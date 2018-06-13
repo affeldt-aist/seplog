@@ -1,0 +1,4 @@
+A formalization of simulations and its
+application to the formal verification of an assembly implementation
+of the binary extended gcd algorithm
+(as documented in <span class="quotation">[<a href="https://staff.aist.go.jp/reynald.affeldt/bib/bib_en.html#affeldt2013isse" target="_top">paper</a>]</span>).

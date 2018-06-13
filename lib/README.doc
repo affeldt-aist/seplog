@@ -1,0 +1,12 @@
+Small extensions to the standard libraries of <a href="https://coq.inria.fr" target="_top">Coq 8.8</a> and <a href="https://math-comp.github.io/math-comp/" target="_top">SSReflect/MathComp</a>. 
+
+They sometimes overlap with standard libraries but still provide new features. 
+machine_int provides a formalization of finite-length integers (int : nat -> Type).
+finmap provides an original formalization of finite maps.
+Also contains Hoare-logic modules for a while-like
+language and a language with gotos (<span class="quotation">[Ando
+Saabas and Tarmo Uustalu. A compositional natural semantics and Hoare
+logic for low-level languages. TCS 373(3):273--302, Elsevier, 2007]</span>,
+formalized in this <span class="quotation">[<a href="https://staff.aist.go.jp/reynald.affeldt/bib/bib_en.html#affeldt2012scp" target="_top">paper</a>]</span>).
+
+

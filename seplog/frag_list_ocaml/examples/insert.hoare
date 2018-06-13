@@ -1,0 +1,17 @@
+{x <> 0 | list i 0 ** x |->_ ** x + 1 |-> data }
+
+[x] := 0;
+if (i == 0) then {
+        i := x
+} else {
+        curr := i;
+        tmp := [curr];
+        while (tmp <> 0)
+        [(i <> 0 | list i curr ** curr |-> tmp ** curr + 1 |->_ ** list tmp 0 ** x |-> 0 ** x + 1 |-> data)]{
+                curr := tmp;
+                tmp := [curr]
+        };
+        [curr] := x
+}
+{TT | list i x ** x |-> 0 ** x + 1 |-> data}
+        

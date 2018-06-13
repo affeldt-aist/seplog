@@ -1,0 +1,6 @@
+A formalization of Separation logic <span class="quotation">[John C. Reynolds. Separation
+Logic: A Logic for Shared Mutable Data Structures. In LICS 2002,
+IEEE]</span>. It contains, as a use-case, a formal verification of the heap
+manager of an operating system <span class="quotation">[<a href="https://staff.aist.go.jp/reynald.affeldt/bib/bib_en.html#marti2006icfem" target="_top">paper</a>]</span> and a certified verifier for a fragment of
+separation logic with singly-linked lists
+<span class="quotation">[<a href="https://staff.aist.go.jp/reynald.affeldt/bib/bib_en.html#marti2008compsoft" target="_top"">paper</a>]</span>. 

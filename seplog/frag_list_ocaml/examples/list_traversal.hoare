@@ -1,0 +1,11 @@
+{TT | list i 0}
+j := i;
+while (j <> 0) [
+        (TT | list i j ** list j 0)
+        ] {
+        
+        j := [j]
+        
+}
+{TT | list i 0}
+

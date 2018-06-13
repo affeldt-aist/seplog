@@ -1,0 +1,7 @@
+A formalization of separation logic for the SmartMIPS assembly language.
+Contains applications to the formal verification of cryptographic functions (e.g., the Montgomery multiplication 
+<span class="quotation">[<a href="https://staff.aist.go.jp/reynald.affeldt/bib/bib_en.html#affeldt2006asian" target="_top">paper</a>]</span>,
+the BBS pseudorandom number generator 
+<span class="quotation">[<a href="https://staff.aist.go.jp/reynald.affeldt/bib/bib_en.html#affeldt2012scp" target="_top">paper</a>]</span>,
+a library of signed multi-precision arithmetic functions
+<span class="quotation">[<a href="https://staff.aist.go.jp/reynald.affeldt/bib/bib_en.html#affeldt2013isse" target="_top">paper</a>]</span>).  

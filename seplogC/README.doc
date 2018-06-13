@@ -1,0 +1,4 @@
+A precise formalization of C data structures 
+with a formalization of the semantics of a subset of the C language.
+Application to the formal verification of a network packet decoder function
+(as documented in <span class="quotation">[<a href="https://staff.aist.go.jp/reynald.affeldt/bib/bib_en.html#affeldt2014jfr" target="_top">paper</a>]</span>).

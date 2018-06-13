@@ -1,0 +1,17 @@
+{TT | list i 0}
+
+j <- 0;
+
+while (i <> 0) [(TT | list i 0 ** list j 0)]{
+
+        k <-* i;
+        i *<- j;
+        j <- i;
+        i <- k
+
+
+}
+ 
+{TT | list j 0}
+       
+

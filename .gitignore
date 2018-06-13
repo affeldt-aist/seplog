@@ -1,0 +1,16 @@
+*.glob
+*.vo
+*.o
+coqdep_warning.txt
+*.d
+*.aux
+*.cmo
+*.cmx
+*.a
+*.cmi
+*.cma
+*.cmxa
+*.cmxs
+*~
+*.depend
+doc/*.html

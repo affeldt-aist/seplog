@@ -1,0 +1,17 @@
+{TT | list i 0 ** list j 0}
+
+if (i == 0) then {
+        i := j
+} else {
+        curr := i;
+        tmp := [curr];        
+        while (tmp <> 0) 
+                [(TT | list i curr ** curr |-> tmp ** curr + 1 |->_ ** list tmp 0 ** list j 0)]{
+
+                curr := tmp;
+                tmp := [curr]
+
+        };
+        [curr] := j
+}
+{TT | list i 0}

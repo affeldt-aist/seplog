@@ -1,0 +1,8 @@
+{next == 0 /\ status == 1 | (adr |->_) ** (adr + 1 |->_) ** (adr + size - 2 |->_) ** (adr + size - 1 |->_)}
+  hmStart <- adr;
+  (hmStart -.> next) *<- adr + size - 2;
+  (hmStart -.> status) *<- Free;
+  hmEnd <-* (hmStart -.> next);
+  (hmEnd -.> next) *<- 0;
+  (hmEnd -.> status) *<- Allocated
+{ TT | (adr |-> adr + (size - 4) + 2 ) ** (adr + 1 |-> Free) ** (adr + size - 2 |-> 0 ) ** (adr + size - 1 |-> Allocated)}

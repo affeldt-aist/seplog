@@ -1,0 +1,35 @@
+.PHONY: doc
+
+STDLIB = lib
+SEPLOG = seplog
+CRYPTOASM = cryptoasm
+BBSUNPREDICTABLE = bbs_unpredictable
+SEPLOGC = seplogC
+BEGCD = begcd
+
+COQDOCDIR = doc
+COQDFLAG = --html --multi-index -d $(COQDOCDIR) 
+COQD = coqdoc $(COQDFLAG)
+
+COQDOCTARGET = $(STDLIB)/*.v $(SEPLOG)/*.v $(CRYPTOASM)/*.v $(BBSUNPREDICTABLE)/BBS_Asm_CryptoProof.v $(SEPLOGC)/*.v $(BEGCD)/*.v
+DOCSHTARGET = $(STDLIB) $(SEPLOG) $(CRYPTOASM) $(BEGCD) $(SEPLOGC) 
+
+TMPFILE := $(shell mktemp)
+MYINDEXHTML := $(shell mktemp)
+
+doc:	
+	$(COQD) $(STDLIB)/*.v $(SEPLOG)/*.v $(CRYPTOASM)/*.v $(BBSUNPREDICTABLE)/BBS_Asm_CryptoProof.v $(SEPLOGC)/C_*.v $(SEPLOGC)/POLAR_*.v $(SEPLOGC)/rfc*.v $(BEGCD)/*.v 
+	sed -i -e "/<div id=\"footer\">/,+1 s/index.html/idx.html/" $(COQDOCDIR)/*.html
+	cp $(COQDOCDIR)/index.html $(COQDOCDIR)/idx.html
+	cp index0.html $(COQDOCDIR)/index.html
+	cat doc_begin.html doc.css doc_header.html doc_warning.html doc_end.html > $(COQDOCDIR)/doc_header.html
+	cat doc_begin.html doc.css menu.html doc_end.html > $(COQDOCDIR)/menu.html
+	bash ./doc_lib.sh | cat doc_begin.html doc.css - doc_end.html > $(COQDOCDIR)/main_display_lib.html
+	bash ./doc_seplog.sh | cat doc_begin.html doc.css - doc_end.html > $(COQDOCDIR)/main_display_seplog.html
+	bash ./doc_cryptoasm.sh | cat doc_begin.html doc.css - doc_end.html > $(COQDOCDIR)/main_display_cryptoasm.html
+	bash ./doc_begcd.sh | cat doc_begin.html doc.css - doc_end.html > $(COQDOCDIR)/main_display_begcd.html
+	bash ./doc_seplogC.sh | cat doc_begin.html doc.css - doc_end.html > $(COQDOCDIR)/main_display_seplogC.html
+
+cleandoc:
+	rm -f $(COQDOCDIR)/*.html $(COQDOCDIR)/*~
+
