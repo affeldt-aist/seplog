@@ -24,7 +24,7 @@ coq_makefile -o Makefile -f _CoqProject
 
 coq_makefile -o Makefile -f XMake; make
 
-#### Doc
+#### Doc (https://staff.aist.go.jp/reynald.affeldt/coqdev/)
 
 make -f MakeDoc
 (once everything has been compiled)
