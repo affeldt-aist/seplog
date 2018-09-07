@@ -196,8 +196,8 @@ Definition div := divZ.
 Definition rem := Zmod.
 Definition abs := Z.abs.
 
-Definition ge := Zge.
-Definition gt := Zgt.
+Definition ge := Z.ge.
+Definition gt := Z.gt.
 Definition geb := Zge_bool.
 Definition gtb := Zgt_bool.
 
@@ -207,7 +207,7 @@ Lemma gtP a b : gtb a b <-> gt a b. Proof. split => *; by apply/gtZP. Qed.
 Definition eqb := @eq_op Z_eqType. (* so that we can use eqxx *)
 Lemma eqP : Equality.axiom eqb. Proof. move=> *; exact: eqP. Qed.
 
-Lemma ge_refl a : ge a a. Proof. exact/Zle_ge/leZZ. Qed.
+Lemma ge_refl a : ge a a. Proof. exact/Z.le_ge/leZZ. Qed.
 
 Lemma gebNgt a b : geb b a = (~~ gtb a b).
 Proof. by rewrite /gtb Z.gtb_ltb ltZNge' negbK -Z.geb_leb. Qed.

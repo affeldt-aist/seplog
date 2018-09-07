@@ -197,13 +197,10 @@ rewrite assert_m.conCE in Hc.
 move: Hc.
 apply monotony => // h' Hh'.
 split => //.
-split; last first.
-  move: Hh'.
-  by apply mapstos_ext.
+split; last by move: Hh'; exact/mapstos_ext.
 rewrite Hb -s2Z_u2Z_pos; last by omega.
-rewrite slen_nk.
 apply Zsgn_pos in Hslen.
-by rewrite Hslen Zmult_1_l.
+by rewrite slen_nk Hslen mul1Z.
 
 by apply con_and_bang_R.
 
@@ -338,7 +335,7 @@ apply Zsgn_pos in Hslen.
 split; first by [].
 split; first by [].
 case: Hh1 => Hrk [a0_ptr [Hh1 [HSum1 HSum2]]].
-rewrite Hslen !Zmult_1_l.
+rewrite Hslen !mul1Z.
 case/leZ_eqVlt : (min_lSum nk A') => // abs.
 - apply HSum1 in abs.
   by rewrite abs Z2uK in Htest.
@@ -383,12 +380,9 @@ apply while.hoare_seq with
 
 have Hslen' : s2Z slen <> - 2 ^ 31.
   move=> H.
-  rewrite slen_nk in H.
   apply Zsgn_neg in Hslen.
-  rewrite Hslen mulN1Z in H.
-  apply Zopp_inj in H.
-  rewrite H in nk_231.
-  by apply ltZZ in nk_231.
+  rewrite slen_nk Hslen mulN1Z eqZ_opp in H *.
+  exact/ltZ_eqF.
 have : uniq(rk, i, r0) by Uniq_uniq r0.
 move/abs_triple_bang/(_ _ Hslen') => Htmp.
 
@@ -635,7 +629,7 @@ have no_overflow : u2Z (store.lo s) = 0.
   have [X|X] : u2Z (store.lo s) = 0 \/ u2Z (store.lo s) = 1.
     move: (min_u2Z (store.lo s)) => ?; omega.
   by [].
-  rewrite X Zmult_1_l in HSum.
+  rewrite X mul1Z in HSum.
   have A'_bound : \S_{ nk.+1 } A' <= 2 ^^ (nk.+1 * 32 - 1).
     have H1 : 2 * \S_{ nk.+1 } A' + 1 < \B^nk.+1.
       rewrite HSum'.

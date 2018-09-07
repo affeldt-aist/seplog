@@ -186,21 +186,15 @@ Qed.
 
 Lemma Zlt_mult_interval_inv b k a : (0 < k)%Z -> (- b <= k * a < b)%Z -> (- b <= a < b)%Z.
 Proof.
-move=> Hk [H1 H2].
-split.
-  case: (Z_lt_ge_dec 0 a) => ?.
-    apply (@leZ_trans Z0); omega.
+move=> Hk [H1 H2]; split.
+  case: (Z_lt_le_dec 0 a) => ?; first by apply (@leZ_trans Z0); omega.
   apply (leZ_trans H1).
   rewrite -{2}(mul1Z a).
-  apply Z.mul_le_mono_nonpos_r.
-  exact: Zge_le.
-  omega.
-case: (Z_lt_ge_dec 0 a) => ?.
-  apply: (leZ_ltZ_trans _ H2).
-  rewrite -{1}(mul1Z a).
-  apply Z.mul_le_mono_pos_r => //.
-  omega.
-omega.
+  apply Z.mul_le_mono_nonpos_r => //; omega.
+case: (Z_lt_ge_dec 0 a) => ?; last omega.
+apply: (leZ_ltZ_trans _ H2).
+rewrite -{1}(mul1Z a).
+apply Z.mul_le_mono_pos_r => //; omega.
 Qed.
 
 Lemma Zabs_Z_of_nat : forall n, `| Z_of_nat n | = Z_of_nat n.

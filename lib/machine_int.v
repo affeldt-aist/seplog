@@ -2832,9 +2832,9 @@ Proof.
 move=> a b k H.
 have H' : u2Z (a `- k) = u2Z (b `- k) by rewrite H.
 case: (Z_lt_le_dec (u2Z a) (u2Z k)) => ak; last first.
-  rewrite u2Z_sub in H'; last by apply Zle_ge.
+  rewrite u2Z_sub in H'; last exact/Z.le_ge.
   case: (Z_lt_le_dec (u2Z b) (u2Z k)) => bk; last first.
-    rewrite u2Z_sub in H'; last by apply Zle_ge.
+    rewrite u2Z_sub in H'; last exact/Z.le_ge.
     apply u2Z_inj; omega.
   rewrite u2Z_sub_overflow // in H'.
   apply u2Z_inj.
@@ -2842,7 +2842,7 @@ case: (Z_lt_le_dec (u2Z a) (u2Z k)) => ak; last first.
   omega.
 rewrite u2Z_sub_overflow // in H'.
 case: (Z_lt_le_dec (u2Z b) (u2Z k)) => bk; last first.
-  rewrite u2Z_sub in H'; last by apply Zle_ge.
+  rewrite u2Z_sub in H'; last exact/Z.le_ge.
   move: (min_u2Z a) => ?. move: (min_u2Z b) => ?. move: (max_u2Z a) => ?. move: (max_u2Z b) => ?.
   omega.
 rewrite u2Z_sub_overflow // in H'.
@@ -2852,10 +2852,8 @@ Qed.
 Lemma u2Z_add_eqmod n (a b : int n) : u2Z (a `+ b) =m u2Z a + u2Z b {{ 2^^n }}.
 Proof.
 elim (Z_le_gt_dec (2 ^^ n) (u2Z a + u2Z b)) => H.
-- exists (-1)%Z.
-  rewrite -(u2Z_add_overflow H); ring.
-- exists 0.
-  rewrite mul0Z addZ0; apply u2Z_add; omega.
+- exists (-1)%Z; rewrite -(u2Z_add_overflow H); ring.
+- exists 0; rewrite mul0Z addZ0; apply u2Z_add; omega.
 Qed.
 
 Lemma add_Z2u l a b : 0 <= a -> 0 <= b -> Z2u l a `+ Z2u l b = Z2u l (a + b).
@@ -2874,18 +2872,18 @@ case: (Z_lt_le_dec (u2Z (Z2u l a) + u2Z (Z2u l b)) (2 ^^ l)) => Hadd.
       - rewrite Z2uK // in Hadd; omega.
       - rewrite u2Z_Z2u_Zmod // in Hadd *.
         rewrite -(Zmod_small (a + b mod 2 ^^ l) (2 ^^ l)); last first.
-          move: (Z_mod_lt b _ (Zlt_gt _ _ (expZ_gt0 l))) => ?; omega.
+          move: (Z_mod_lt b _ (Z.lt_gt _ _ (expZ_gt0 l))) => ?; omega.
         by rewrite Zplus_mod_idemp_r.
     * rewrite u2Z_Z2u_Zmod // in Hadd *.
       case: (Z_lt_le_dec b (2 ^^ l)) => HB.
      - rewrite Z2uK // in Hadd *.
         rewrite -(Zmod_small (a mod 2 ^^ l + b) (2^^l)); last first.
-          move: (Z_mod_lt a _ (Zlt_gt _ _ (expZ_gt0 l))) => ?; omega.
+          move: (Z_mod_lt a _ (Z.lt_gt _ _ (expZ_gt0 l))) => ?; omega.
         by rewrite Zplus_mod_idemp_l.
       - rewrite u2Z_Z2u_Zmod // in Hadd *.
         rewrite -(Zmod_small (a mod 2 ^^ l + b mod 2 ^^ l) (2 ^^ l)); last first.
-          move: (Z_mod_lt a _ (Zlt_gt _ _ (expZ_gt0 l))) => ?;
-            move: (Z_mod_lt b _ (Zlt_gt _ _ (expZ_gt0 l))) => ?; omega.
+          move: (Z_mod_lt a _ (Z.lt_gt _ _ (expZ_gt0 l))) => ?;
+            move: (Z_mod_lt b _ (Z.lt_gt _ _ (expZ_gt0 l))) => ?; omega.
         by rewrite Zplus_mod_idemp_l Zplus_mod_idemp_r.
 - move: (u2Z_add_overflow Hadd) => H.
   have {H}-> : u2Z (Z2u l a `+ Z2u l b) = u2Z (Z2u l a) + u2Z (Z2u l b) - 2 ^^ l by omega.
@@ -2904,7 +2902,7 @@ case: (Z_lt_le_dec (u2Z (Z2u l a) + u2Z (Z2u l b)) (2 ^^ l)) => Hadd.
         by rewrite Z_mod_plus_full.
       - rewrite u2Z_Z2u_Zmod // in Hadd *.
         have H' : 0 <= a + b mod 2 ^^ l - 2 ^^ l < 2 ^^ l.
-          move: (Z_mod_lt b _ (Zlt_gt _ _ (expZ_gt0 l))) => X; omega.
+          move: (Z_mod_lt b _ (Z.lt_gt _ _ (expZ_gt0 l))) => X; omega.
         rewrite -(Zmod_small (a + b mod 2 ^^ l - 2 ^^ l) (2^^l)) //.
         have -> : a + b mod 2 ^^ l - 2 ^^ l = (a + b mod 2 ^^ l) + ( -1) * 2 ^^ l by ring.
         by rewrite Z_mod_plus_full Zplus_mod_idemp_r.
@@ -2912,14 +2910,14 @@ case: (Z_lt_le_dec (u2Z (Z2u l a) + u2Z (Z2u l b)) (2 ^^ l)) => Hadd.
       case: (Z_lt_le_dec b (2 ^^ l)) => HB.
       - rewrite Z2uK // in Hadd *.
         have H' : 0 <= a mod 2 ^^ l + b - 2 ^^ l < 2 ^^ l.
-          move: (Z_mod_lt a _ (Zlt_gt _ _ (expZ_gt0 l))) => X; omega.
+          move: (Z_mod_lt a _ (Z.lt_gt _ _ (expZ_gt0 l))) => X; omega.
         rewrite -(Zmod_small (a mod 2 ^^ l + b - 2 ^^ l) (2^^l)) //.
         have -> : a mod 2 ^^ l + b - 2 ^^ l = (a mod 2 ^^ l + b) + ( -1) * 2 ^^ l by ring.
         by rewrite Z_mod_plus_full Zplus_mod_idemp_l.
       - rewrite u2Z_Z2u_Zmod // in Hadd *.
         have H' : 0 <= a mod 2 ^^ l + b mod 2 ^^ l - 2 ^^ l < 2^^l.
-          move: (Z_mod_lt a _ (Zlt_gt _ _ (expZ_gt0 l))) => X;
-            move: (Z_mod_lt b _ (Zlt_gt _ _ (expZ_gt0 l))) => Y; omega.
+          move: (Z_mod_lt a _ (Z.lt_gt _ _ (expZ_gt0 l))) => X;
+            move: (Z_mod_lt b _ (Z.lt_gt _ _ (expZ_gt0 l))) => Y; omega.
         rewrite -(Zmod_small (a mod 2 ^^ l + b mod 2 ^^ l - 2 ^^ l) (2^^l)) //.
         have -> : a mod 2 ^^ l + b mod 2 ^^ l - 2 ^^ l = (a mod 2 ^^ l + b mod 2 ^^ l) + ( -1) * 2 ^^ l by ring.
         by rewrite Z_mod_plus_full Zplus_mod_idemp_l Zplus_mod_idemp_r.
@@ -3459,10 +3457,10 @@ case: (Ztrichotomy_inf (u2Z m) (u2Z n)).
 - move=> m_n.
   + apply/negP/orP.
     * move=> _; right.
-      exact/Zlt2lt_n/Zgt_lt.
+      exact/Zlt2lt_n/Z.gt_lt.
     * case=> [ _ | n_m].
       - apply/negP.
-        move/Zgt_lt : m_n => /ltZ_eqF/eqP.
+        move/Z.gt_lt : m_n => /ltZ_eqF/eqP.
         by apply contra => /eqP ->.
       - apply/negP.
         move/lt_n2Zlt : n_m => /gtZ_eqF/eqP.

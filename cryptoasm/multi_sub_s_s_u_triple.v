@@ -185,10 +185,8 @@ rewrite /wp_subu.
 repeat Reg_upd.
 repeat (split => //).
 by Assert_upd.
-rewrite add0i s2Z_cplt2.
-congr Zopp.
-rewrite s2Z_u2Z_pos' // Hrk [predn _]/=; omega.
-rewrite weirdE Hrk; omega.
+rewrite add0i s2Z_cplt2; last by rewrite weirdE Hrk; omega.
+congr (- _); rewrite s2Z_u2Z_pos' // Hrk [predn _]/=; omega.
 
 apply hoare_sw_back'.
 move=> s h [Hrz [Hrx [Hry [Hrk [H [HZ [HX [Ha3 Ha0]]]]]]]].
@@ -206,8 +204,7 @@ split.
   apply Zsgn_neg.
   rewrite Ha0; omega.
 split.
-  rewrite Ha0 slenx0 s2Z_u2Z_pos' // Z2uK //= 2!Zsgn_Zopp.
-  congr Zopp.
+  rewrite Ha0 slenx0 s2Z_u2Z_pos' // Z2uK //= 2!Zsgn_Zopp; congr (- _).
   transitivity 1.
     apply Zsgn_pos; by case: nk_231.
   exact/esym/Zsgn_pos.

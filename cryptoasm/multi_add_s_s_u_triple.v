@@ -435,7 +435,7 @@ by [].
     case=> _ abs; rewrite abs in Htest; omega.
   case.
     case=> _ abs; rewrite abs in Htest; omega.
-  by case; move/Zgt_lt.
+  by case; move/Z.gt_lt.
 - move=> s h.
   case=> h1 [h2 [h1dh2 [h1Uh2 [Hh1 Hh2]]]].
   case: Hh1 => Hrk [Hry [HX [HSum Hh1]]].
@@ -720,10 +720,9 @@ rewrite add0i s2Z_cplt2; last first.
   rewrite weirdE Hrk.
   move=> abs; rewrite abs in Hnk.
   case: Hnk => _; by move/ltZZ.
-congr Zopp.
+congr (- _).
 rewrite s2Z_u2Z_pos' // Hrk.
-split; first by apply Zle_0_nat.
-by case: Hnk.
+split; [exact: Zle_0_nat | by case: Hnk].
 
 (* sw a0 zero16 rk *)
 

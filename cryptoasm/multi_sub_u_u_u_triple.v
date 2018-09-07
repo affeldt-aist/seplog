@@ -240,7 +240,7 @@ exists C', nj, nbor.
 rewrite Hone umul_1.
 repeat Reg_upd; repeat (split; trivial).
 - by Assert_upd.
-- move=> H; rewrite store.msubu_utoZ Hm ?(@u2Z_zext 32) //; last exact: Zle_ge.
+- move=> H; rewrite store.msubu_utoZ Hm ?(@u2Z_zext 32) //; last exact: Z.le_ge.
   apply (@ltZ_trans \B^1) => //; exact: max_u2Z.
 - move=> H; rewrite store.msubu_utoZ_overflow Hm ?(@u2Z_zext 32) //.
   apply (@ltZ_trans \B^1) => //; exact: max_u2Z.
@@ -288,7 +288,7 @@ case: (Z_lt_le_dec (u2Z [atmp]_s) (u2Z [btmp]_s)).
   move: {Hm1 Hm2}(Hm2 X) => Hm.
   have Hacx0 : store.acx s = Z2u store.acx_size 0.
     apply store.utoZ_acx_beta2; rewrite Hm.
-    apply Zlt_plus_swap, leZ_lt_add; by [apply leZZ | rewrite oppZK].
+    rewrite ltZ_subLR addZC; exact/ltZ_le_add.
   rewrite store.utoZ_def Hacx0{Hacx0} Z2uK // in Hm.
   rewrite mul0Z addZ0 in Hm.
   rewrite (_ : \B^2 = \B^1 * (\B^1 - 1) + \B^1) // addZC (mulZC (\B^1)) in Hm.
@@ -300,13 +300,11 @@ case: (Z_lt_le_dec (u2Z [atmp]_s) (u2Z [btmp]_s)).
     by split; [apply min_u2Z | apply max_u2Z].
     split; first by [].
     split.
-    apply Zle_plus_swap.
-    rewrite addZC.
-    apply leZ_add; [exact/ltZW/max_u2Z | exact/min_u2Z].
-    apply Zlt_plus_swap; apply ltZ_add2l; by rewrite oppZK.
+      apply/leZ_subRL/leZ_add; [exact/ltZW/max_u2Z | exact/min_u2Z].
+    by apply/ltZ_subLR; rewrite addZC ltZ_add2r.
   case: Hm => _ Hm.
   rewrite Hinv Hm (Zbeta_S nj) Hrbtmp2 Z2uK //; ring.
-- move/Zle_not_lt/ltZP/negbTE => X.
+- move/leZNgt/ltZP/negbTE => X.
   rewrite X in Hrbor.
   move/ltZP/leZNgt in X.
   rewrite Hratmp in X.
@@ -318,10 +316,9 @@ case: (Z_lt_le_dec (u2Z [atmp]_s) (u2Z [btmp]_s)).
   move: {Hm1 Hm2}(Hm1 X) => Hm.
   have H0 : store.utoZ s < \B^1.
     rewrite Hm.
-    apply Zlt_plus_swap.
+    rewrite ltZ_subLR.
     apply (@ltZ_leZ_trans \B^1); first exact: max_u2Z.
-    apply Zle_plus_swap, Zle_plus_trans_L => //.
-    rewrite leZ_oppl oppZ0; exact: min_u2Z.
+    rewrite addZC -leZ_subLR subZZ; exact: min_u2Z.
   rewrite -(proj2 (proj2 (store.utoZ_lo_beta1 _ H0))).
   rewrite Hinv Hm Hrbtmp2 Z2uK //; ring.
 

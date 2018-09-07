@@ -197,14 +197,14 @@ have -> : ve `>> Z.abs_nat (Z_of_nat vl + 1) = zero32.
   rewrite shrl_overflow // Zabs_nat_Zplus //; last exact: Zle_0_nat.
   rewrite plus_comm [plus _ _]/= Zabs2Nat.id.
   apply (@ltZ_trans (2 ^^ vl)); by [ | apply expZ_2_lt].
-by rewrite Z2uK // [Zmult]lock /= -lock Zmult_1_l.
+by rewrite Z2uK // [Zmult]lock /= -lock mul1Z.
 
 clear Hna'.
 move=> s h [[A0 [A0' [new_va [new_va' [ni [HlenA0 [HlenA0' [r_k [r_alpha [r_e [r_l [r_a [Hnew_na [r_a' [Hna' [r_x' [r_m [r_i [Hi [Hmem [HSumA01 HSumA02]]]]]]]]]]]]]]]]]]]]] r_i'];
   rewrite /= in r_i'. move/leZP in r_i'.
 
 have {r_i'}r_i' : s2Z [i]_s < 0.
- apply Znot_ge_lt; contradict r_i'; exact: Zge_le.
+ apply Znot_ge_lt; contradict r_i'; exact: Z.ge_le.
 exists A0, A0', new_va, new_va'; repeat (split; trivial).
 have Hni : ni = -1.
   rewrite r_i in r_i'; case: Hi => Hi _; omega.

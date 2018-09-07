@@ -1541,16 +1541,12 @@ Fixpoint umul (a b : list bool) {struct b} :=
                 end
   end.
 
-Lemma size_umul : forall a b, size (umul a b) = size a + size b.
+Lemma size_umul a b : size (umul a b) = size a + size b.
 Proof.
-intros a b; generalize a; clear a; induction b as [_ | hd tl]; intros.
-- by rewrite /= size_nseq.
-- destruct hd.
-  + rewrite /= (size_add (size (false :: a) + size tl)) /=.
-    * nat_norm; by auto.
-    * by rewrite size_cat size_nseq.
-    * by rewrite IHtl.
-  + rewrite /= IHtl; by apply plus_n_Sm.
+elim: b a => [a /=|h t IH a /=]; first by rewrite /zeros size_nseq addn0.
+case: ifPn => /= Hh; last by rewrite IH addnS.
+rewrite (size_add (size a + (size t).+1)) //=; last by rewrite IH addnS.
+by rewrite size_cat /zeros size_nseq addnS.
 Qed.
 
 Lemma umulnill : forall l, umul nil l = zeros (size l).

@@ -1507,7 +1507,7 @@ Qed.
 
 Lemma bop_re_le_Zle (e1 e2 : exp sigma (g.-ityp: _)) :
   [ \b e1 \<= e2 ]b_ s -> s2Z (si32<=phy [ e1 ]_s) <= s2Z (si32<=phy [ e2 ]_s).
-Proof. move=> H. by apply Zge_le, bop_re_ge_Zge, beval_bop_r_le_ge. Qed.
+Proof. move=> H. exact/Z.ge_le/bop_re_ge_Zge/beval_bop_r_le_ge. Qed.
 
 Lemma bop_re_lt_Zlt (e1 e2 : exp sigma (g.-ityp: sint)) :
   [ \b e1 \< e2 ]b_ s -> s2Z (si32<=phy [ e1 ]_s) < s2Z (si32<=phy [ e2 ]_s).

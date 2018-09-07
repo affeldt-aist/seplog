@@ -238,8 +238,7 @@ apply fwd_sim_seq with (fun st s _ => uv_bound rk s u v st k /\
         split.
           move=> abs; rewrite abs Z2uK // in H; omega.
         repeat (split; first by tauto).
-        rewrite Zabs_non_eq; last first.
-          case: H => _ [_] /=; by move/geZP/Zge_le.
+        rewrite Zabs_non_eq; last by case: H => _ [_] /=; by move/geZP/Z.ge_le.
         ssromega.
       assoc_tac_m.put_in_front v.
       assoc_tac_m.put_in_front t1.
@@ -250,9 +249,9 @@ apply fwd_sim_seq with (fun st s _ => uv_bound rk s u v st k /\
           - by Uniq_uniq r0.
         move=> st s h [] st_s_h [rk0 [rk231 [Hk [Ht1 Hv]]]].
         split; first by apply st_s_h.
-        split; first by assumption.
-        rewrite Hk Z_of_nat_Zabs_nat; last by apply min_u2Z.
-        split; last by assumption.
+        split; first assumption.
+        rewrite Hk Z_of_nat_Zabs_nat; last exact: min_u2Z.
+        split; last assumption.
         apply/ltZP; rewrite ltZ_neqAle.
         apply/andP; split; last exact/leZP/min_u2Z.
         rewrite -(@Z2uK 0 32) //.

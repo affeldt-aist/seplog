@@ -200,7 +200,7 @@ by rewrite add0i sext_Z2u.
 rewrite Hrbtmp -Hrbor u2Z_add //.
 apply u2Z_add_no_overflow.
 rewrite -Hrbtmp.
-apply Znot_gt_le; move/Zgt_lt/ltZP => X.
+apply Znot_gt_le; move/Z.gt_lt/ltZP => X.
 by rewrite Hru X Z2uK // Z2uK in Huzero.
 
 (** multu atmp one; *)
@@ -239,7 +239,7 @@ repeat Reg_upd; repeat (split; trivial).
 by Assert_upd.
 move=> H; rewrite store.msubu_utoZ Hm ?(@u2Z_zext 32) //.
 apply (@ltZ_trans (\B^1)); by [apply max_u2Z | ].
-exact/Zle_ge.
+exact/Z.le_ge.
 move=> H; rewrite store.msubu_utoZ_overflow Hm ?(@u2Z_zext 32) //.
 apply (@ltZ_trans (\B^1)); by [exact: max_u2Z | ].
 
@@ -293,7 +293,7 @@ case: (Z_lt_le_dec (u2Z (A `32_ nj)) (u2Z [btmp]_s)).
     move: (min_u2Z (A `32_ nj)) (max_u2Z [btmp]_s) => ? ?; omega.
   case: Hm => _ ->.
   rewrite Hinv (Zbeta_S nj) Hrbtmp2 Z2uK //; ring.
-- move/Zle_not_lt/ltZP/negbTE => X.
+- move/leZNgt/ltZP/negbTE => X.
   rewrite X in Hrbor.
   move/ltZP/leZNgt in X.
   exists A', nj, (u2Z zero32); repeat Reg_upd; repeat (split; trivial).
@@ -323,7 +323,7 @@ have [X1 X2] : nbor = 1 /\ u2Z (B `32_ nj) = \B^1 - 1.
   rewrite Hrbtmp in H.
   apply u2Z_add_overflow' in H; rewrite -Zbeta1E in H.
   move: (max_u2Z (B `32_ nj)) => H'; rewrite -Zbeta1E in H'; omega.
-rewrite Hratmp Hinv X1 X2 !Zmult_1_l (Zbeta_S nj); ring.
+rewrite Hratmp Hinv X1 X2 !mul1Z (Zbeta_S nj); ring.
 
 (** sw atmp zero16 t; *)
 

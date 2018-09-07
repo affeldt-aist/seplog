@@ -94,8 +94,8 @@ rewrite -subSn; last by rewrite lt0n; apply/eqP; auto.
 rewrite subSS subn0.
 repeat (split; trivial).
 - rewrite sext_Z2s // u2Z_add_Z2s //; last first.
-    rewrite Hri -(Zmult_1_l (-1)) -(Zopp_eq_mult_neg_1 1) (_ : 1 = Z_of_nat 1) //.
-    exact/Zle_left/inj_le/neq_0_lt.
+    rewrite Hri -(mul1Z (-1)) mulZN1 leZ_subRL addZ0 (_ : 1 = Z<=nat 1) //.
+    exact/inj_le/neq_0_lt.
   rewrite inj_minus1 //; by [rewrite Hri | apply neq_0_lt].
 - by Assert_upd.
 

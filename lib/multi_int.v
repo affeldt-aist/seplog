@@ -319,9 +319,7 @@ case=> l'.
   apply Znot_ge_lt => H''.
   have {H''} H'' : 2 ^^ (l'.+1 * n) <= 2 ^^ n * lSum l tl.
     rewrite /= mulSn ZpowerD.
-    apply leZ_wpmul2l.
-    exact: expZ_ge0.
-    exact: Zge_le.
+    apply leZ_wpmul2l; [exact: expZ_ge0 | exact: Z.ge_le].
   move: (min_u2Z hd) => ?; omega.
 Qed.
 

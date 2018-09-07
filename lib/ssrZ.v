@@ -9,7 +9,7 @@ Require Import ZArith.
 
 Local Open Scope Z_scope.
 
-Notation "`| x |" := (Zabs x) : zarith_ext_scope.
+Notation "`| x |" := (Z.abs x) : zarith_ext_scope.
 Notation "'Z<=nat'" := (Z.of_nat) (at level 9) : zarith_ext_scope.
 Notation "'| x |" := (Z.abs_nat x) : zarith_ext_scope.
 Notation "'gcdZ'" := Z.gcd : zarith_ext_scope.
@@ -58,6 +58,9 @@ Qed.
 Lemma eqZ_add2l p m n : (p + m = p + n) <-> (m = n).
 Proof. split; [exact: Z.add_reg_l | by move=> ->]. Qed.
 
+Lemma eqZ_opp x y : (- x = - y) <-> (x = y).
+Proof. exact: Z.opp_inj_wd. Qed.
+
 (* Z.leb_spec0 : forall x y : Z, Bool.reflect (x <= y) (x <=? y) *)
 Lemma leZP {m n} : reflect (m <= n) (Zle_bool m n).
 Proof. apply: (iffP idP); by apply Z.leb_le. Qed.
@@ -67,10 +70,10 @@ Lemma ltZP {m n} : reflect (m < n) (m <? n).
 Proof. apply: (iffP idP); by apply Z.ltb_lt. Qed.
 
 Lemma geZP {m n} : reflect (m >= n) (m >=? n).
-Proof. apply: (iffP idP); rewrite /Zge /Zge_bool; by destruct (m ?= n). Qed.
+Proof. apply: (iffP idP); rewrite /Z.ge /Zge_bool; by destruct (m ?= n). Qed.
 
 Lemma gtZP {m n} : reflect (m > n) (m >? n).
-Proof. apply: (iffP idP); rewrite /Zgt /Zgt_bool; by destruct (m ?= n). Qed.
+Proof. apply: (iffP idP); rewrite /Z.gt /Zgt_bool; by destruct (m ?= n). Qed.
 
 Lemma leZNgt n m : n <= m <-> ~ m < n.
 Proof. split; [exact: Zle_not_lt | exact: Z.Private_Tac.not_gt_le]. Qed.
@@ -140,6 +143,8 @@ Definition mulZ1 : right_id 1 Z.mul := Zmult_1_r.
 Definition mulZC : commutative Zmult := Zmult_comm.
 Lemma mulN1Z n : -1 * n = - n.
 Proof. by rewrite mulZC Zopp_eq_mult_neg_1. Qed.
+Lemma mulZN1 n : n * -1 = - n.
+Proof. by rewrite Z.opp_eq_mul_m1. Qed.
 
 Definition mulZN x y : x * (- y) = - (x * y) := Z.mul_opp_r x y.
 Definition mulNZ x y : (- x) * y = - (x * y) := Z.mul_opp_l x y.
@@ -249,7 +254,7 @@ Proof. move=> *; exact: Zmult_lt_compat2. Qed.
 
 Lemma leZ_pmul2r m n1 n2 : 0 < m -> n1 * m <= n2 * m <-> (n1 <= n2).
 Proof.
-move=> m0; split; first by apply: Zmult_le_reg_r; apply Zlt_gt.
+move=> m0; split; first by apply: Zmult_le_reg_r; apply Z.lt_gt.
 move=> *; apply leZ_wpmul2r => //; exact: ltZW.
 Qed.
 Lemma leZ_pmul2r' m n1 n2 : 0 < m -> n1 * m <=? n2 * m = (n1 <=? n2).
@@ -272,6 +277,19 @@ Proof. by move=> H; apply/idP/idP => /ltZP/(ltZ_pmul2r _ _ _ H)/ltZP. Qed.
 
 Lemma ltZ_pmul2l m n1 n2 : 0 < m -> (m * n1 < m * n2) <-> (n1 < n2).
 Proof. rewrite 2!(mulZC m); exact: ltZ_pmul2r. Qed.
+
+Lemma leZ_subLR m n p : (m - n <= p) <-> (m <= n + p).
+Proof. by rewrite Zle_plus_swap Z.sub_opp_r addZC. Qed.
+
+Lemma ltZ_subLR m n p : (m - n < p) <-> (m < n + p).
+Proof. by rewrite Zlt_plus_swap Z.sub_opp_r addZC. Qed.
+
+Lemma leZ_subRL m n p : (n <= p - m) <-> (m + n <= p).
+Proof.
+split => H.
+- move/(@leZ_add2l m) : H; by rewrite subZKC.
+- by apply (@leZ_add2l m); rewrite subZKC.
+Qed.
 
 Lemma ltZ_subRL m n p : (n < p - m) <-> (m + n < p).
 Proof.

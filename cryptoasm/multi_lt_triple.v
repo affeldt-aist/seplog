@@ -397,7 +397,7 @@ move=> s h [r_k [r_a [r_b [Hmem [ni [r_i [Hnink [Hsum [r_a0 [r_a1 [ [r_ret [r_re
       - split; first by [].
         rewrite /= in Hsum.
         rewrite (drop_nth zero32); last by rewrite HlenA.
-        apply Zlt_gt.
+        apply Z.lt_gt.
         rewrite (drop_nth zero32); last by rewrite HlenB.
         have -> : (nk - ni = S (nk - S ni))%nat by rewrite -subSn.
         simpl drop; rewrite 2!lSum_S.

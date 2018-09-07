@@ -183,7 +183,7 @@ by map_tac_m.Disj.
 by map_tac_m.Equal.
 case : Hor.
 - case => _ [Hor _]; by rewrite Hor /one32 /zero32 2?Z2uK in Hbeqint0.
-- case; by [case=> H _; apply ltZW, Zgt_lt | case=> -> _; apply leZZ].
+- case; [case=> H _; exact/ltZW/Z.gt_lt | case=> -> _; exact/leZZ].
 - by exists h1, h2.
 
 apply pull_out_bang => HZM.

@@ -193,7 +193,7 @@ by map_tac_m.Equal.
 rewrite /= store.get_r0 in Hbeqint0.
 case: Hor.
 - case => _ [Hint Hext]; by rewrite Hint /one32 /zero32 2?Z2uK in Hbeqint0.
-- case; case => Hor _; by [ exact/Zle_ge/ltZW/Zgt_lt | rewrite Hor; apply Zle_ge, leZZ].
+- case; case => Hor _; by [ exact/Z.le_ge/ltZW/Z.gt_lt | rewrite Hor; exact/Z.le_ge/leZZ].
 by exists h1, h2; repeat (split; trivial).
 
 apply pull_out_bang => HZM.
@@ -245,7 +245,7 @@ apply frame_rule_R.
   by Uniq_uniq r0.
   apply: (ltZ_trans _ Hnz).
   by rewrite Z_S mulZDr !addZA -{1}[_ + _]addZ0 ltZ_add2l.
-- exact: Zge_le.
+- exact: Z.ge_le.
 - by Inde_frame.
 - move=> ?; by Inde_mult.
 
@@ -372,7 +372,7 @@ rewrite -ZbetaE => ?.
 move: (min_lSum nk Z) (min_lSum nk M) => ? ?.
 have ? : 0 < u2Z [C]_s.
   rewrite /zero32 Z2uK // in r_C; move: (min_u2Z [C]_s) => ?; omega.
-apply Zle_ge.
+apply Z.le_ge.
 apply (@leZ_trans (\S_{ nk } Z + \B^nk * 1)); first omega.
 apply/leZ_add2l/leZ_wpmul2l => //; omega.
 
@@ -471,7 +471,7 @@ apply frame_rule_R.
   by Uniq_uniq r0.
   by rewrite size_cat /= len_Z addnC.
   by rewrite size_cat /= HlenM addnC.
-  exact/Zge_le.
+  exact/Z.ge_le.
 - by Inde_frame.
 - move=> ?; by Inde_mult.
 Qed.

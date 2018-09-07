@@ -117,7 +117,7 @@ eapply (before_frame (fun s h =>
 apply frame_rule_R.
 by apply hoare_triple.
 rewrite [modified_regs _]/=; by Inde.
-done.
+by [].
 move=> s h [[[Hrx [Hry [Hrz [Hrk [H [HrY [Ha0 [sgn_a1 Ha1']]]]]]]] _] Ha1].
 rewrite -conAE in H; case: H => h1 [h2 [h1dh2 [h1Uh2 [Hh1 Hh2]]]].
 rewrite /= store.get_r0 in Ha1.
@@ -154,9 +154,9 @@ move/multi_sub_s_s_u_triple/(_ nk vz vx ptry Hnk ptrz ptrx ptrz_fit ptrx_fit ptr
 eapply (before_frame (fun s h => 0 < s2Z sleny /\ [ry ]_ s = vy /\
   (var_e ry |--> sleny :: ptry :: nil) s h )).
 apply frame_rule_R.
-  by apply hoare_triple.
+  exact/hoare_triple.
   rewrite [modified_regs _]/=; by Inde.
-  done.
+by [].
 move=> s h [[[Hrx [hry [Hrz [Hrk [H [hrY [Ha0 [sgn_a1 Ha1'']]]]]]]] Ha1'] Ha1].
 rewrite -conAE conCE 2!conAE in H.
 case: H => h1 [h2 [h1dh2 [h1Uh2 [Hh1 Hh2]]]].
@@ -184,16 +184,13 @@ move=> s h [h1 [h2 [h1dh2 [h1Uh2 [Hh1 Hh2]]]]].
 case: Hh1 => Z' [slenz' [lenZ' [HrY [Hslenz' [sgn_slenz' [Hh1 [Ha3 HSum]]]]]]].
 case: Hh2 => sleny0 [Hry Hh2].
 exists Z', slenz'; repeat (split => //).
-rewrite sgn_slenz'.
-apply Zsgn_pos in sleny0.
-by rewrite sleny0 Zmult_1_l.
+apply Zsgn_pos in sleny0; by rewrite sgn_slenz' sleny0 mul1Z.
 rewrite -2!conAE conCE -conAE.
 exists h1, h2; repeat (split => //).
 assoc_comm Hh1.
 move: Hh1; apply mapstos_ext => /=.
-done.
-apply Zsgn_pos in sleny0.
-by rewrite sleny0 Zmult_1_l.
+by [].
+apply Zsgn_pos in sleny0; by rewrite sleny0 mul1Z.
 
 have : uniq(rk, rz, rx, rY, a0, a1, a2, a3, a4, a5, rX, rZ, r0) by Uniq_uniq r0.
 move/multi_add_s_s_u_triple/(_ nk vz vx ptry Hnk ptrz ptrx
@@ -202,7 +199,7 @@ eapply (before_frame (fun s h => s2Z sleny < 0 /\ (var_e ry |--> sleny :: ptry :
 apply frame_rule_R.
   by apply hoare_triple.
   rewrite [modified_regs _]/=; by Inde.
-done.
+by [].
 move=> s h [ [Hrx [Hry [Hrz [Hrk [H [HrY [Ha0 [Ha1' Ha1'']]]]]]]] Ha1 ].
 rewrite /= in Ha1.
 move/leZP in Ha1.

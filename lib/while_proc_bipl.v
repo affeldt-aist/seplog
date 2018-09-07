@@ -285,9 +285,9 @@ Record procedure : Type := mkProcedure {
 }.
 
 Parameter eq_cmd0 : cmd0 -> cmd0 -> bool.
-Hypothesis eq_cmd0P : Equality.axiom eq_cmd0.
+Axiom eq_cmd0P : Equality.axiom eq_cmd0.
 Parameter eq_expr_b : expr_b -> expr_b -> bool.
-Hypothesis eq_expr_bP : Equality.axiom eq_expr_b.
+Axiom eq_expr_bP : Equality.axiom eq_expr_b.
 
 Fixpoint eq_cmd (c1 c2 : cmd) : bool :=
 match c1, c2 with

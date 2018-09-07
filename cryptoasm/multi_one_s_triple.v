@@ -132,12 +132,8 @@ apply hoare_ifte_bang.
       rewrite Z2uK //; clear -Hnk; simpl in *; omega.
     rewrite Z2uK; last by clear -Hnk; simpl in *; omega.
     rewrite s2Z_cplt2; last first.
-      move/weirdE2.
-      rewrite Hslen slen_neq mulN1Z.
-      move/Zopp_inj => abs.
-      case: Hnk => _.
-      rewrite abs.
-      by move/ltZZ.
+      move/weirdE2; rewrite Hslen slen_neq mulN1Z eqZ_opp.
+      move=> /ltZ_eqF; apply; by case: Hnk.
     rewrite Hslen slen_neq mulN1Z; ring.
   have : uniq(rx, a0, r0) by Uniq_uniq r0.
   move/(multi_negate_triple.multi_negate_triple rx a0 slen ptr X) => Htmp.
@@ -145,8 +141,7 @@ apply hoare_ifte_bang.
   apply hoare_prop_m.hoare_stren with (
     (var_e rx |--> slen :: ptr :: nil ** int_e ptr |--> X) **
     (!(fun s : store.t => [rx ]_ s = vx) **
-        !(fun s : store.t => u2Z [rk ]_ s = Z_of_nat nk)
-        )).
+        !(fun s : store.t => u2Z [rk ]_ s = Z_of_nat nk))).
     move=> s h.
     rewrite [mapstos]lock.
     rewrite !assert_m.conAE.
@@ -186,11 +181,8 @@ rewrite store.get_r0 Z2uK // in H2.
 have {H1 H2}H1 : 0 < s2Z slen.
   have {H2}H2 : s2Z [ a0 ]_ s <> 0.
     contradict H2.
-    rewrite (_ : 0 = s2Z (Z2u 32 0)) in H2; last first.
-      rewrite s2Z_u2Z_pos' //; last by rewrite Z2uK.
-      by rewrite Z2uK.
-    apply s2Z_inj in H2.
-    by rewrite H2 Z2uK.
+    rewrite (_ : 0 = s2Z (Z2u 32 0)) in H2; last by rewrite s2Z_u2Z_pos' // Z2uK.
+    by rewrite (s2Z_inj H2) Z2uK.
   subst slen; omega.
 move/Zsgn_pos in H1.
 rewrite H1 s2Z_u2Z_pos'; last first.

@@ -192,8 +192,7 @@ case: Hh2 => Hh2 Ha0.
 apply assert_m.con_and_bang_inv_R in Hh2.
 case: Hh2 => Hh2 Hrk.
 split.
-  rewrite Hrk slen_nk Zabs_Zmult Zabs_Zsgn_1.
-  by rewrite Zmult_1_l Zabs_Z_of_nat.
+  rewrite Hrk slen_nk normZM Zabs_Zsgn_1; first by rewrite mul1Z Zabs_Z_of_nat.
   contradict slen_zero.
   rewrite (_ : 0 = s2Z (Z2u 32 0)) in slen_zero; last by rewrite s2Z_u2Z_pos' // Z2uK.
   by move/s2Z_inj : slen_zero.

@@ -84,9 +84,8 @@ rewrite -H8{H2 H8} in H6.
 have H : 0 <= store.get x s by omega.
 case: (Zis_gcd_eq _ _ H H6) => X.
 - by exists d.
-- exists (-d); split; first by done.
-  apply Zis_gcd_opp.
-  by apply Zis_gcd_sym.
+- exists (-d); split; first by [].
+  exact/Zis_gcd_opp/Zis_gcd_sym.
 apply while.hoare_while.
 (** var_e y >> var_e x *)
 apply while.hoare_ifte.
@@ -119,11 +118,11 @@ split.
 - move/negbTE: H8 => /= /eqP H8.
   move/negbTE: H9 => /gtZP /= H9.
   subst vx vy; omega.
-- split; first by done.
+- split; first by [].
   split.
   + by rewrite /= H4 H5.
-  + split; first by done.
-    split; last by done.
+  + split; first by [].
+    split; last by [].
     have -> : vx - vy = vy * (-1) + vx by ring.
     by apply Zis_gcd_sym, Zis_gcd_for_euclid2.
 Qed.
@@ -166,14 +165,14 @@ apply hoare_assign with (fun s _ => exists wa wb d, 0 <= wa /\ 0 < wb /\
 move=> s h /= [ [wa [wb [ d [H2 [H3 [H4 [H6 [H7 H8]]]]]]]] H1].
 exists wa, wb, d.
 repeat Store_upd => //.
-split; first by done.
+split; first by [].
 split.
 - move/negbTE : H1 => /eqP /= H1.
   subst wa wb; omega.
-- split; first by done.
+- split; first by [].
   split => //.
-  split; first by done.
-  split; first by done.
+  split; first by [].
+  split; first by [].
   by rewrite /= H4 H6.
 (** a <- var_e b; *)
 apply hoare_assign with (fun s _ => exists wa wb d, 0 <= wa /\ 0 < wb /\
@@ -189,14 +188,14 @@ exists wb, (wa mod wb), d.
 repeat Store_upd => //.
 split; first by omega.
 split.
-- case: (Z_mod_lt wa wb (Zlt_gt _ _ H3)) => X1 _ //.
-- split; first by done.
-  split; first by done.
-  split; last by done.
-  move: (Z_div_mod_eq wa wb (Zlt_gt _ _ H3)) => H.
+- case: (Z_mod_lt wa wb (Z.lt_gt _ _ H3)) => X1 _ //.
+- split; first by [].
+  split; first by [].
+  split; last by [].
+  move: (Z_div_mod_eq wa wb (Z.lt_gt _ _ H3)) => H.
   have ->: wa mod wb = wb * (- (wa / wb)) + wa.
     have -> : wa mod wb = wa - wb * (wa / wb) by omega.
-    by ring.
+    ring.
   by apply (Zis_gcd_for_euclid2 (wb) d (-(wa / wb)) wa).
 Qed.
 
@@ -329,13 +328,8 @@ destruct lst.
     simpl in H0.
     destruct i; auto.
     destruct i; discriminate.
-  assert (2 <= size (a::nil))%nat.
-    rewrite H2.
-    rewrite size_cat.
-    simpl.
-    rewrite size_map.
-    ssromega.
-  done.
+  suff : (2 <= size (a::nil))%nat by [].
+  rewrite H2 size_cat /= size_map; ssromega.
 inversion H.
 inversion H1.
 destruct i.
@@ -500,18 +494,18 @@ move=> s h [H1 [H2 H3]]; exists (cst_e str0); split.
   case_sepcon H1_h2.
   exists h21; exists (h1 \U h22); split; first by map_tac_m.Disj.
   split; first by map_tac_m.Equal.
-  split; [by Mapsto | done].
+  split; [by Mapsto | by []].
 - rewrite /wp_assign; repeat Store_upd => //.
-  split; last by done.
+  split; last by [].
   apply inde_upd_store => //.
   apply inde_sep_con.
   - apply inde_mapstos' => /=.
     apply disj_cons_R.
-    by apply disj_nil_R.
+    exact/disj_nil_R.
     by Uniq_not_In.
   - apply inde_mapstos' => /=.
     apply disj_cons_R.
-    by apply disj_nil_R.
+    exact/disj_nil_R.
     by Uniq_not_In.
 (**  while (var_e str_tmp =/= cst_e 0) *)
 apply (hoare_prop_m.hoare_stren (fun s h => exists i,
@@ -523,7 +517,7 @@ move=> s h [H1 [H2 [H3 Hstr_tmp_is_0]]]; exists O; rewrite drop0; split => //=.
 do 2 rewrite addZ0.
 repeat (split => //).
 apply string_hd_ge0 in Hstr.
-apply Zge_le; by rewrite Hstr_tmp_is_0.
+apply Z.ge_le; by rewrite Hstr_tmp_is_0.
 apply while.hoare_seq with (fun s h => (exists i,
   (var_e buf |---> (take i (str0 :: str_lst)) ++ (drop i buf_lst) ** (var_e str |---> str0 :: str_lst)) s h /\
   [ c1 ]_ s = [ buf ]_ s + Z_of_nat i /\ [ c2 ]_ s = [ str ]_ s + Z_of_nat i /\
@@ -549,9 +543,7 @@ have [H0 | H0] : (size buf_lst <= x \/ x < size buf_lst)%coq_nat by omega.
   rewrite H in H0.
   have H8 : x = size (str0 :: str_lst) by ssromega.
   have H9 : store.get str_tmp s = -1 by rewrite H8 // nth_default in H5.
-  rewrite H9 in H7.
-  (* So this case is impossible *)
-  done.
+  by rewrite H9 in H7. (* So this case is impossible *)
 - have H : 0 < [ str_tmp ]_ s.
     rewrite /hoare_m.eval_b in H1.
     eval_b2Prop_hyp H1.
@@ -627,7 +619,7 @@ apply inde_upd_store => //.
     apply disj_cons_R.
     by apply disj_nil_R.
     by Uniq_not_In.
-split; last by done.
+split; last by [].
 by rewrite /= H2.
 (**    c2 <- var_e c2 \+ cst_e 1; *)
 apply hoare_assign with (fun s h => exists i,
@@ -648,8 +640,8 @@ apply inde_upd_store => //.
     apply disj_cons_R.
     by apply disj_nil_R.
     by Uniq_not_In.
-split; first by done.
-split=> /=; last by done.
+split; first by [].
+split=> /=; last by [].
 by rewrite H3.
 (**    str_tmp <-* var_e c2); *)
 apply hoare_lookup_back'.
@@ -688,12 +680,11 @@ split.
 by rewrite Hc1 Z_S addZA.
 split => //.
 by rewrite Hc2 Z_S addZA.
-split; first by done.
+split; first by [].
 split.
 by ssromega.
 rewrite [nth]lock /= -lock.
-apply Zge_le.
-by apply string_last''.
+exact/Z.ge_le/string_last''.
 (**  var_e c1 *<- var_e str_tmp. *)
 apply hoare_mutation_backwards'.
 move=> s h [[x [Hmem [Hc1 [Hc2 [Hstr_tmp [Hx _]]]]]] Hstr_tmp_is_0].
@@ -788,7 +779,7 @@ rewrite /wp_assign.
 split.
 Compose_sepcon h1' h2; by Mapsto.
 rewrite /=; repeat Store_upd => //.
-apply hoare_lookup_back'' with (fun s h => 
+apply hoare_lookup_back'' with (fun s h =>
   (var_e x |~> cst_e a ** var_e y |~> cst_e b) s h /\ [ var_e z ]e_ s = a /\ [ var_e v ]e_ s = b).
 move=> s h [H1 H2].
 case_sepcon H1.
@@ -809,7 +800,7 @@ Compose_sepcon h1 h2 => //.
 rewrite /imp => h1' [X1 X2] h' Hh'.
 split.
 Compose_sepcon h1' h2; by Mapsto.
-done.
+by [].
 apply hoare_mutation_backwards'.
 move=> s h /= [H1 [H2 H3] ].
 case_sepcon H1.

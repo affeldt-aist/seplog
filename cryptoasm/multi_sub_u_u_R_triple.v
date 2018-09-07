@@ -195,7 +195,7 @@ apply hoare_addiu with (fun s h => exists B' nj nbor,
   nbor <= 1 /\ \S_{ nj } B' = \S_{ nj } A - \S_{ nj } B + nbor * \B^nj /\
   [atmp]_s = A `32_ nj /\
   drop nj B = drop nj B' /\ [btmp']_s = B `32_ nj `+ [bor]_s /\
-  u2Z [btmp']_s = u2Z (B `32_ nj) + nbor ).
+  u2Z [btmp']_s = u2Z (B `32_ nj) + nbor).
 
 move=> s h [[B' [nj [nbor [HlenC [Hra [Hrb [Hrk [Hmem [Hrj [Hjk2 [Hrt [Hrbor [Hnbor [HInv [Hnth [Hratmp [Hrbtmp' Hru]]]]]]]]]]]]]]]]] Huzero]; rewrite /= in Huzero.
 
@@ -204,8 +204,7 @@ by Assert_upd.
 by rewrite add0i sext_Z2u.
 rewrite Hrbtmp' -Hrbor u2Z_add //.
 have X : u2Z (B `32_ nj) <= u2Z [btmp']_s.
-  apply Znot_gt_le.
-  move/Zgt_lt/ltZP => X.
+  rewrite leZNgt => /ltZP X.
   by rewrite Hru X /zero32 /one32 ?Z2uK in Huzero.
 rewrite Hrbtmp' in X; by move/u2Z_add_no_overflow in X.
 
@@ -235,7 +234,7 @@ apply hoare_msubu with (fun s h => exists B' nj nbor,
   [u]_s = one32 /\ u2Z [j]_s = Z_of_nat nj /\ (nj < nk)%nat /\
   u2Z [t]_s = u2Z vb + 4 * Z_of_nat nj /\ u2Z [bor]_s = nbor /\
   nbor <= 1 /\ \S_{ nj } B' = \S_{ nj } A - \S_{ nj } B + nbor * \B^nj /\
-  [atmp]_s = A `32_ nj /\ 
+  [atmp]_s = A `32_ nj /\
   drop nj B = drop nj B' /\ [btmp']_s = B `32_ nj `+ [bor]_s /\
   u2Z [btmp']_s = u2Z (B `32_ nj) + nbor /\
   ((u2Z [btmp']_s <= u2Z (A `32_ nj) -> store.utoZ s = u2Z (A `32_ nj) - u2Z [btmp']_s) /\
@@ -249,10 +248,9 @@ by Assert_upd.
 move=> H; rewrite store.msubu_utoZ Hm ?(@u2Z_zext 32) //.
 apply (@ltZ_trans \B^1) => //.
 exact: max_u2Z.
-exact: Zle_ge.
+exact: Z.le_ge.
 move=> H; rewrite store.msubu_utoZ_overflow Hm ?(@u2Z_zext 32) //.
-apply (@ltZ_trans \B^1) => //.
-exact: max_u2Z.
+apply (@ltZ_trans \B^1) => //; exact: max_u2Z.
 
 (** sltu bor atmp btmp'; *)
 
@@ -268,7 +266,7 @@ apply hoare_sltu with (fun s h => exists B' nj nbor,
   u2Z [btmp']_s = u2Z (B `32_ nj) + nbor /\
   (u2Z [btmp']_s <= u2Z (A `32_ nj) -> store.utoZ s = u2Z (A `32_ nj) - u2Z [btmp']_s) /\
   (u2Z (A `32_ nj) < u2Z [btmp']_s -> store.utoZ s = \B^2 + u2Z (A `32_ nj) - u2Z [btmp']_s) /\
-  [bor]_s = if Zlt_bool (u2Z (A `32_ nj)) (u2Z [btmp']_s) then one32 else zero32).
+  [bor]_s = if u2Z (A `32_ nj) <? u2Z [btmp']_s then one32 else zero32).
 
 move=> s h [B' [nj [nbor [HlenC [Hra [Hrb [Hrk [Hmem [Hone [Hrj [Hjk [Hrt [Hrbor [Hnbor [Hinv [Hratmp [Hnth [Hrbtmp' [Hrbtmp'2 [Hinv1 Hinv2]]]]]]]]]]]]]]]]]]]].
 
@@ -307,7 +305,7 @@ case: (Z_lt_le_dec (u2Z (A `32_ nj)) (u2Z [btmp']_s)).
     move: (min_u2Z (A `32_ nj)) (max_u2Z [btmp']_s) => ? ?; omega.
   case: Hm => _ Hm.
   rewrite Hinv Hm (Zbeta_S nj) Hrbtmp'2 Z2uK //; ring.
-- move/Zle_not_lt/ltZP/negbTE => X.
+- move/leZNgt/ltZP/negbTE => X.
   rewrite X in Hrbor.
   move/ltZP/leZNgt in X.
   exists B', nj, (u2Z zero32).
@@ -341,7 +339,7 @@ have [X1 X2] : nbor = 1 /\ u2Z (B `32_ nj) = \B^1 - 1.
   rewrite Hrbtmp' in H.
   apply u2Z_add_overflow' in H; rewrite -Zbeta1E in H.
   move: (max_u2Z (B `32_ nj)) => H'; rewrite -Zbeta1E in H'; omega.
-rewrite Hratmp Hinv X1 X2 !Zmult_1_l (Zbeta_S nj); ring.
+rewrite Hratmp Hinv X1 X2 !mul1Z (Zbeta_S nj); ring.
 
 (** sw ctmp zero16 t; *)
 

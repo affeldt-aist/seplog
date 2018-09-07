@@ -14,7 +14,7 @@ corresponding to the following papers:
 
 ## Requirements
 
-Coq version 8.8.0, mathcomp version 1.7.0
+Coq version 8.8.1, mathcomp version 1.7.0
 
 ## Install
 
@@ -24,7 +24,7 @@ coq_makefile -o Makefile -f _CoqProject
 
 coq_makefile -o Makefile -f XMake; make
 
-#### Doc (https://staff.aist.go.jp/reynald.affeldt/coqdev/)
+#### Doc
 
 make -f MakeDoc
 (once everything has been compiled)

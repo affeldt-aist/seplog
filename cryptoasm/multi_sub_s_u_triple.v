@@ -329,7 +329,7 @@ rewrite store.get_r0.
 apply u2Z_inj.
 by rewrite u2Z_Z2s_pos // Z2uK.
 by rewrite Ha3 Z2uK.
-by rewrite Z2sK //= Hslen Zmult_1_l HSum subZZ.
+by rewrite Z2sK //= Hslen mul1Z HSum subZZ.
 
 (** multi_sub k X b X a0 a1 a2 a3 a4 ret *)
 
@@ -475,7 +475,7 @@ move=> s h [A'_nk [Ha [Hb [Hk [HX [Hsgn [Hmem [B_A [Ha3 HSum]]]]]]]]].
 case: Hmem => h1 [h2 [h1_d_h2 [h1_U_h2 [Hh1 Hh2]]]].
 Compose_sepcon h1 h2; first by [].
 repeat (split => //).
-exact: Zlt_gt.
+exact: Z.lt_gt.
 
 move=> s h [h1 [h2 [h1_d_h2 [h1_U_h2 [Hh1 Hh2]]]]].
 case : Hh2 => A'_nk [Ha [Hb [Hk [HX [HZsgn [Hh2 [B_A [Ha3 HSum']]]]]]]].
@@ -484,10 +484,10 @@ rewrite s2Z_cplt2; last first.
   rewrite weirdE2 slen_not_weird HZsgn; omega.
 rewrite Zsgn_Zopp Ha3 Z2uK // mul0Z addZ0.
 repeat (split => //).
-rewrite slen_not_weird HZsgn Zmult_1_l (proj2 (Zsgn_pos (Z_of_nat nk))) //; omega.
-rewrite HZsgn Zmult_1_l (proj2 (Zsgn_neg (\S_{ nk } A - \S_{ nk } B))) //; omega.
+rewrite slen_not_weird HZsgn mul1Z (proj2 (Zsgn_pos (Z_of_nat nk))) //; omega.
+rewrite HZsgn mul1Z (proj2 (Zsgn_neg (\S_{ nk } A - \S_{ nk } B))) //; omega.
 by Compose_sepcon h1 h2.
-rewrite HZsgn Zmult_1_l HSum'; ring.
+rewrite HZsgn mul1Z HSum'; ring.
 
 (** addiu a3 r0 one16; *)
 

@@ -151,15 +151,12 @@ apply while.hoare_seq with (!(fun s => s2Z ([rk ]_ s) = `|s2Z slen|) **
 
 have : s2Z slen <> - 2 ^ 31.
   case: encoding => H1 H2 H3 H4.
-  rewrite H2.
-  move=> abs.
-  have : Z_of_nat nk = 2 ^ 31.
+  rewrite H2 => abs.
+  have abs' : Z_of_nat nk = 2 ^ 31.
     destruct (s2Z slen) => //.
-    rewrite Zmult_1_l in abs.
-    by destruct nk.
-    rewrite mulN1Z in abs.
-    by apply Zopp_inj in abs.
-  move=> abs'; by rewrite abs' in nk_231.
+    rewrite mul1Z in abs; by destruct nk.
+    by rewrite mulN1Z eqZ_opp in abs *.
+  by rewrite abs' in nk_231.
 have : uniq(rk, a0,r0) by Uniq_uniq r0.
 move/abs_triple_bang/(_ slen) => Habs_triple.
 move/Habs_triple => {Habs_triple} Habs_triple.

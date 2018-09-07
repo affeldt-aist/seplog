@@ -114,7 +114,6 @@ exists A, slen.
 repeat Reg_upd.
 rewrite -r_a1 mul0Z subZ0.
 repeat (split => //).
-(*by rewrite Zsgn_Zmult Zsgn_involutive.*)
 by Assert_upd.
 by rewrite add0i sext_Z2u // Z2uK.
 by rewrite add0i sext_Z2u // Z2uK // mul0Z addZ0.

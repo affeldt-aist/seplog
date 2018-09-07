@@ -622,7 +622,7 @@ have Htmp : 0 < \S_{ nk } M by apply (@leZ_ltZ_trans (\S_{ nk } X)); [exact: min
 apply eqmod_mod in Sum_X => //.
 apply eqmod_inv in Sum_X; last 2 first.
   split => //; exact: min_lSum.
-  exact/Z_mod_lt/Zlt_gt.
+  exact/Z_mod_lt/Z.lt_gt.
 by rewrite -Sum_X cats1.
 
 rewrite bits_int_or (bits.drop_or 32); last 2 first.

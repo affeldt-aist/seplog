@@ -503,12 +503,10 @@ destruct k.
   rewrite utoZ_def in H.
   rewrite [\B^1]lock /= -lock in H.
   rewrite 2!(@u2Z_zext 24 acx_size) Z2uK //=.
-  have H1 : u2Z h * \B^1 + u2Z a * \B^2 < \B^1 * Zpos p.
-    move: (min_u2Z l) => ?; omega.
-  apply Zmult_gt_0_lt_reg_r with (\B^1).
-  by apply Zlt_gt.
+  have H1 : u2Z h * \B^1 + u2Z a * \B^2 < \B^1 * Zpos p by move: (min_u2Z l) => ?; omega.
+  apply/(@ltZ_pmul2r \B^1) => //.
   rewrite 2!addZ0.
-  rewrite (_ : (u2Z a * \B^1 + u2Z h) * \B^1 = u2Z h * \B^1 + u2Z a * \B^2); last by rewrite (Zbeta_S 1); ring.
+  rewrite (_ : (_ + _) * \B^1 = u2Z h * \B^1 + u2Z a * \B^2); last by rewrite (Zbeta_S 1); ring.
   by rewrite (mulZC (Zpos p)).
 - (* if K < 0, we have a contradiction *) move=> H.
   move: (utoZ_pos mu) => H'.
@@ -1450,11 +1448,10 @@ elim.
     move/(_ Hh2 _ _ Hi Helt).
     rewrite [u2Z _]/= u2Z_add_Z2u //; last first.
       rewrite Z_S in Hfit; rewrite -Zbeta1E; omega.
-    rewrite -{1}(Zmult_1_l 4) Z_div_plus_full // Zabs_nat_Zplus //; last first.
-      apply Z_div_pos => //; by apply min_u2Z.
+    rewrite -{1}(mul1Z 4) Z_div_plus_full // Zabs_nat_Zplus //; last first.
+      apply Z_div_pos => //; exact/min_u2Z.
     rewrite -addnA => {IH}IH.
-    rewrite Hunion.
-    by apply heap.get_union_R.
+    rewrite Hunion; exact: heap.get_union_R.
 Qed.
 
 Lemma mapstos_inj : forall n l1 l2 e st h, size l1 = n -> size l2 = n ->
