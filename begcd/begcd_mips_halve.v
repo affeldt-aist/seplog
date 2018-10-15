@@ -208,12 +208,12 @@ apply fwd_sim_ifte => //.
              - rewrite [Equality.sort _]/= in Hvars *. by Uniq_uniq O.
              - by Uniq_uniq r0.
             move=> st s h [] st_s_h H.
-            split; first by apply st_s_h.
+            split; first exact: st_s_h.
             case: H => rk0 [rk231 [Hk [Ht2 Hu]]].
-            split; first by assumption.
+            split; first by [].
             rewrite Hk Z_of_nat_Zabs_nat //; last exact: min_u2Z.
-            split; last by assumption.
-            apply Zle_neq_lt; first by apply min_u2Z.
+            split; last by [].
+            rewrite ltZ_neqAle; split; last exact: min_u2Z.
             contradict rk0.
             rewrite (_ : 0 = u2Z zero32) in rk0; last by rewrite Z2uK.
             by move/u2Z_inj in rk0.

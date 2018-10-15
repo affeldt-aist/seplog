@@ -1337,15 +1337,14 @@ apply (@log_mapsto_ind g
   case/orP => [ /eqP ? | Ht].
   + subst t.
     apply: (leZ_ltZ_trans _ Hfit).
-    rewrite inj_plus -addZA; apply leZ_add2l.
-    apply Zle_plus_trans; by [apply Zle_0_nat | apply leZZ].
+    rewrite inj_plus -addZA leZ_add2l.
+    apply leZ_addl; by [apply Zle_0_nat | apply leZZ].
   + apply Halign' in Ht.
     apply: (leZ_ltZ_trans _ Ht).
-    rewrite 2!inj_plus -!addZA; apply leZ_add2l.
-    rewrite addZA.
-    apply Zle_plus_trans.
-    rewrite -inj_plus; by apply Zle_0_nat.
-    by apply leZZ.
+    rewrite 2!inj_plus -!addZA leZ_add2l addZA.
+    apply leZ_addl.
+    rewrite -inj_plus; exact: Zle_0_nat.
+    exact: leZZ.
 Qed.
 
 Lemma log_mapsto_inv_align {g} : forall (t : g.-typ) (vhd : log t) a (h : hp.t),

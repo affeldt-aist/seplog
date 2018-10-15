@@ -205,9 +205,9 @@ apply fwd_sim_ifte_spec => //.
       case: P1 => P1 [] P2 [] P3 _.
       Rewrite_reg rk s.
       rewrite P3 Z_of_nat_Zabs_nat; last exact: min_u2Z.
-      split; last by reflexivity.
       split; last by [].
-      apply Zle_neq_lt; first by apply min_u2Z.
+      split; last by [].
+      rewrite ltZ_neqAle; split; last exact: min_u2Z.
       contradict P1.
       rewrite (_ : 0 = u2Z zero32) in P1; last by rewrite Z2uK.
       by move/u2Z_inj : P1.
@@ -221,7 +221,7 @@ apply fwd_sim_ifte_spec => //.
         case: P1 => P1 [] P2 [] P3 _.
         rewrite P3 Z_of_nat_Zabs_nat; last exact: min_u2Z.
         split => //.
-        apply Zle_neq_lt; first by apply min_u2Z.
+        rewrite ltZ_neqAle; split; last exact: min_u2Z.
         contradict P1.
         rewrite (_ : 0 = u2Z zero32) in P1; last by rewrite Z2uK.
         by move/u2Z_inj : P1.
@@ -234,12 +234,12 @@ apply fwd_sim_ifte_spec => //.
             rewrite [Equality.sort _]/= in Hvars *. by Uniq_uniq O.
             by Uniq_uniq r0.
           move=> st s h [] st_s_h H.
-          split; first by apply st_s_h.
-          split; first by tauto.
+          split; first exact: st_s_h.
+          split; first tauto.
           case: H => H1 [] H2 [] H3 [] H4 H5.
-          rewrite H3 Z_of_nat_Zabs_nat; last by apply min_u2Z.
+          rewrite H3 Z_of_nat_Zabs_nat; last exact: min_u2Z.
           split; last by [].
-          apply Zle_neq_lt; first exact: min_u2Z.
+          rewrite ltZ_neqAle; split; last exact: min_u2Z.
           contradict H1.
           apply u2Z_inj; by rewrite -H1 Z2uK.
         apply pfwd_sim_multi_add_s_s_u_wo_overflow.

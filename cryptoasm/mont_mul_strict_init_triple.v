@@ -1,7 +1,7 @@
 (* seplog (c) AIST 2005-2013. R. Affeldt, N. Marti, et al. GNU GPLv3. *)
 (* seplog (c) AIST 2014-2018. R. Affeldt et al. GNU GPLv3. *)
 From mathcomp Require Import ssreflect ssrfun ssrbool eqtype ssrnat seq.
-Require Import ZArith_ext ssrnat_ext seq_ext machine_int multi_int uniq_tac.
+Require Import ssrZ ZArith_ext ssrnat_ext seq_ext machine_int multi_int uniq_tac.
 Import MachineInt.
 Require Import mips_seplog mips_frame mips_contrib mips_tactics mapstos.
 Require Import multi_zero_u_prg mont_mul_strict_prg multi_zero_u_triple.
@@ -62,7 +62,7 @@ by rewrite !assert_m.conAE.
 
 apply pull_out_bang => HlenZ.
 
-apply (hoare_prop_m.hoare_stren 
+apply (hoare_prop_m.hoare_stren
   ((fun s h => [z]_s = vz /\ u2Z [k]_s = Z_of_nat nk /\ (var_e z |--> Z) s h) **
    (fun s h => [x]_s = vx /\ [y]_s = vy /\ [m]_s = vm /\ [alpha]_s = valpha /\
       (var_e x |--> X ** var_e y |--> Y ** var_e z \+ int_e (Z2u 32 (Z_of_nat (4 * nk))) |~> int_e zero32 **

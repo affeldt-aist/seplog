@@ -83,10 +83,9 @@ rewrite /state_mint; split.
         by case.
       move=> abs'.
       rewrite abs' mulN1Z in abs.
-      apply Zopp_inj in abs.
+      apply Z.opp_inj in abs.
       rewrite abs in k_231.
-      case: k_231 => _.
-      by move/ltZZ.
+      by case: k_231 => _ /ltZZ.
     apply mkVarSigned with (cplt2 slen) ptr A => //.
     * by rewrite -rx_st_st'.
     * move/syntax_m.seplog_m.semop_prop_m.exec_cmd0_inv : exec_pseudo.

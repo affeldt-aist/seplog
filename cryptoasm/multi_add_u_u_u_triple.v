@@ -135,7 +135,7 @@ exists nj, C; rewrite Hone umul_1; repeat Reg_upd; repeat (split; trivial).
 by Assert_upd.
 rewrite store.utoZ_maddu.
 - rewrite (@u2Z_zext 32) (_ : 2 ^^ 32 = 2 ^^ 32 - 1 + 1) //.
-  apply leZ_add => //; exact/Zle_minus_1/max_u2Z.
+  apply leZ_add => //; exact/leZsub1/max_u2Z.
   exact: (@leZ_ltZ_trans 1).
 - rewrite store.utoZ_maddu; last exact: (@leZ_ltZ_trans 1).
   rewrite lSum_remove_last -/zero32 (addZC (\S_{ nj } A)) -addZA -Hinv Hratmp (@u2Z_zext 32) store.acxhi_zero; last first.
@@ -182,7 +182,7 @@ exists nj, C; rewrite Hone umul_1; repeat Reg_upd; repeat (split; trivial).
 by Assert_upd.
 rewrite store.utoZ_maddu.
 rewrite (@u2Z_zext 32) (_ : 2 ^^ 33 - 1 = 2 ^^ 32 - 1 + 2 ^^ 32) //.
-apply leZ_add => //; exact/Zle_minus_1/max_u2Z.
+apply leZ_add => //; exact/leZsub1/max_u2Z.
 exact: (leZ_ltZ_trans Hm).
 rewrite store.utoZ_maddu; last exact: (leZ_ltZ_trans Hm).
 rewrite Hratmp (lSum_remove_last _ B) -/zero32 -ZbetaE addZA -Hinv (@u2Z_zext 32) /= -/(B `32_ nj); ring.
@@ -287,5 +287,5 @@ repeat (split; trivial).
   apply: (leZ_ltZ_trans _ Hnc).
   move/ltP : Hjk => /inj_lt ?.
   move: (min_u2Z vc) => ?; omega.
-- apply Zle_minus_1 in Hm; exact Hm.
+- move/leZsub1 : Hm; exact.
 Qed.

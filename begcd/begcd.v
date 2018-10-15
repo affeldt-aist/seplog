@@ -2228,7 +2228,7 @@ split.
   tauto.
 split.
   rewrite /ti_bounds; by repeat Store_upd.
-move/Zge_le : H1; case/leZ_eqVlt => H1 //.
+move/Z.ge_le : H1; case/leZ_eqVlt => H1 //.
 by rewrite -H1 in H15.
 
 apply hoare_assign with (fun s h => C2 vu vv u v g s /\
@@ -2568,8 +2568,7 @@ split.
       rewrite Htmp tuv1; ring.
     have Htmp : [u1 ]_ s - [v1 ]_ s <= 0 by omega.
     have {Htmp}Htmp : [u ]_ s * ([u1 ]_ s - [v1 ]_ s) <= 0.
-      apply Zmult_sign => //.
-      omega.
+      apply mulZ_ge0_le0 => //; omega.
     omega.
   have {Htmp}Htmp : - [v ]_ s * ([u2 ]_ s - [v2 ]_ s) < [v3 ]_ s by omega.
   apply/leZP/negPn/negP; rewrite -ltZNge' => /ltZP abs.

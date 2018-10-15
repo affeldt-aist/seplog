@@ -1,7 +1,7 @@
 (* seplog (c) AIST 2005-2013. R. Affeldt, N. Marti, et al. GNU GPLv3. *)
 (* seplog (c) AIST 2014-2018. R. Affeldt et al. GNU GPLv3. *)
 From mathcomp Require Import ssreflect ssrbool eqtype seq.
-Require Import Init_ext ZArith_ext uniq_tac.
+Require Import Init_ext ssrZ ZArith_ext uniq_tac.
 Require Import machine_int multi_int encode_decode integral_type.
 Import MachineInt.
 Require Import mips_bipl mips_seplog mips_tactics mips_syntax mips_mint.
@@ -15,12 +15,13 @@ Local Open Scope heap_scope.
 Local Open Scope assoc_scope.
 Local Open Scope uniq_scope.
 Local Open Scope asm_expr_scope.
+Local Open Scope zarith_ext_scope.
 
 Lemma safe_termination_copy_s_s u x d L rk ru rx a0 a1 a2 a3 a4 : uniq(u, x) ->
   uniq(rk, ru, rx, a0, a1, a2, a3, a4, r0) ->
-  safe_termination 
+  safe_termination
   (fun s st h => state_mint (u |=> signed L ru \U+ (x |=> signed L rx \U+ d)) s st h /\
-                 L = Zabs_nat (u2Z ([rk]_st)))
+                 L = '| u2Z ([rk]_st) |)
   (copy_s_s rk ru rx a0 a1 a2 a3 a4).
 Proof.
 move=> Hvars Hregs.

@@ -115,7 +115,7 @@ move/(_ Hst'_proj) => H; split => Htest.
   decompose [and] H; clear H.
   case: encoding => Ha Hb Hc Hd.
   rewrite Hd -H1.
-  apply/Zle_ge/mulZ_ge0 => //; exact: min_lSum.
+  apply/Z.le_ge/mulZ_ge0 => //; exact: min_lSum.
 Qed.
 
 Lemma fwd_sim_b_pick_sign_bne x rx a0 a1 L d : uniq(rx, a0, a1, r0) ->
@@ -302,7 +302,7 @@ move/(_ Hst'_proj) => H; split => Htest.
   case: encoding => Ha Hb Hc Hd.
   rewrite Hd -H1 in Htest.
   apply Zsgn_neg0.
-  apply Zge_le in Htest.
+  apply Z.ge_le in Htest.
   case: H3.
     by move=> ->.
     case.
@@ -311,13 +311,13 @@ move/(_ Hst'_proj) => H; split => Htest.
       rewrite H3 in Htest.
       rewrite Zmult_1_l in Htest.
       move: (min_lSum L A).
-      case/Z_le_lt_eq_dec => abs; first by omega.
+      case/Z_le_lt_eq_dec => abs; first omega.
       rewrite -abs mulZ0 in Hd .
       rewrite Hd /= in Hc.
       by rewrite Hc in H1.
     by move=> ->.
 - rewrite /= /ZIT.geb.
-  apply/geZP/Zle_ge.
+  apply/geZP/Z.le_ge.
   rewrite /= in Htest.
   move/leZP in Htest.
   case: encoding => Ha Hb Hc Hd.
@@ -325,6 +325,5 @@ move/(_ Hst'_proj) => H; split => Htest.
   rewrite Hd -H1.
   apply Zsgn_neg0 in Htest.
   move: (min_lSum L A) => ?.
-  rewrite mulZC.
-  exact: Zmult_sign.
+  rewrite mulZC; exact: mulZ_ge0_le0.
 Qed.

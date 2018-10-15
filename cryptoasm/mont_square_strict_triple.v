@@ -352,7 +352,7 @@ move: (max_lSum nk M); rewrite -ZbetaE => ?.
 move: (min_lSum nk Z) (min_lSum nk M) => ? ?.
 have ? : 0 < u2Z [C]_s.
   rewrite /zero32 Z2uK // in r_C.
-  apply Zle_neq_lt; by [apply min_u2Z | contradict r_C].
+  rewrite ltZ_neqAle; split; by [apply min_u2Z | contradict r_C].
 simpl.
 apply (@leZ_trans (\S_{ nk } Z + \B^nk * 1)); first by omega.
 apply leZ_add2l, leZ_pmul2l; by [omega | ].

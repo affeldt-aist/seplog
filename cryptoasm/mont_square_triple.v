@@ -245,8 +245,7 @@ do 8 (split; trivial).
 split.
   rewrite store.utoZ_maddu // Hone umul_1 (@u2Z_zext 32) r_Z_.
   apply (@leZ_trans ((\B^1 - 1) + (\B^1 - 1) * (\B^1 - 1))) => //.
-  apply leZ_add.
-  apply Zle_minus_1; exact: max_u2Z.
+  apply leZ_add; first exact/leZsub1/max_u2Z.
   rewrite Hm2 -u2Z_umul; exact: max_u2Z_umul.
 by rewrite store.utoZ_maddu // Hone umul_1 (@u2Z_zext 32) r_Z_ Hm2 addZC.
 
@@ -276,8 +275,7 @@ rewrite Hm2 u2Z_add //.
 by rewrite u2Z_umul u2Z_zext.
 rewrite u2Z_zext ZpowerD -Zbeta1E -ZbetaD /=.
 apply (@leZ_ltZ_trans ((\B^1 - 1) * (\B^1 - 1) + (\B^1 - 1))); last by [].
-apply leZ_add; first exact: max_u2Z_umul.
-apply Zle_minus_1; exact: max_u2Z.
+apply leZ_add; [exact: max_u2Z_umul | exact/leZsub1/max_u2Z].
 
 (** mfhi s; *)
 
@@ -306,7 +304,7 @@ have H : store.lo s = [t]_s.
     * by rewrite u2Z_zext.
     * rewrite u2Z_zext ZpowerD -Zbeta1E -ZbetaD /=.
       apply (@leZ_ltZ_trans ((\B^1 - 1) * (\B^1 - 1) + (\B^1 - 1))); last by [].
-      apply leZ_add; [exact: (@max_u2Z_umul 32) | exact/Zle_minus_1/max_u2Z].
+      apply leZ_add; [exact: (@max_u2Z_umul 32) | exact/leZsub1/max_u2Z].
 
 rewrite -H u2Z_concat -Zbeta1E.
 rewrite store.utoZ_def store.utoZ_acx_beta2 in Hm2; last exact: (@leZ_ltZ_trans (\B^1 * (\B^1 - 1))).
@@ -408,10 +406,9 @@ rewrite store.utoZ_def store.hi_mthi_op store.acx_mthi_op store.lo_mthi_op store
   rewrite -u2Z_umul; exact: max_u2Z_umul.
 rewrite Z2uK // addZ0.
 apply (@leZ_ltZ_trans ((\B^1 - 1) + (\B^1 - 1) * \B^1)); last by [].
-apply leZ_add.
-apply Zle_minus_1; exact: max_u2Z.
+apply leZ_add; first exact/leZsub1/max_u2Z.
 apply leZ_wpmul2r => //.
-apply Zle_minus_1; exact: max_u2Z.
+exact/leZsub1/max_u2Z.
 exact: store.hi_mthi_op.
 
 (** mtlo t; *)
@@ -437,10 +434,9 @@ by Assert_upd.
 
 rewrite store.utoZ_def store.acx_mtlo_op store.lo_mtlo_op store.hi_mtlo_op store.utoZ_acx_beta2 // Z2uK //= addZ0.
 apply (@leZ_ltZ_trans ((\B^1 - 1) + (\B^1 - 1) * \B^1)); last by [].
-apply leZ_add.
-apply Zle_minus_1; exact: max_u2Z.
+apply leZ_add; first exact/leZsub1/max_u2Z.
 apply leZ_wpmul2r => //.
-apply Zle_minus_1; exact: max_u2Z.
+exact/leZsub1/max_u2Z.
 rewrite -Hm2.
 exact: store.hi_mtlo_op.
 exact: store.lo_mtlo_op.
@@ -477,7 +473,7 @@ rewrite mul0Z addZ0 addZC -u2Z_concat Hm2 Hm3 Hconcat -u2Z_umul u2Z_add.
 rewrite (@u2Z_zext 32) // u2Z_zext.
 apply (@leZ_ltZ_trans ((\B^1 - 1) * (\B^1 - 1) + (\B^1 - 1))); last by [].
 apply leZ_add; first exact: (@max_u2Z_umul 32).
-rewrite (@u2Z_zext 32) //; apply Zle_minus_1; exact: max_u2Z.
+rewrite (@u2Z_zext 32) //; exact/leZsub1/max_u2Z.
 by split; [exact: leZZ | exact: expZ_gt0].
 
 (** mflhxu Z_; *)
@@ -509,7 +505,7 @@ apply store.mflhxu_kbeta1_utoZ.
 apply (@leZ_ltZ_trans ((\B^1 - 1) * (\B^1 - 1) + (\B^1 - 1) * (\B^1 - 1) + (\B^1 - 1))); last by [].
 rewrite store.utoZ_upd Hm2; apply leZ_add.
 apply leZ_add; rewrite -u2Z_umul; exact: max_u2Z_umul.
-exact/Zle_minus_1/max_u2Z.
+exact/leZsub1/max_u2Z.
 
 (** addiu t z zero16; *)
 
@@ -762,7 +758,7 @@ rewrite store.utoZ_maddu //.
 apply (@ltZ_leZ_trans ((\B^1 - 1) + \B^2)); last by [].
 apply leZ_lt_add; last by [].
 rewrite Hone umul_1 (@u2Z_zext 32) //.
-apply Zle_minus_1; exact/max_u2Z.
+exact/leZsub1/max_u2Z.
 
 case: Hinv => K [Hinv1 Hinv2].
 exists K; split; last by []. (* about X * Y < M *)
@@ -841,9 +837,8 @@ rewrite sext_Z2u // u2Z_add_Z2u //.
   apply (@leZ_ltZ_trans (Z_of_nat nk)).
   rewrite (_ : 1 = Z_of_nat 1) //. by omegaz' ssromega. (*-inj_plus plus_comm; exact/inj_le/leP.*)
   apply: leZ_ltZ_trans; last exact/Hnz.
-  apply Zle_plus_trans; first exact: min_u2Z.
-  rewrite mulZC; apply Zle_scale; last by [].
-  exact/Zle_0_nat.
+  apply leZ_addl; first exact: min_u2Z.
+  rewrite mulZC; apply Zle_scale; [exact/Zle_0_nat | by [] ].
 
 rewrite r_t Z_S; ring.
 
@@ -915,7 +910,7 @@ rewrite sext_Z2u // u2Z_add_Z2u //.
   apply: (leZ_ltZ_trans _ Hnz).
   rewrite -addZA; apply leZ_add2l.
   rewrite -{2}(mulZ1 4) -mulZDr; apply leZ_wpmul2l => //.
-  rewrite -addZA; apply Zle_plus_trans_L => //; exact/inj_le/leP.
+  rewrite -addZA; apply addr_leZ => //; exact/inj_le/leP.
 
 (** sw Z_ mfour16 t *)
 
@@ -939,7 +934,7 @@ have Htmp: [z]_s `+ Z2u 32 (Z_of_nat (4 * nint_.-2)) = [t]_s `+ sext 16 mfour16.
   apply/inj_le/leP.
   by rewrite subn2 (leq_trans (leq_pred _ )) // (leq_trans _ Hint_') // leq_pred.
   rewrite r_t -addZA (_ : -4 = 4 * ( -1 )) // -mulZDr.
-  apply Zle_plus_trans; first exact: min_u2Z.
+  apply leZ_addl; first exact: min_u2Z.
   rewrite mulZC; apply mulZ_ge0 => //.
   rewrite -addZA /= (_ : -2 = - Z_of_nat 2) //.
   exact/Zle_left/inj_le/leP.
@@ -1083,7 +1078,7 @@ repeat Reg_upd; repeat (split; trivial).
 by Assert_upd.
 rewrite store.utoZ_maddu // Hone umul_1 (@u2Z_zext 32) //.
 apply (@ltZ_leZ_trans ((\B^1 - 1) + (2 * \B^1 - 1))); last by [].
-apply leZ_lt_add => //; exact/Zle_minus_1/max_u2Z.
+apply leZ_lt_add => //; exact/leZsub1/max_u2Z.
 
 case : Hinv => K [Hinv1 Hinv2].
 exists K; split; last by []. (* about X * Y < M *)
@@ -1178,7 +1173,7 @@ exists K; split.
   rewrite -2!mulZA.
   apply leZ_wpmul2r.
   apply mulZ_ge0 => //; exact: min_lSum.
-  apply Zle_minus_1; exact/max_u2Z.
+  exact/leZsub1/max_u2Z.
   rewrite -addZA.
   apply (@leZ_trans (2 * \S_{ nk } M * \B^next +
     ((\B^1 - 1) * \B^next * \S_{ nk } M + (\B^1 - 1) * \B^next * \S_{ nk } M))).
@@ -1284,6 +1279,5 @@ exists (K + u2Z [quot]_s * \B^(next - 1)); split.
 - apply (@leZ_ltZ_trans(\S_{ next } X * \S_{ nk } X + K * \S_{ nk } M + ((\B^1 - 1) * \B^next.-1 * \S_{ nk } M))); last by rewrite -mulZA.
   rewrite mulZDl addZA.
   apply/leZ_add2l/leZ_wpmul2r; first exact: min_lSum.
-  rewrite subn1; apply leZ_wpmul2r => //.
-  apply Zle_minus_1; exact: max_u2Z.
+  rewrite subn1; apply leZ_wpmul2r => //; exact/leZsub1/max_u2Z.
 Qed.

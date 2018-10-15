@@ -316,7 +316,7 @@ by Assert_upd.
 
 rewrite store.utoZ_maddu // Hone umul_1 (@u2Z_zext 32).
 apply (@ltZ_leZ_trans ((\B^1 - 1) + (\B^2 - \B^1 + 1))) => //.
-apply leZ_lt_add => //; exact/Zle_minus_1/max_u2Z.
+apply leZ_lt_add => //; exact/leZsub1/max_u2Z.
 
 rewrite store.utoZ_maddu // Hone umul_1 (@u2Z_zext 32) Hrctmp.
 apply trans_eq with (\S_{ ni + nk } C + store.utoZ s * \B^(ni + nj)

@@ -102,8 +102,7 @@ exists (X `32_ '|u2Z [i ]_ s|); split.
 Decompose_32 X '|u2Z ([i ]_ s)| X1 X2 HlenX1 HX'; last first.
   apply/ltP/Nat2Z.inj_lt.
   rewrite Z_of_nat_Zabs_nat //.
-  - rewrite len_X.
-    apply Zle_neq_lt => //; by rewrite -r_k.
+  - by rewrite len_X ltZ_neqAle -{1}r_k.
   - exact/min_u2Z.
 rewrite {1}HX' in mem.
 rewrite (mapstos.decompose_equiv _ _ _ _ _ HlenX1) in mem.

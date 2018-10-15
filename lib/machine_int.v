@@ -1696,10 +1696,9 @@ destruct a'.
   split => //; exact: expZ_gt0.
 - by eapply u2Z_rem''_; eauto.
 - move: (min_u2Z a) => H1.
-  suff [//] : ~ (0 <= u2Z a).
+  suff : ~ (0 <= u2Z a) by [].
   apply ltZNge.
-  rewrite H mulZC.
-  apply Zmult_neg; by [apply Zlt_neg_0 | apply expZ_gt0].
+  rewrite H mulZC pmulZ_llt0; by [apply Zlt_neg_0 | apply expZ_gt0].
 Qed.
 
 Lemma u2Z_rem_zext : forall n (a : int n) k m, u2Z (zext k a `% m) = u2Z (a `% m).
@@ -3030,25 +3029,25 @@ rewrite (_ : 0 = 0 mod m) //.
 have m_min' : 0 < m.
   destruct m => //.
   by rewrite mulZ0 in km_pos.
-  lapply (Zmult_sign k (Zneg p) k_pos) => //.
+  lapply (mulZ_ge0_le0 k (Zneg p) k_pos) => //.
   omega.
 apply (proj1 (eqmod_Zmod _ _ _ m_min')).
 eapply eqmod_trans with (u2Z a + u2Z (Z2u n (k * m))).
-- apply Zmod_divides in m_n; last by omega.
+- apply Zmod_divides in m_n; last omega.
   case: m_n => c m_n.
   apply eqmod_div with c.
   rewrite (mulZC c m) -m_n.
   by apply u2Z_add_eqmod.
-- apply Zmod_divides in a_m; last by omega.
+- apply Zmod_divides in a_m; last omega.
   case: a_m => c Hc.
-  rewrite u2Z_Z2u_Zmod; last by omega.
+  rewrite u2Z_Z2u_Zmod; last omega.
   apply eqmod_trans with (u2Z a); last first.
   exists c; by rewrite mulZC.
   rewrite Hc.
   rewrite addZC.
   rewrite -{2}(add0Z (m * c)).
   apply eqmod_compat_plus_R.
-  apply Zmod_divides in m_n; last by omega.
+  apply Zmod_divides in m_n; last omega.
   case: m_n => q m_n.
   apply (proj2 (eqmod_Zmod _ _ _ m_min')).
   by rewrite m_n mulZC Zmult_mod_distr_l mulZC Z_mod_mult Zmod_0_l.

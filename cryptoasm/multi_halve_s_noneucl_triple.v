@@ -380,10 +380,9 @@ case: Hh2 => A'shift Hh2.
 case: Hh1 => rk_nk [a0_ptr [Hh1 His_zero]].
 rewrite val_A.
 have A'_not_0 : 0 < \S_{ nk } A'.
-  apply Zle_neq_lt => //.
-  by apply min_lSum.
-  move/(proj1 (His_zero)) => abs; rewrite abs in Htest.
-  by rewrite Z2uK in Htest.
+  apply ltZ_neqAle; split; last exact: min_lSum.
+  move/(proj1 (His_zero)) => abs; move: Htest.
+  by rewrite abs Z2uK.
 apply con_and_bang_inv_L in Hh2.
 split.
   apply mkVarSigned with slen ptr A' => //.
@@ -391,13 +390,12 @@ split.
   apply mkSignMagn => //.
   rewrite Zsgn_Zmult ZsgnK (proj2 (Zsgn_pos (\S_{ nk } A')) A'_not_0); ring.
 exists h2, h1 => //.
-split; first by apply heap.disj_sym.
+split; first exact: heap.disj_sym.
 split.
   rewrite heap.unionC //; exact: heap.disj_sym.
-split; first by tauto.
+split; first tauto.
 by move: Hh1; apply mapstos_ext => //.
-rewrite -A'shift.
-rewrite mulZDr !mulZA.
+rewrite -A'shift mulZDr !mulZA.
 f_equal; first ring.
 f_equal.
 rewrite -mulZA -mulZDr Zsgn_Zmult ZsgnK.

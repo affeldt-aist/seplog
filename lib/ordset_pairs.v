@@ -2,7 +2,7 @@
 (* seplog (c) AIST 2014-2018. R. Affeldt et al. GNU GPLv3. *)
 From mathcomp Require Import ssreflect ssrfun ssrbool eqtype seq.
 Require Import seq_ext.
-Require Import order.
+Require Import order ordset.
 
 (** This file provides
 - a section with generic definitions for lists of pairs of eqtypes
@@ -321,7 +321,6 @@ elim=> [| [hd1 hd2] tl IH] n w n' H H' /=.
       by move/negP: H2.
 Qed.
 
-Require Import ordset.
 Import OrderedSequence.
 
 Lemma lb_dom_filter : forall (k : seq (A * B)) n p,

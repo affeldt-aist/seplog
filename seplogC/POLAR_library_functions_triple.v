@@ -1,6 +1,7 @@
 (* seplog (c) AIST 2005-2013. R. Affeldt, N. Marti, et al. GNU GPLv3. *)
 (* seplog (c) AIST 2014-2018. R. Affeldt et al. GNU GPLv3. *)
 From mathcomp Require Import ssreflect ssrfun ssrbool eqtype ssrnat.
+From mathcomp Require Import fintype tuple.
 Require Import ssrZ ZArith_ext String_ext.
 From mathcomp Require Import seq.
 Require Import seq_ext.
@@ -10,7 +11,6 @@ Require Import C_types C_types_fp C_value C_expr C_expr_equiv.
 Require Import POLAR_ssl_ctxt POLAR_library_functions.
 Require Import rfc5246.
 Import RFC5932.
-From mathcomp Require Import fintype tuple.
 Require Import POLAR_parse_client_hello_header.
 
 Definition SSL_BUFFER_LEN : Z := (16384 + 512)%Z.

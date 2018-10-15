@@ -1,7 +1,8 @@
 (* seplog (c) AIST 2005-2013. R. Affeldt, N. Marti, et al. GNU GPLv3. *)
 (* seplog (c) AIST 2014-2018. R. Affeldt et al. GNU GPLv3. *)
 From mathcomp Require Import ssreflect ssrbool eqtype seq.
-Require Import Init_ext ZArith_ext uniq_tac machine_int multi_int encode_decode integral_type.
+Require Import Init_ext ssrZ ZArith_ext uniq_tac machine_int multi_int.
+Require Import encode_decode integral_type.
 Import MachineInt.
 Require Import mips_bipl mips_seplog mips_tactics mips_syntax mips_mint.
 Import mips_bipl.expr_m.
@@ -20,7 +21,7 @@ Lemma safe_termination_multi_add_s_u a y L d rk rA ry a0 a1 a2 a3 a4 ret X :
   uniq(a, y) ->
   uniq(rk, rA, ry, a0, a1, a2, a3, a4, ret, X, r0) ->
   safe_termination (fun s st h => state_mint (a |=> signed L rA \U+ (y |=> unsign rk ry \U+ d)) s st h /\
-    L = Zabs_nat (u2Z ([rk]_st)) /\ 0 < Z.of_nat L < 2 ^^ 31)
+    L = '| u2Z ([rk]_st) | /\ 0 < Z.of_nat L < 2 ^^ 31)
   (multi_add_s_u rk rA ry a0 a1 a2 a3 a4 ret X).
 Proof.
 move=> Hvars Hregs.
@@ -39,7 +40,7 @@ case/(_ (refl_equal _)) => ry_fit y_L mem_y.
 move/(_ L L_231 ([rA ]_ st) [ry]_st (([a ]_ s)%pseudo_expr) (([y ]_ s)%pseudo_expr)) => hoare_triple.
 apply constructive_indefinite_description'.
 apply (triple_exec_precond _ _ _ hoare_triple _ _ _ Hsf
-  (heap.dom (heap_mint (signed L rA) st h \U 
+  (heap.dom (heap_mint (signed L rA) st h \U
              heap_mint (unsign rk ry) st h))).
 repeat (split => //).
 rewrite Hk Z_of_nat_Zabs_nat //; by apply min_u2Z.
@@ -60,6 +61,6 @@ congruence.
 congruence.
 rewrite -heap.incluE.
 apply heap_prop_m.inclu_union.
-by apply heap_inclu_heap_mint_signed.
-by apply heap_inclu_heap_mint_unsign.
+exact: heap_inclu_heap_mint_signed.
+exact: heap_inclu_heap_mint_unsign.
 Qed.

@@ -1,5 +1,5 @@
 (* seplog (c) AIST 2014-2018. R. Affeldt et al. GNU GPLv3. *)
-Require Import Relations Permutation.
+Require Import FunctionalExtensionality ClassicalFacts Relations Permutation.
 From mathcomp Require Import ssreflect ssrbool eqtype ssrnat seq.
 Require Import Init_ext String_ext.
 Require Import finmap.
@@ -2004,7 +2004,7 @@ move=> l l' ll'; elim.
   apply hoare_ifte.
     rewrite /MGT in IHc.
     eapply hoare_conseq_new.
-    move=> s' [] [] [] ?; subst s'.
+    move=> s' [] [] ?; subst s'.
     move=> Hc Hb.
     eexists; eexists; split; first by apply (IHc s).
     split.
@@ -2014,7 +2014,7 @@ move=> l l' ll'; elim.
     by apply exec_ifte_true.
   rewrite /MGT in IHc.
   eapply hoare_conseq_new.
-  move=> s' [] [] [] ?; subst s'.
+  move=> s' [] [] ?; subst s'.
   move=> Hd Hb.
   eexists; eexists; split; first by apply (IHd s).
   split.
@@ -2107,8 +2107,7 @@ Definition to_state : (gstore * heap) -> string -> state := fun s str =>
 Definition to_state2 : (gstore * heap) -> store -> state := fun s ls =>
   mkState (fst s) ls (snd s).*)
 
-Require Import FunctionalExtensionality.
-Require Import ClassicalFacts.
+(* Extensionality of predicates can be safely added to Coq (see Coq FAQ) *)
 Axiom prop_ext : prop_extensionality.
 
 Lemma MGTs : forall l str, str \in Procs.dom l ->

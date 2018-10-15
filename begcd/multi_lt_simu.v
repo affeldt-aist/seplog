@@ -115,9 +115,9 @@ split => u_z.
   * apply/geZP.
     case: Hret.
     - case=> Hret _.
-      exact/Zle_ge/ltZW/Zgt_lt.
+      exact/Z.le_ge/ltZW/Z.gt_lt.
     - case => /= => -> _.
-      exact/Zle_ge/leZZ.
+      exact/Z.le_ge/leZZ.
 Qed.
 
 Lemma fwd_sim_b_gt_multi_lt rk ru rv a3 flag a0 a1 ret ret2 z u d :

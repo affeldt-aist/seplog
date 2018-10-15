@@ -377,10 +377,10 @@ move=> n m; elim/tls_typ_nested_ind => {n m}.
   case: ifP => // m_a [] ?; subst a'.
   rewrite size_cat inj_plus.
   have -> : m <=? Z_of_nat (size a) + Z_of_nat (size b).
-    move/leZP : m_a => m_a.
+    move/leZP in  m_a.
     apply/leZP.
     rewrite addZC.
-    apply Zle_plus_trans; [by apply Zle_0_nat | done].
+    apply leZ_addl; [exact: Zle_0_nat | by []].
     rewrite drop_cat.
     case: ifP => // H.
     have : '|m| = size a.

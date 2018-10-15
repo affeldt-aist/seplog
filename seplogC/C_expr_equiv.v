@@ -415,13 +415,11 @@ rewrite Ceqpn_add2l //.
 - move=> H6 H7. by rewrite !s2Z_sc.
 - move=> H6.
   rewrite s2Z_sc // -(geZ0_norm (Z<=nat (sizeof t))); last exact/Zle_0_nat.
-  rewrite -normZM.
-  apply Zabs_lt.
+  rewrite -normZM ltZ_norml.
   split; [exact: ltZ_leZ_trans (proj1 H2) | exact: (ltZ_leZ_trans (proj2 H2))].
 - move=> H6.
   rewrite s2Z_sc // -(geZ0_norm (Z<=nat (sizeof t))); last exact/Zle_0_nat.
-  rewrite -normZM.
-  apply Zabs_lt.
+  rewrite -normZM ltZ_norml.
   split; [exact: ltZ_leZ_trans (proj1 H3) | exact: (ltZ_leZ_trans (proj2 H3))].
 Qed.
 
@@ -457,11 +455,11 @@ Transparent eval.
 move=> Hx Hy xy s /=.
 rewrite 2!i8_of_i32K.
 Local Open Scope machine_int_scope.
-suff -> : `( x )s_ 32 `- `( y )s_ 32 = `(x - y)s_ 32 by done.
+suff -> : `( x )s_ 32 `- `( y )s_ 32 = `(x - y)s_ 32 by [].
 apply s2Z_inj.
-rewrite Z2sK; last by done.
+rewrite Z2sK; last by [].
 rewrite s2Z_sub; last first.
-  rewrite Z2sK; last by done.
+  rewrite Z2sK; last by [].
   rewrite Z2sK; last by simpl in *; omega.
   simpl in *; omega.
 rewrite Z2sK; last by simpl in *; omega.
@@ -481,7 +479,7 @@ congr (i8<=i32).
 apply s2Z_inj.
 rewrite Z2sK; last first.
   rewrite /=; split.
-  apply: (leZ_trans _ (min_u2Z _)) => //.
+  exact: (leZ_trans _ (min_u2Z _)).
   exact: (ltZ_leZ_trans (max_u2Z _)).
 rewrite s2Z_u2Z_pos'; last first.
   rewrite (u2Z_zext 24) /=; split; first by apply min_u2Z.

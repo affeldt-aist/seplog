@@ -938,46 +938,42 @@ rewrite CaddnpA //.
   + split.
       apply (@leZ_trans 0) => //; exact: Zle_0_nat.
     apply: (leZ_ltZ_trans _ l1l2_ub).
-    rewrite addZC; apply Zle_plus_trans.
+    rewrite addZC; apply leZ_addl.
     * rewrite -inj_mult; by apply Zle_0_nat.
-    * rewrite addZC; apply Zle_plus_trans.
+    * rewrite addZC; apply leZ_addl.
       - exact: Zle_0_nat.
-      - apply Zle_scale; first by apply Zle_0_nat.
-        apply Z_of_nat_lt0.
-        by apply sizeof_gt0.
+      - apply Zle_scale; [exact: Zle_0_nat | exact/Z_of_nat_lt0/sizeof_gt0].
   + split.
       apply (@leZ_trans 0) => //.
-      rewrite -Z_S; by apply Zle_0_nat.
-    apply: leZ_ltZ_trans; last by apply l1l2_ub.
-    rewrite [X in _ <= X]addZC; apply Zle_plus_trans.
-    * rewrite -inj_mult; by apply Zle_0_nat.
+      rewrite -Z_S; exact: Zle_0_nat.
+    apply: leZ_ltZ_trans; last exact: l1l2_ub.
+    rewrite [X in _ <= X]addZC; apply leZ_addl.
+    * rewrite -inj_mult; exact: Zle_0_nat.
       apply leZ_add.
-      - apply Zle_scale; first by apply Zle_0_nat.
-        apply Z_of_nat_lt0.
-        by apply sizeof_gt0.
-      rewrite (_ : 1 = Z<=nat 1) //.
-      exact/inj_le/leP/sizeof_gt0.
+      - apply Zle_scale; first exact: Zle_0_nat.
+        exact/Z_of_nat_lt0/sizeof_gt0.
+      rewrite (_ : 1 = Z<=nat 1) //; exact/inj_le/leP/sizeof_gt0.
 - split.
-    rewrite -inj_mult; by apply Zle_0_nat.
-  apply: leZ_ltZ_trans; last by apply l1l2_ub.
+    rewrite -inj_mult; exact/Zle_0_nat.
+  apply: leZ_ltZ_trans; last exact/l1l2_ub.
   rewrite -addZA addZC.
-  apply Zle_plus_trans.
-    rewrite -inj_mult -inj_plus; by apply Zle_0_nat.
+  apply leZ_addl.
+    rewrite -inj_mult -inj_plus; exact/Zle_0_nat.
   by rewrite mulZC; apply leZZ.
 - split.
-    rewrite mulZ1; by apply Zle_0_nat.
+    rewrite mulZ1; exact: Zle_0_nat.
   apply: (leZ_ltZ_trans _ l1l2_ub).
   rewrite addZC addZA.
-  apply Zle_plus_trans.
-    rewrite -2!inj_mult -inj_plus; by apply Zle_0_nat.
+  apply leZ_addl.
+    rewrite -2!inj_mult -inj_plus; exact: Zle_0_nat.
   rewrite mulZ1; exact/leZZ.
 - rewrite mulZ1.
   split.
-    rewrite -inj_mult -inj_plus; by apply Zle_0_nat.
+    rewrite -inj_mult -inj_plus; exact: Zle_0_nat.
   apply: (leZ_ltZ_trans _ l1l2_ub).
   rewrite [X in _ <= X]addZC.
-  apply Zle_plus_trans.
-    rewrite -inj_mult; by apply Zle_0_nat.
+  apply leZ_addl.
+    rewrite -inj_mult; exact: Zle_0_nat.
   rewrite mulZC; exact: leZZ.
 Qed.
 
@@ -1211,7 +1207,7 @@ apply IH => //.
     apply: leZ_ltZ_trans; last by apply Hh1_fit.
     apply leZ_add2l.
     rewrite mulZDr mulZ1.
-    apply Zle_plus_trans; last exact: leZZ.
+    apply leZ_addl; last exact: leZZ.
     rewrite -inj_mult; exact: Zle_0_nat.
 Transparent eval.
 move: Hh2.
@@ -1224,10 +1220,9 @@ have Htmp :  (Z<=nat n.+1 < 2 ^^ 31)%Z.
     rewrite inj_mult -[X in (X <= _)%Z]Zmult_1_r.
     apply leZ_pmul => //.
       rewrite size_cat [size _]/= inj_plus Hn addZC.
-      apply Zle_plus_trans; by [apply Zle_0_nat | apply leZZ].
+      apply leZ_addl; by [apply Zle_0_nat | apply leZZ].
     rewrite (_ : 1%Z = Z_of_nat 1) //.
-    apply inj_le.
-    apply/leP; by apply sizeof_gt0.
+    apply/inj_le/leP; exact: sizeof_gt0.
   apply: ltZ_trans; eauto.
   by [].
 have Htmp2 : s2Z (Z2s 32 (Z_of_nat n.+1)) = Z_of_nat n.+1 by rewrite Z2sK.
@@ -1290,37 +1285,37 @@ apply con_c => //.
   rewrite size_cat inj_mult inj_plus Zmult_plus_distr_r in Hh2.
   apply: leZ_ltZ_trans; last by apply Hh2.
   rewrite addZA [X in (_ <= X)%Z]addZC -2!inj_mult.
-  apply Zle_plus_trans; by [apply Zle_0_nat | apply leZZ].
+  apply leZ_addl; by [apply Zle_0_nat | apply leZZ].
 rewrite /mapstos_fit.
-apply con_c => //; first by apply hp.disjhe.
+apply con_c => //; first exact: hp.disjhe.
 split => //.
 rewrite size_cat inj_mult inj_plus Zmult_plus_distr_r in Hh2.
-apply: leZ_ltZ_trans; last by apply Hh2.
+apply: leZ_ltZ_trans; last exact: Hh2.
 apply Zeq_le.
 have Hn : - 2 ^^ 31 <= Z.of_nat n < 2 ^^ 31.
   split.
-    apply: leZ_trans; last by apply Zle_0_nat.
+    apply: leZ_trans; last exact: Zle_0_nat.
     by [].
-  apply: leZ_ltZ_trans; last by apply lub.
+  apply: leZ_ltZ_trans; last exact: lub.
   rewrite inj_mult size_cat inj_plus l1n Zmult_plus_distr_l addZC.
-  apply Zle_plus_trans; first by rewrite -inj_mult; apply Zle_0_nat.
-  apply Zle_scale; first by apply Zle_0_nat.
-  apply Z_of_nat_lt0; by apply sizeof_gt0.
+  apply leZ_addl; first by rewrite -inj_mult; apply Zle_0_nat.
+  apply Zle_scale; first exact: Zle_0_nat.
+  apply Z_of_nat_lt0; exact: sizeof_gt0.
 rewrite phy_add_pe; last first.
-  rewrite si32_of_phy_sc Z2sK //; by apply/leZP; apply Zle_0_nat.
+  rewrite si32_of_phy_sc Z2sK //; exact/leZP/Zle_0_nat.
 have Hn' : 0 <= Z.of_nat (sizeof t) * Z.of_nat n < 2 ^^ ptr_len.
   split; first by rewrite -inj_mult; apply Zle_0_nat.
-  apply: leZ_ltZ_trans; last by apply Hh2.
-  apply Zle_plus_trans; first by apply min_u2Z.
-  rewrite addZC; apply Zle_plus_trans.
-  rewrite -inj_mult; by apply Zle_0_nat.
+  apply: leZ_ltZ_trans; last exact/Hh2.
+  apply leZ_addl; first exact/min_u2Z.
+  rewrite addZC; apply leZ_addl.
+  rewrite -inj_mult; exact/Zle_0_nat.
   rewrite l1n; exact: leZZ.
 apply u2Z_add_new.
   apply: leZ_ltZ_trans; last by apply Hh2.
   rewrite si32_of_phy_sc Z2uK; last by rewrite Z2sK.
   rewrite Z2sK //.
   apply leZ_add2l.
-  rewrite addZC; apply Zle_plus_trans.
+  rewrite addZC; apply leZ_addl.
   by rewrite -inj_mult; apply Zle_0_nat.
   by rewrite l1n; apply leZZ.
 move=> _.

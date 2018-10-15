@@ -61,8 +61,7 @@ case/(_ (refl_equal _)) => ly py Y ry_fit [Y_k ly_k ly_y y_Y] py_fit mem_y.
 have Htmp : 0 < Z_of_nat k < 2 ^^ 31.
   rewrite Hk Z_of_nat_Zabs_nat; last exact/min_u2Z.
   split => //.
-  apply Zle_neq_lt.
-  by apply min_u2Z.
+  rewrite ltZ_neqAle; split; last exact: min_u2Z.
   contradict rk_0.
   by apply u2Z_inj; rewrite -rk_0 Z2uK.
 move/multi_sub_s_s_s_triple : (Hregs).
@@ -167,11 +166,9 @@ split.
         have -> : sgZ (Z_of_nat k) = 1.
           apply Z.sgn_pos.
           rewrite Hk Z_of_nat_Zabs_nat; last exact/min_u2Z.
-          apply Zle_neq_lt.
-          exact/min_u2Z.
+          rewrite ltZ_neqAle; split; last exact: min_u2Z.
           contradict rk_0.
-          apply u2Z_inj.
-          by rewrite -rk_0 Z2uK.
+          apply u2Z_inj; by rewrite -rk_0 Z2uK.
         rewrite mulZ1.
         move/syntax_m.seplog_m.semop_prop_m.exec_cmd0_inv : exec_pseudo.
         case/syntax_m.seplog_m.exec0_assign_inv => _ ->.
@@ -257,7 +254,7 @@ have Hd_unchanged : forall v r, assoc.get v d = Some r ->
         apply heap.inclu_union_L; first by map_tac_m.Disj.
         apply heap.inclu_union_R; first by map_tac_m.Disj.
         apply heap.inclu_union_L.
-        assumption.
+        by [].
         by apply heap.inclu_refl.
         by rewrite -rx_st_st'.
         by rewrite X_k.

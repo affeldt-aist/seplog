@@ -429,9 +429,9 @@ rewrite (field_address_slide0 _ new_addr); last first.
   by apply align_get_fields.
 rewrite inj_plus /new_addr inj_plus Z_of_nat_Zabs_nat; last exact/min_u2Z.
 rewrite -2!addZA; apply leZ_add2l.
-apply Zle_plus_trans; first exact: Zle_0_nat.
+apply leZ_addl; first exact: Zle_0_nat.
 rewrite addZC.
-apply Zle_plus_trans; by [apply Zle_0_nat | apply leZZ].
+apply leZ_addl; by [apply Zle_0_nat | apply leZZ].
 Opaque eval.
 Qed.
 

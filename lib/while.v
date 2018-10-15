@@ -1,5 +1,6 @@
 (* seplog (c) AIST 2005-2013. R. Affeldt, N. Marti, et al. GNU GPLv3. *)
 (* seplog (c) AIST 2014-2018. R. Affeldt et al. GNU GPLv3. *)
+Require Import ClassicalChoice.
 From mathcomp Require Import ssreflect ssrbool.
 Require Import Init_ext.
 
@@ -631,8 +632,6 @@ elim=> //; clear P Q Hcd.
   case/IH => R [H1 H2].
   exists R; split; by [eapply hoare_stren; eauto | eapply hoare_weak; eauto].
 Qed.
-
-Require Import ClassicalChoice.
 
 Lemma hoare_seq_inv_special : forall (A : Type) (P Q : A -> assert) c d,
   (forall x, {{ P x }} c ; d {{ Q x }}) ->

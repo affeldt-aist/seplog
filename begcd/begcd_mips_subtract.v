@@ -115,14 +115,12 @@ apply fwd_sim_seq with (fun st s _ => uv_bound rk s u v st k /\
         - rewrite [Equality.sort _]/= in Hvars *. by Uniq_uniq O.
         - by Uniq_uniq r0.
       move=> st s h [] st_s_h [rk0 [rk231 [Hk [Hu1 Hv1]]]].
-      split; first by apply st_s_h.
-      split; first by assumption.
-      rewrite Hk Z_of_nat_Zabs_nat; last by apply min_u2Z.
-      split; last by assumption.
-      apply/ltZP; rewrite ltZ_neqAle.
-      apply/andP; split; last by apply/leZP/min_u2Z.
-      rewrite -(@Z2uK 0 32) //.
-      apply/eqP => /u2Z_inj; by auto.
+      split; first exact: st_s_h.
+      split; first by [].
+      rewrite Hk Z_of_nat_Zabs_nat; last exact: min_u2Z.
+      split; last by [].
+      rewrite ltZ_neqAle; split; last exact: min_u2Z.
+      rewrite -(@Z2uK 0 32) //; move/u2Z_inj; by auto.
     apply pfwd_sim_multi_sub_s_s_s_wo_overflow.
     * rewrite [Equality.sort _]/= in Hvars *. by Uniq_uniq O.
     * by Uniq_uniq r0.
@@ -159,14 +157,12 @@ apply fwd_sim_seq with (fun st s _ => uv_bound rk s u v st k /\
           - rewrite [Equality.sort _]/= in Hvars *. by Uniq_uniq O.
           - by Uniq_uniq r0.
         move=> st s h [] st_s_h [rk0 [rk231 [Hk [Hu1 Hv1]]]].
-        split; first exact:st_s_h.
+        split; first exact: st_s_h.
         split; first assumption.
         rewrite Hk Z_of_nat_Zabs_nat; last exact: min_u2Z.
         split; last assumption.
-        apply/ltZP; rewrite ltZ_neqAle.
-        apply/andP; split; last by apply/leZP/min_u2Z.
-        rewrite -(@Z2uK 0 32) //.
-        apply/eqP => /u2Z_inj; by auto.
+        rewrite ltZ_neqAle; split; last exact: min_u2Z.
+        rewrite -(@Z2uK 0 32) // => /u2Z_inj; by auto.
       apply pfwd_sim_multi_sub_s_s_s_wo_overflow.
       - rewrite [Equality.sort _]/= in Hvars *. by Uniq_uniq O.
       - by Uniq_uniq r0.
@@ -187,13 +183,11 @@ apply fwd_sim_seq with (fun st s _ => uv_bound rk s u v st k /\
           - by Uniq_uniq r0.
         move=> st s h [] st_s_h [rk0 [rk231 [Hk [Hu1 Hv1]]]].
         split; first by apply st_s_h.
-        split; first by assumption.
+        split; first assumption.
         rewrite Hk Z_of_nat_Zabs_nat; last exact: min_u2Z.
-        split; last by assumption.
-        apply/ltZP; rewrite ltZ_neqAle.
-        apply/andP; split; last by apply/leZP/min_u2Z.
-        rewrite -(@Z2uK 0 32) //.
-        apply/eqP => /u2Z_inj; by auto.
+        split; last assumption.
+        rewrite ltZ_neqAle; split; last exact: min_u2Z.
+        rewrite -(@Z2uK 0 32) // => /u2Z_inj; by auto.
       apply pfwd_sim_multi_sub_s_s_s_wo_overflow.
       - rewrite [Equality.sort _]/= in Hvars *. by Uniq_uniq O.
       - by Uniq_uniq r0.
@@ -252,10 +246,8 @@ apply fwd_sim_seq with (fun st s _ => uv_bound rk s u v st k /\
         split; first assumption.
         rewrite Hk Z_of_nat_Zabs_nat; last exact: min_u2Z.
         split; last assumption.
-        apply/ltZP; rewrite ltZ_neqAle.
-        apply/andP; split; last exact/leZP/min_u2Z.
-        rewrite -(@Z2uK 0 32) //.
-        apply/eqP => /u2Z_inj; by auto.
+        rewrite ltZ_neqAle; split; last exact: min_u2Z.
+        rewrite -(@Z2uK 0 32) // => /u2Z_inj; by auto.
       apply pfwd_sim_multi_add_s_u_wo_overflow.
       - rewrite [Equality.sort _]/= in Hvars *. by Uniq_uniq O.
       - by Uniq_uniq r0.
@@ -277,10 +269,8 @@ apply fwd_sim_seq with (fun st s _ => uv_bound rk s u v st k /\
          split; first by [].
          rewrite Hk Z_of_nat_Zabs_nat; last exact: min_u2Z.
          split; last by [].
-         apply/ltZP; rewrite ltZ_neqAle.
-         apply/andP; split; last exact/leZP/min_u2Z.
-         rewrite -(@Z2uK 0 32) //.
-         apply/eqP => /u2Z_inj; by auto.
+         rewrite ltZ_neqAle; split; last exact: min_u2Z.
+         rewrite -(@Z2uK 0 32) // => /u2Z_inj; by auto.
       apply pfwd_sim_multi_sub_s_u_wo_overflow.
       - rewrite [Equality.sort _]/= in Hvars *. by Uniq_uniq O.
       - by Uniq_uniq r0.

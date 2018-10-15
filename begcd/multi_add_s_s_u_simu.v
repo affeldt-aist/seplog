@@ -58,10 +58,9 @@ rewrite assoc.get_union_sing_eq.
 case/(_ Logic.eq_refl).
 move=> ry_fit _ (*y_fit: superseded by y_fit*) mem_y.
 have Htmp : 0 < Z_of_nat k < 2 ^^ 31.
-  rewrite Hk Z_of_nat_Zabs_nat; last by apply min_u2Z.
+  rewrite Hk Z_of_nat_Zabs_nat; last exact: min_u2Z.
   split => //.
-  apply Zle_neq_lt.
-  by apply min_u2Z.
+  rewrite ltZ_neqAle; split; last exact: min_u2Z.
   contradict rk_0.
   by apply u2Z_inj; rewrite -rk_0 Z2uK.
 move/multi_add_s_s_u_triple : (Hregs).
@@ -170,19 +169,16 @@ split.
         have -> : sgZ (Z_of_nat k) = 1.
           apply Z.sgn_pos.
           rewrite Hk Z_of_nat_Zabs_nat; last exact: min_u2Z.
-          apply Zle_neq_lt.
-          by apply min_u2Z.
+          rewrite ltZ_neqAle; split; last exact: min_u2Z.
           contradict rk_0.
-          apply u2Z_inj.
-          by rewrite -rk_0 Z2uK.
+          apply u2Z_inj; by rewrite -rk_0 Z2uK.
         rewrite mulZ1.
         move/syntax_m.seplog_m.semop_prop_m.exec_cmd0_inv : exec_pseudo.
         case/syntax_m.seplog_m.exec0_assign_inv => _ ->.
         repeat syntax_m.seplog_m.assert_m.expr_m.Store_upd.
         rewrite lz'_x_y.
         rewrite lSum_Z2ints; last first.
-          apply Zabs_lt.
-          split.
+          apply/ltZ_norml; split.
             apply: (@ltZ_leZ_trans 0); [rewrite ltZ_oppl oppZ0; exact: expZ_gt0|tauto].
           case: y_fit => _ y_fit.
           apply/(ltZ_leZ_trans y_fit)/leZP; rewrite ZbetaE Zpower_2_le; ssromega.

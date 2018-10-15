@@ -34,9 +34,8 @@ case/(_ (refl_equal _)) => len ptr A rx_fit encoding ptr_fit Hmem.
 case: encoding => H1 H2 H3 H4.
 have htmp : s2Z len <> - 2 ^ 31.
   move=> abs.
-  rewrite abs in H2.
-  rewrite (_ : sgZ (- 2 ^ 31) = -1) // mulN1Z in H2.
-  apply Zopp_inj in H2.
+  rewrite abs (_ : sgZ (- 2 ^ 31) = -1) // mulN1Z in H2.
+  apply Z.opp_inj in H2.
   rewrite -H2 in HL.
   by case: HL => _ => /ltZZ.
 move: (multi_is_even_s_triple _ _ _ _ Hset L A len ptr H1 htmp H2) => hoare_triple.

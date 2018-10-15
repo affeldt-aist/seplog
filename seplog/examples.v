@@ -547,8 +547,7 @@ have [H0 | H0] : (size buf_lst <= x \/ x < size buf_lst)%coq_nat by omega.
 - have H : 0 < [ str_tmp ]_ s.
     rewrite /hoare_m.eval_b in H1.
     eval_b2Prop_hyp H1.
-    apply Zle_neq_lt => //.
-    by auto.
+    rewrite ltZ_neqAle; by auto.
   have [H9|[H9|H8]] : (S x = size (str0 :: str_lst) \/ x = size (str0 :: str_lst) \/ S x < size (str0 :: str_lst))%coq_nat by ssromega.
     + rewrite string_last' // in H5; last by rewrite -H9 subn1.
       rewrite H5 in H; by inversion H.

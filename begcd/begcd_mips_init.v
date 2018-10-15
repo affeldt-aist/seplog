@@ -235,7 +235,7 @@ apply fwd_sim_seq with (fun st s _ => (EGCD.C2 vu vv u v g st /\ EGCD.C3 vu vv u
                 split; first by [].
                 rewrite HL Z_of_nat_Zabs_nat; last by apply min_u2Z.
                 split; last by [].
-                apply Zle_neq_lt; first by apply min_u2Z.
+                rewrite ltZ_neqAle; split; last by apply min_u2Z.
                 contradict rk0.
                 rewrite (_ : 0 = u2Z zero32) in rk0; last by rewrite Z2uK.
                 by move/u2Z_inj in rk0.

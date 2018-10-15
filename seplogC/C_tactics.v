@@ -1,6 +1,7 @@
 (* seplog (c) AIST 2005-2013. R. Affeldt, N. Marti, et al. GNU GPLv3. *)
 (* seplog (c) AIST 2014-2018. R. Affeldt et al. GNU GPLv3. *)
 From mathcomp Require Import ssreflect ssrbool eqtype seq ssrnat.
+Require Import Coq.Program.Tactics.
 Require Import Init_ext ssrZ ZArith_ext String_ext ssrnat_ext seq_ext.
 Require Import machine_int.
 Import MachineInt.
@@ -1178,8 +1179,6 @@ Ltac Ent_R_or_2_n n := Ent_R_to_icon; Ent_R_or_2_n_icon n; rewrite iconE /=.
 
 (* begin new *)
 
-Require Import Coq.Program.Tactics.
-
 (* TODO: rename -> replace *)
 Ltac Ent_R_gen param tac tac_idx :=
   match goal with
@@ -1191,7 +1190,7 @@ Ltac Ent_R_gen param tac tac_idx :=
     let Q'' := Replace_list n Q' R in
     let Q3 := seq_to_assert Q'' in
     let n' := eval compute in (size Q' - S n)%nat in
-    apply (ent_trans Q3); 
+    apply (ent_trans Q3);
       [ idtac |
         (let tmp := (apply monotony_L) in do_nat n tmp) ;
         (match n' with S _ => apply monotony_R | _ => idtac end) ;
@@ -2235,7 +2234,7 @@ have -> : cast_subnK (leq_trans Hn (leqnSSn _))
     rewrite -lock.
     split.
       apply (@leZ_trans Z0) => //.
-      apply Zle_minus_1; exact: expZ_gt0.
+      exact/leZsub1/expZ_gt0.
     apply (@leZ_ltZ_trans (2 ^^ 30.+1 - 1)%Z) => //.
     apply/leZ_sub2r/leZP; by rewrite Zpower_2_le.
   rewrite -lock ZpowerS in H2.

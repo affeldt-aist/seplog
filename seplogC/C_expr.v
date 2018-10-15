@@ -53,7 +53,7 @@ Definition safe t1 t2 :=
     false.
 
 (** unary conversion : potential data loss *)
-    
+
 Definition data_loss t1 t2 :=
   if (~~ is_signed t1) && (sizeof_integral t2 < sizeof_integral t1) then
     true (* preserve low-order bits *)
@@ -94,7 +94,7 @@ Proof. by move=> [] []. Abort.
 End UnConv.
 
 (** Modulo operation
-    This is a specialized version for powers of 2 
+    This is a specialized version for powers of 2
     E.g.,
     <<
     ciph_len mod 2 != 0
@@ -240,7 +240,7 @@ Notation "a '\<<' b" := (bop_n _ _ shl_e a b) (at level 62, left associativity) 
 Notation "e \% n" := (bopk_n _ _ mod2n_e e n) (at level 57, left associativity) : C_expr_scope.
 Notation "a '\!=' b" := (bop_r _ _ neq_e a b) (at level 64, left associativity) : C_expr_scope.
 Notation "a '\<' b" := (bop_r _ _ lt_e a b) (at level 63, left associativity) : C_expr_scope.
-Notation "a '\<=' b" := (bop_r _ _ le_e a b) (at level 63, left associativity) : C_expr_scope. 
+Notation "a '\<=' b" := (bop_r _ _ le_e a b) (at level 63, left associativity) : C_expr_scope.
 Notation "a '\>' b" := (bop_r _ _ gt_e a b) (at level 63, left associativity) : C_expr_scope.
 Notation "a '\>=' b" := (bop_r _ _ ge_e a b) (at level 63, left associativity) : C_expr_scope.
 Notation "a '\&&' b" := (bop_r _ _ land_e a b) (at level 67, left associativity) : C_expr_scope.
@@ -256,16 +256,15 @@ Definition NULL {g} {sigma : g.-env} {t : g.-typ} : exp sigma (:* t) := [ @pv0 g
 
 (** a value store is defined w.r.t. a type_store *)
 
-Record store {g} (sigma : g.-env) := 
+Record store {g} (sigma : g.-env) :=
   { store_list :> seq (string * {ty : g.-typ & ty.-phy}) ;
     Hstore : map (fun x => (x.1, projT1 x.2)) store_list == sigma }.
 
 Lemma store_irrelevance {g} (sigma : g.-env) : forall (s1 s2 : store sigma),
   store_list sigma s1 = store_list sigma s2 -> s1 = s2.
-Proof. 
+Proof.
 case=> s1 Hs1 [] s2 Hs2 /= ?; subst s2.
-congr Build_store.
-by apply eq_irrelevance. 
+congr Build_store; exact: eq_irrelevance.
 Qed.
 
 Fixpoint sval_store0 {g} (sigma : g.-env) : seq (string * {t: g.-typ & t.-phy}) :=
@@ -274,7 +273,7 @@ Fixpoint sval_store0 {g} (sigma : g.-env) : seq (string * {t: g.-typ & t.-phy}) 
     | (n, t) :: tl => (n, existT _ _ (@pv0 _ t)) :: sval_store0 tl
   end.
 
-Lemma rval_store0 {g} : forall (sigma : g.-env), 
+Lemma rval_store0 {g} : forall (sigma : g.-env),
   map (fun x => (x.1, projT1 x.2)) (sval_store0 sigma) == sigma.
 Proof. by elim=> // [[str t] tl] /= /eqP ->. Qed.
 
@@ -284,7 +283,7 @@ Definition store0 {g} (sigma : g.-env) : store sigma :=
 Lemma env_get_proj_Some {g} : forall (sigma : g.-env) (s : store sigma) str t,
   env_get str (map (fun x => (x.1, projT1 x.2)) s) = |_ t _| ->
   exists y, assoc_get str s = Some y.
-Proof.  
+Proof.
 elim => [ [] // [] // | [str t] tl IH ].
 case=> [[|h1 t1] //=] /eqP [] ? ?; subst str t => /eqP H1.
 move=> str' t'.
@@ -296,11 +295,11 @@ case: ifP => [/eqP ? |/negbT H2 H3].
 by apply: IH (Build_store _ _ _ H1) _ t' H3.
 Qed.
 
-Lemma env_get_proj_Some2 {g} : 
+Lemma env_get_proj_Some2 {g} :
   forall (sigma : g.-env) (s : store sigma) str t y (Hy : y.-phy),
   assoc_get str sigma = |_ t _| -> assoc_get str s  = |_ existT _ y Hy _| ->
   t = y.
-Proof.  
+Proof.
 elim => [ [] // [] // | [str t] tl IH ].
 case=> [[|h1 t1] /= Hs] // str' t' y Hy.
 case/eqP : Hs => ? ?; subst str t => /eqP Hs.
@@ -331,7 +330,7 @@ case: ifP => [/eqP ? | /negbT H1].
   by case => -> [].
 by apply IH.
 Qed.
- 
+
 Lemma store_get_helper2 (s : store sigma) (Hstr : env_get str sigma = |_ t _|) :
  assoc_get str s = None -> False.
 Proof.
@@ -458,7 +457,7 @@ Program Definition safe_cast_phy_sint {g} (v : (ityp: sint).-phy) (t : integral)
     | uchar => @False_rect _ _
     | schar => @False_rect _ _
     | ulong => match v with
-                 mkPhy l Hl => mkPhy (g.-ityp: ulong) 
+                 mkPhy l Hl => mkPhy (g.-ityp: ulong)
                  match oi32<=i8 l with
                    | Some i => i8<=i64 (sext (8 * (sizeof_integral ulong - sizeof_integral sint)) i)
                    | None => @False_rect _ _
@@ -470,7 +469,7 @@ Obligation Tactic := idtac.
 
 Program Definition safe_cast_phy_uint {g} (v : (ityp: uint).-phy) (t : integral)
   (H : UnConv.safe uint t) : (ityp: t).-phy :=
-  match t with 
+  match t with
     | sint => @False_rect _ _
     | uint => v
     | uchar => @False_rect _ _
@@ -518,17 +517,17 @@ Obligation Tactic := Tactics.program_simpl.
 Program Definition safe_cast_phy_uchar {g} (v : (g.-ityp: uchar).-phy) (t : integral)
   (H : UnConv.safe uchar t) : (ityp: t).-phy :=
   match v with
-    | mkPhy l Hl => 
+    | mkPhy l Hl =>
       match l with
         | h :: nil =>
-          match t with 
+          match t with
             | uchar => v
             | schar => mkPhy (ityp: schar) v (Hphy (ityp: schar) v)
             | sint => mkPhy (ityp: sint) (i8<=i32 (zext (8 * (sizeof_integral sint - sizeof_integral uchar)) h)) _
             | uint => mkPhy (ityp: uint) (i8<=i32 (zext (8 * (sizeof_integral uint - sizeof_integral uchar)) h)) _
             | ulong => mkPhy (ityp: ulong) (i8<=i64 (zext (8 * (sizeof_integral ulong - sizeof_integral uchar)) h)) _
           end
-        | _ => @pv0 g (g.-ityp: t) (* dummy; shouldn't happen*) 
+        | _ => @pv0 g (g.-ityp: t) (* dummy; shouldn't happen*)
       end
   end.
 Next Obligation.
@@ -556,18 +555,18 @@ Qed.
 Program Definition safe_cast_phy_schar {g} (v : (g.-ityp: schar).-phy) (t : integral)
   (H : UnConv.safe schar t) : (ityp: t).-phy :=
   match v with
-    | mkPhy l Hl => 
+    | mkPhy l Hl =>
       match l return (ityp: t).-phy with
         | h :: nil =>
-          match t with 
+          match t with
             | uchar => @False_rect _ _
             | schar => v
-            | sint => mkPhy (ityp: sint) 
+            | sint => mkPhy (ityp: sint)
               (i8_of_i32 (sext (8 * (sizeof_integral sint - sizeof_integral schar)) h)) _
             | uint => @False_rect _ _
             | ulong => @False_rect _ _
           end
-        | _ => @pv0 g (g.-ityp: t) (* dummy; shouldn't happen*) 
+        | _ => @pv0 g (g.-ityp: t) (* dummy; shouldn't happen*)
       end
   end.
 Next Obligation.
@@ -575,7 +574,7 @@ rewrite /i8_of_i32 size_int_break sizeof_ityp.
 reflexivity.
 Defined.
 
-Program Definition safe_cast_phy {g t} (pv : (g.-ityp: t).-phy) 
+Program Definition safe_cast_phy {g t} (pv : (g.-ityp: t).-phy)
   t' (H : UnConv.safe t t') : (g.-ityp: t').-phy :=
   match t with
     | sint => safe_cast_phy_sint pv t' H
@@ -586,7 +585,7 @@ Program Definition safe_cast_phy {g t} (pv : (g.-ityp: t).-phy)
   end.
 Next Obligation. by destruct t'. Defined.
 
-Notation "'(phyint)' e" := (safe_cast_phy e sint Logic.eq_refl) 
+Notation "'(phyint)' e" := (safe_cast_phy e sint Logic.eq_refl)
   (at level 6, format "'[' '(phyint)'  e ']'") : C_value_scope.
 
 Lemma si32_of_phy_safe_cast_phy_uchar {g} (a : @phy g _) H :
@@ -596,7 +595,7 @@ rewrite /si32_of_phy /safe_cast_phy -2!Eqdep.Eq_rect_eq.eq_rect_eq.
 by rewrite safe_cast_phy_uchar_zext /= i8_of_i32Ko /=.
 Qed.
 
-Program Definition unsafe_cast_phy {g} {t} (v : (g.-ityp: t).-phy) t' 
+Program Definition unsafe_cast_phy {g} {t} (v : (g.-ityp: t).-phy) t'
   (H : UnConv.data_loss t t' || UnConv.misinterpret t t') : (ityp: t').-phy :=
   match (t != t') && (sizeof_integral t == sizeof_integral t') with
     | true =>
@@ -604,7 +603,7 @@ Program Definition unsafe_cast_phy {g} {t} (v : (g.-ityp: t).-phy) t'
     | false =>
       match is_signed t && ~~ (is_signed t') && (sizeof_integral t < sizeof_integral t') with
         | true => safe_cast_phy v t' _
-        | false => 
+        | false =>
           match sizeof_integral t' < sizeof_integral t with
             | true => match v with
                         mkPhy l Hl => mkPhy (ityp: t') (drop (sizeof_integral t - sizeof_integral t') l) _
@@ -664,110 +663,110 @@ Local Open Scope machine_int_scope.
 
 Reserved Notation "'[' e ']_' s" (at level 9, format "'[' [  e  ]_ s ']'", no associativity).
 
-Fixpoint eval {g sigma t} (s : store sigma) (e : exp sigma t) : t.-phy := 
+Fixpoint eval {g sigma t} (s : store sigma) (e : exp sigma t) : t.-phy :=
   match e with
     | var_e v t H => store_get H s
     | cst_e t v => v
-    | bop_r t' b e1 e2 => 
-      match t' as t return (forall (_ : t = t'), (ityp: uint).-phy) with 
+    | bop_r t' b e1 e2 =>
+      match t' as t return (forall (_ : t = t'), (ityp: uint).-phy) with
         | uint =>
           match [ e1 ]_ s, [ e2 ]_ s with
-            | mkPhy l1 H1, mkPhy l2 H2 => fun (Heq : uint = t') => 
+            | mkPhy l1 H1, mkPhy l2 H2 => fun (Heq : uint = t') =>
                 let H'1 := eq_ind_r (fun t => size l1 = sizeof (ityp: t)) H1 Heq in
                 let H'2 := eq_ind_r (fun t => size l2 = sizeof (ityp: t)) H2 Heq in
                 [ binop_re_interp b (u2Z (i32<=i8 l1 H'1)) (u2Z (i32<=i8 l2 H'2)) ]p
-          end 
+          end
         | sint =>
           match [ e1 ]_ s, [ e2 ]_ s with
-            | mkPhy l1 H1, mkPhy l2 H2 => fun (Heq : sint = t') => 
+            | mkPhy l1 H1, mkPhy l2 H2 => fun (Heq : sint = t') =>
                 let H'1 := eq_ind_r (fun t => size l1 = sizeof (ityp: t)) H1 Heq in
                 let H'2 := eq_ind_r (fun t => size l2 = sizeof (ityp: t)) H2 Heq in
                 [ binop_re_interp b (s2Z (i32<=i8 l1 H'1)) (s2Z (i32<=i8 l2 H'2)) ]p
           end
         | uchar =>
           match [ e1 ]_ s, [ e2 ]_s with
-            | mkPhy l1 H1, mkPhy l2 H2 => fun (Heq : uchar = t') => 
+            | mkPhy l1 H1, mkPhy l2 H2 => fun (Heq : uchar = t') =>
                 let H'1 := eq_ind_r (fun t => size l1 = sizeof (ityp: t)) H1 Heq in
                 let H'2 := eq_ind_r (fun t => size l2 = sizeof (ityp: t)) H2 Heq in
                 [ binop_re_interp b (u2Z (i8_to_i8 l1 H'1)) (u2Z (i8_to_i8 l2 H'2)) ]p
           end
         | schar =>
           match [ e1 ]_ s, [ e2 ]_s with
-            | mkPhy l1 H1, mkPhy l2 H2 => fun (Heq : schar = t') => 
+            | mkPhy l1 H1, mkPhy l2 H2 => fun (Heq : schar = t') =>
                 let H'1 := eq_ind_r (fun t => size l1 = sizeof (ityp: t)) H1 Heq in
                 let H'2 := eq_ind_r (fun t => size l2 = sizeof (ityp: t)) H2 Heq in
                 [ binop_re_interp b (s2Z (i8_to_i8 l1 H'1)) (s2Z (i8_to_i8 l2 H'2)) ]p
           end
         | ulong =>
           match [ e1 ]_ s, [ e2 ]_ s with
-            | mkPhy l1 H1, mkPhy l2 H2 => fun (Heq : ulong = t') => 
+            | mkPhy l1 H1, mkPhy l2 H2 => fun (Heq : ulong = t') =>
                 let H'1 := eq_ind_r (fun t => size l1 = sizeof (ityp: t)) H1 Heq in
                 let H'2 := eq_ind_r (fun t => size l2 = sizeof (ityp: t)) H2 Heq in
                 [ binop_re_interp b (u2Z (i64<=i8 l1 H'1)) (u2Z (i64<=i8 l2 H'2)) ]p
           end
       end erefl
-    | bop_n t' b e1 e2 => 
+    | bop_n t' b e1 e2 =>
       match t' as t return (forall (_ : t = t'), (g.-ityp: t).-phy) with
         | uint =>
           match [ e1 ]_ s, [ e2 ]_s with
-            | mkPhy l1 H1, mkPhy l2 H2 => fun (Heq : uint = t') => 
+            | mkPhy l1 H1, mkPhy l2 H2 => fun (Heq : uint = t') =>
                 let H'1 := eq_ind_r (fun t => size l1 = sizeof (ityp: t)) H1 Heq in
                 let H'2 := eq_ind_r (fun t => size l2 = sizeof (ityp: t)) H2 Heq in
                 [ binop_ne_interp b (i32<=i8 l1 H'1) (i32<=i8 l2 H'2) ]p
           end
         | uchar =>
           match [ e1 ]_ s, [ e2 ]_s with
-            | mkPhy l1 H1, mkPhy l2 H2 => fun (Heq : uchar = t') => 
+            | mkPhy l1 H1, mkPhy l2 H2 => fun (Heq : uchar = t') =>
                 let H'1 := eq_ind_r (fun t => size l1 = sizeof (ityp: t)) H1 Heq in
                 let H'2 := eq_ind_r (fun t => size l2 = sizeof (ityp: t)) H2 Heq in
                 [ binop_ne_interp b (i8_to_i8 l1 H'1) (i8_to_i8 l2 H'2) ]p
           end
         | schar =>
           match [ e1 ]_ s, [ e2 ]_s with
-            | mkPhy l1 H1, mkPhy l2 H2 => fun (Heq : schar = t') => 
+            | mkPhy l1 H1, mkPhy l2 H2 => fun (Heq : schar = t') =>
                 let H'1 := eq_ind_r (fun t => size l1 = sizeof (ityp: t)) H1 Heq in
                 let H'2 := eq_ind_r (fun t => size l2 = sizeof (ityp: t)) H2 Heq in
                 [ binop_ne_interp b (i8_to_i8 l1 H'1) (i8_to_i8 l2 H'2) ]p
           end
-        | sint => 
+        | sint =>
           match [ e1 ]_ s, [ e2 ]_ s with
-            | mkPhy l1 H1, mkPhy l2 H2 => fun (Heq : sint = t') => 
+            | mkPhy l1 H1, mkPhy l2 H2 => fun (Heq : sint = t') =>
                 let H'1 := eq_ind_r (fun t => size l1 = sizeof (ityp: t)) H1 Heq in
                 let H'2 := eq_ind_r (fun t => size l2 = sizeof (ityp: t)) H2 Heq in
                 [ binop_ne_interp b (i32<=i8 l1 H'1) (i32<=i8 l2 H'2) ]p
           end
-        | ulong => 
+        | ulong =>
           match [ e1 ]_ s, [ e2 ]_ s with
-            | mkPhy l1 H1, mkPhy l2 H2 => fun (Heq : ulong = t') => 
+            | mkPhy l1 H1, mkPhy l2 H2 => fun (Heq : ulong = t') =>
                 let H'1 := eq_ind_r (fun t => size l1 = sizeof (ityp: t)) H1 Heq in
                 let H'2 := eq_ind_r (fun t => size l2 = sizeof (ityp: t)) H2 Heq in
                 [ binop_ne_interp b (i64<=i8 l1 H'1) (i64<=i8 l2 H'2) ]p
           end
       end erefl
-    | bopk_n ity b e1 k => 
+    | bopk_n ity b e1 k =>
       match ity as t return (forall (_ : t = ity), (ityp: t).-phy) with
         | uint => match [ e1 ]_ s with
-                  | mkPhy l1 H1 => fun (Heq : uint = ity) => 
+                  | mkPhy l1 H1 => fun (Heq : uint = ity) =>
                     let H'1 := eq_ind_r (fun t => size l1 = sizeof (ityp: t)) H1 Heq in
                     [ binopk_e_interp b (i32<=i8 l1 H'1) k ]p
                   end
         | sint => match [ e1 ]_ s with
-                  | mkPhy l1 H1 => fun (Heq : sint = ity) => 
+                  | mkPhy l1 H1 => fun (Heq : sint = ity) =>
                     let H'1 := eq_ind_r (fun t => size l1 = sizeof (ityp: t)) H1 Heq in
                     [ binopk_e_interp b (i32<=i8 l1 H'1) k ]p
                   end
         | uchar => match [ e1 ]_ s with
-                   | mkPhy l1 H1 => fun (Heq : uchar = ity) => 
+                   | mkPhy l1 H1 => fun (Heq : uchar = ity) =>
                      let H'1 := eq_ind_r (fun t => size l1 = sizeof (ityp: t)) H1 Heq in
                      [ binopk_e_interp b (i8_to_i8 l1 H'1) k ]p
                    end
         | schar => match [ e1 ]_ s with
-                   | mkPhy l1 H1 => fun (Heq : schar = ity) => 
+                   | mkPhy l1 H1 => fun (Heq : schar = ity) =>
                      let H'1 := eq_ind_r (fun t => size l1 = sizeof (ityp: t)) H1 Heq in
                      [ binopk_e_interp b (i8_to_i8 l1 H'1) k ]p
                    end
         | ulong => match [ e1 ]_ s with
-                   | mkPhy l1 H1 => fun (Heq : ulong = ity) => 
+                   | mkPhy l1 H1 => fun (Heq : ulong = ity) =>
                      let H'1 := eq_ind_r (fun t => size l1 = sizeof (ityp: t)) H1 Heq in
                      [ binopk_e_interp b (i64<=i8 l1 H'1) k ]p
                    end
@@ -793,7 +792,7 @@ Fixpoint eval {g sigma t} (s : store sigma) (e : exp sigma t) : t.-phy :=
 where "'[' e ']_' s" := (eval s e).
 Global Opaque eval.
 
-Lemma eval_store_upd_notin {g} sigma t : 
+Lemma eval_store_upd_notin {g} sigma t :
   forall (e : exp sigma t) (t' : g.-typ) y (H : env_get y sigma = Some t') pval,
     y \notin unzip1 (vars e) ->
     forall s, [ e ]_ (store_upd H pval s) = [ e ]_ s.
@@ -833,21 +832,21 @@ elim : t / => //.
 Opaque eval.
 Qed.
 
-Definition subst_exp {g} {sigma : g.-env} str {t' : g.-typ} (str_t' : env_get str sigma = |_ t' _|) (e' : exp sigma t') 
-  {t : g.-typ} (e : exp sigma t) : exp sigma t := 
-  exp_rect g sigma 
+Definition subst_exp {g} {sigma : g.-env} str {t' : g.-typ} (str_t' : env_get str sigma = |_ t' _|) (e' : exp sigma t')
+  {t : g.-typ} (e : exp sigma t) : exp sigma t :=
+  exp_rect g sigma
   (fun (t0 : g.-typ) (_ : exp sigma t0) => exp sigma t0)
   (fun str0 (t0 : g.-typ) (e0 : env_get str0 sigma = |_ t0 _|) =>
    match string_dec str0 str with
    | left Heq =>
      let str_t0 :  env_get str sigma = |_ t0 _| := eq_rect str0 (fun x => env_get x sigma = |_ t0 _|) e0 _ Heq in
-     (eq_rect t' (exp sigma) e' t0) 
-       ((f_equal 
-           (fun ot => match ot with |_ t1 _| => t1 | None => t' end) 
-           (Logic.trans_eq (Logic.eq_sym str_t') str_t0)) : 
+     (eq_rect t' (exp sigma) e' t0)
+       ((f_equal
+           (fun ot => match ot with |_ t1 _| => t1 | None => t' end)
+           (Logic.trans_eq (Logic.eq_sym str_t') str_t0)) :
           t' = t0)
    | right _ => var_e sigma str0 t0 e0
-   end) 
+   end)
   (cst_e sigma)
   (fun t0 b (_ IHe1 _ IHe2 : exp sigma (g.-ityp: t0)) =>
    match b with
@@ -863,13 +862,13 @@ Definition subst_exp {g} {sigma : g.-env} str {t' : g.-typ} (str_t' : env_get st
   (fun t0 (_ IHe1 : exp sigma (:* t0)) _ => fun x => IHe1 \+ x)
   (fun t0 (t'0 : integral) (_ IHe : exp sigma (g.-ityp: t0)) => safe_cast sigma t0 t'0 IHe)
   (fun t0 t'0 (_ IHe : exp sigma (g.-ityp: t0)) => unsafe_cast sigma t0 t'0 IHe)
-  (fun f tg t1 (_ IHe : exp sigma (:* t1)) (H : styp tg = t1) (t'1 : g.-typ) => 
+  (fun f tg t1 (_ IHe : exp sigma (:* t1)) (H : styp tg = t1) (t'1 : g.-typ) =>
      @fldp _ sigma f _ _ IHe H t'1)
   (fun t0 (_ IHe1 _ : exp sigma (:* t0)) => eq_p sigma t0 IHe1)
   (fun t0 (_ IHe1 : exp sigma (g.-ityp: uint)) (_ IHe2 _ : exp sigma t0) => ifte_e sigma t0 IHe1 IHe2)
   t e.
 
-Lemma subst_exp_store_upd  {g} {sigma : g.-env} x {t' : g.-typ} 
+Lemma subst_exp_store_upd  {g} {sigma : g.-env} x {t' : g.-typ}
   {Hx : env_get x sigma = Some t'} (e' : exp sigma t') s {t : g.-typ} (e : exp sigma t) :
   [ subst_exp x Hx e' e ]_ s = [ e ]_ (store_upd Hx ([ e' ]_ s) s).
 Proof.
@@ -902,11 +901,11 @@ Local Open Scope Z_scope.
 
 Section eval_sect.
 
-Variable (g : wfctxt) (sigma : g.-env). 
+Variable (g : wfctxt) (sigma : g.-env).
 
 (* NB: generalize? *)
 Lemma eval_spec : forall (a : (:* (g.-ityp: uchar)).-phy),
-  [ [phy<=ptr _ (ptr<=phy a `+ `( 8 )_ ptr_len) ]c ]_ (store0 sigma) = 
+  [ [phy<=ptr _ (ptr<=phy a `+ `( 8 )_ ptr_len) ]c ]_ (store0 sigma) =
   [ [ a ]c \+ [ 8 ]sc ]_ (store0 sigma).
 Proof.
 case=> l Hl.
@@ -1096,7 +1095,7 @@ Qed.
 
 (* works for \+, \-, \|, \& *)
 Lemma si32_of_phy_binop_ne (e1 : exp sigma _) e2 (b : binop_ne) :
-  si32<=phy [bop_n sigma sint b e1 e2 ]_ s = 
+  si32<=phy [bop_n sigma sint b e1 e2 ]_ s =
   (binop_ne_interp b) (si32<=phy ([ e1 ]_ s)) (si32<=phy ([ e2 ]_ s)).
 Proof.
 Transparent eval.
@@ -1106,7 +1105,7 @@ case: ([e2]_s) => p2 Hp2.
 rewrite phy_of_si32K /si32_of_phy /=.
 case: (oi32_of_i8_Some _ Hp) => x Hx.
 case: (oi32_of_i8_Some _ Hp2) => y Hy.
-rewrite Hx Hy /=.  
+rewrite Hx Hy /=.
 move: (oi32_of_i8_bij _ _ Hx) => ?; subst.
 move: (oi32_of_i8_bij _ _ Hy) => ?; subst.
 by rewrite !i8_of_i32K.
@@ -1162,7 +1161,7 @@ Notation "'\~b' b" := (bneg _ b) (at level 71, format "'['  \~b  b  ']'") : C_ex
 
 Notation "'\b' e" := (exp2bexp _ e) (at level 70, format "'['  \b  e  ']'") : C_expr_scope.
 
-Fixpoint subst_bexp {g} {sigma : g.-env} x {t : g.-typ} 
+Fixpoint subst_bexp {g} {sigma : g.-env} x {t : g.-typ}
   (Hx : env_get x sigma = Some t) (e' : exp sigma t) (b : bexp sigma) : bexp sigma :=
   match b with
     | exp2bexp e => \b subst_exp x Hx e' e
@@ -1177,7 +1176,7 @@ elim => /= [e | b Hind].
 - by rewrite subst_exp_store_upd.
 - by rewrite Hind.
 Opaque beval.
-Qed.  
+Qed.
 
 Fixpoint bvars {g} {sigma : g.-env} (b : bexp sigma) :=
   match b with
@@ -1185,11 +1184,11 @@ Fixpoint bvars {g} {sigma : g.-env} (b : bexp sigma) :=
     | bneg b => bvars b
   end.
 
-Lemma bvars_subset_sigma {g} {sigma : g.-env} : 
+Lemma bvars_subset_sigma {g} {sigma : g.-env} :
   forall (b : bexp sigma), {subset bvars b <= sigma}.
 Proof. elim => //=. exact vars_in_ts. Qed.
 
-Lemma beval_store_upd_notin {g} sigma : 
+Lemma beval_store_upd_notin {g} sigma :
   forall (b : bexp sigma) (t : g.-typ) str (str_t : env_get str sigma = Some t) pv,
     str \notin unzip1 (bvars b) ->
     forall s, [ b ]b_ (store_upd str_t pv s) = [ b ]b_ s.
@@ -1263,7 +1262,7 @@ case: t a b => //= a b; case: ([ a ]_ s) => ha Ha; case: ([ b ]_ s) => hb Hb.
 Opaque eval beval.
 Qed.
 
-Lemma beval_neq_not_bneg (t : integral) (a b : exp sigma (ityp: t)) : 
+Lemma beval_neq_not_bneg (t : integral) (a b : exp sigma (ityp: t)) :
  [ \b a \!= b  ]b_ s = [ \~b \b a \= b ]b_ s.
 Proof.
 Transparent eval beval.
@@ -1294,7 +1293,7 @@ case: t a b Hha Ha Hhb Hb => a b Hha _ Hhb _; case: ifP => //= ?.
 Opaque eval beval.
 Qed.
 
-Lemma beval_neq_not_eq (t : integral) (a b : exp sigma (ityp: t)) : 
+Lemma beval_neq_not_eq (t : integral) (a b : exp sigma (ityp: t)) :
   [ \b a \!= b  ]b_ s = ([ a ]_ s != [ b ]_ s).
 Proof. by rewrite beval_neq_not_bneg beval_neg_not beval_eq_e_eq. Qed.
 
@@ -1331,7 +1330,7 @@ Qed.
 
 (* NB: see also Ceqpn_add2l in C_expr_equiv *)
 Lemma Ceqpn_add2l' t (e : exp sigma (:* t)) e1 e2 :
-  [ \b e1 \= e2 ]b_ s -> [ \b e \+ e1 \= e \+ e2 ]b_ s. 
+  [ \b e1 \= e2 ]b_ s -> [ \b e \+ e1 \= e \+ e2 ]b_ s.
 Proof.
 Transparent beval eval.
 rewrite /=.
@@ -1488,7 +1487,7 @@ move He1 : ( [ e1 ]_s ) => [he1 Hhe1].
 move He2 : ( [ e2 ]_s ) => [he2 Hhe2].
 case: ifP; last by move=> _; rewrite /is_zero eqxx.
 move/leZP => H _.
-apply Zle_ge.
+apply Z.le_ge.
 set lhs := si32<=phy _.
 set rhs := si32<=phy _.
 set lhs2 := i32_of_i8 _ _ in H.

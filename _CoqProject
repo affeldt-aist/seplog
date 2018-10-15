@@ -1,3 +1,4 @@
+-arg "-w -notation-overridden"
 lib/Init_ext.v
 lib/ssrnat_ext.v
 lib/Max_ext.v
