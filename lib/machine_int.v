@@ -2713,6 +2713,11 @@ case: (Z_zerop b) => b0.
 case/not_Zeq_inf : a0 => a0; last first.
 Abort.
 
+Lemma s2Z_Z2s_underflow : forall n (b : Z),
+  - 2 ^^ n.+1 <= b < -2 ^^ n -> s2Z (Z2s n.+1 b) = b + 2 ^^ n.+1.
+Proof.
+Abort.
+
 Lemma add_Z2s {n} : forall a b,
   Z2s n.+1 a `+ Z2s n.+1 b = Z2s n.+1 (a + b).
 Proof.
@@ -2727,12 +2732,6 @@ case: (Z_lt_le_dec (a + b) (2 ^^ n)) => ab_top.
           case: (Z_le_gt_dec (-2 ^^ n) b) => b_bot.
             rewrite s2Z_add; by rewrite Z2sK // Z2sK.
           clear b_top.
-
-Lemma s2Z_Z2s_underflow : forall n (b : Z),
-  - 2 ^^ n.+1 <= b < -2 ^^ n -> s2Z (Z2s n.+1 b) = b + 2 ^^ n.+1.
-Proof.
-Abort.
-
 Abort.
 
 Local Close Scope machine_int_scope.

@@ -90,7 +90,7 @@ Lemma sepClst_ind_new
        forall (l : seq (int 32)) (p : (:* Clst).-phy) (s : store) (h : heap),
        sepClst l p s h -> P l p s h.
 Proof.
-fix 8.
+fix sepClst_ind_new 8.
 intros.
 destruct H1.
   apply H.

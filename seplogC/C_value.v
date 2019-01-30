@@ -658,7 +658,7 @@ Qed.
 (* extracting machine-int's from some logical values *)
 
 Definition uint_of_log {g} (lv : (g.-ityp: uint).-log) :=
-  match lv with log_of_uint _ _ i => i | _ => zero32 end.
+  match lv return int 32 with log_of_uint _ _ i => i | _ => zero32 end.
 
 Lemma log_of_uintK {g} i : uint_of_log (@log_of_uint g _ erefl i) = i.
 Proof. by []. Qed.
@@ -667,7 +667,7 @@ Lemma uint_of_logK {g} v : @log_of_uint g _ erefl (uint_of_log v) = v.
 Proof. by move: (log_of_uint_inv erefl v) => [] i ->. Qed.
 
 Definition sint_of_log {g} (lv : (g.-ityp: sint).-log) :=
-  match lv with log_of_sint t Ht i => i | _ => zero32 end.
+  match lv return int 32 with log_of_sint t Ht i => i | _ => zero32 end.
 
 Lemma log_of_sintK {g} i : sint_of_log (@log_of_sint g _ erefl i) = i.
 Proof. by []. Qed.
@@ -676,7 +676,7 @@ Lemma sint_of_logK {g} v : @log_of_sint g _ erefl (sint_of_log v) = v.
 Proof. by move: (log_of_sint_inv erefl v) => [] i ->. Qed.
 
 Definition uchar_of_log {g} (lv : (g.-ityp: uchar).-log) :=
-  match lv with log_of_uchar t Ht c => c | _ => zero8 end.
+  match lv return int 8 with log_of_uchar t Ht c => c | _ => zero8 end.
 
 Lemma log_of_ucharK {g} i : uchar_of_log (@log_of_uchar g _ erefl i) = i.
 Proof. by []. Qed.
@@ -685,7 +685,7 @@ Lemma uchar_of_logK {g} v : @log_of_uchar g _ (erefl _) (uchar_of_log v) = v.
 Proof. by move: (log_of_uchar_inv erefl v) => [] i ->. Qed.
 
 Definition ulong_of_log {g} (lv : (g.-ityp: ulong).-log) :=
-  match lv with log_of_ulong t Ht i => i | _ => Z2u 64 0 end.
+  match lv return int 64 with log_of_ulong t Ht i => i | _ => Z2u 64 0 end.
 
 Lemma log_of_ulongK {g} i : ulong_of_log (@log_of_ulong g _ erefl i) = i.
 Proof. by []. Qed.
