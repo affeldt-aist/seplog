@@ -2577,7 +2577,7 @@ f_equal.
   rewrite bits.adjust_u_id //= size_takel //.
   case: Hb => ->.
   by rewrite leq_addr.
-have Hn0 : (n - k.+1 = q * k.+1)%nat by rewrite Hn -{1}(addn1 q) mulnDl mul1n -addnBA // subnn.
+have Hn0 : (n - k.+1 = q * k.+1)%nat by rewrite Hn -{1}(addn1 q) mulnDl mul1n addnK.
 set lst := drop k.+1 b.
 have Hlst : size lst = (n - k.+1)%nat by rewrite /lst size_drop Hb.
 have [a Ha] : exists a : int (n - k.+1), int_lst a = lst by exists (mk_int Hlst).

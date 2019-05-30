@@ -107,7 +107,7 @@ Proof. rewrite !Sum_cons opA; apply Equivalence_Reflexive. Qed.
 Lemma Sum_perm_eq l l1 l2 : perm_eq l1 l2 ->
   Sum op (map_indices zero l l1) === Sum op (map_indices zero l l2).
 Proof.
-move /perm_eqP. 
+move/permP.
 elim: l1 l2 => [| i l1 Hl1] l2 eq_l1l2.
   case: l2 eq_l1l2; last first.
   by move => // i l2; move/(_ (pred1 i)); rewrite /= eqxx.

@@ -682,7 +682,11 @@ Ltac Ent_monotony_icon :=
 Ltac Ent_monotony := Ent_LR_to_icon; Ent_monotony_icon; unfold icon; simpl.
 
 Tactic Notation "Ent_monotony0_new" tactic(tac) :=
-  repeat (tac || apply monotony_R || apply monotony_L || apply monotony_R2 || apply monotony_L2);
+  repeat (tac ||
+match goal with
+| |- (_ ** ?X) ===> (_ ** ?X) => apply monotony_R
+end
+|| apply monotony_L || apply monotony_R2 || apply monotony_L2);
   try (apply ent_emp_bbang_pe || apply ent_emp_bbang_re).
 
 Ltac Ent_monotony0 := Ent_monotony0_new fail.

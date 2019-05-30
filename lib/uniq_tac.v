@@ -1,6 +1,6 @@
 (* seplog (c) AIST 2005-2013. R. Affeldt, N. Marti, et al. GNU GPLv3. *)
 (* seplog (c) AIST 2014-2018. R. Affeldt et al. GNU GPLv3. *)
-Require Import Omega.
+Require Import Omega Permutation.
 From mathcomp Require Import ssreflect ssrbool eqtype ssrnat seq.
 Require Import seq_ext.
 
@@ -57,8 +57,6 @@ Proof. move=> /=. by case/andP. Qed.
 
 Lemma list_is_not_set_hd_hd (hd : A) tl : uniq (hd :: hd :: tl) -> False.
 Proof. by rewrite /= !inE !eqxx. Qed.
-
-Require Import Permutation.
 
 Lemma Permutation_uniq (l1 l2 : seq A) : Permutation l1 l2 -> uniq l1 -> uniq l2.
 Proof.

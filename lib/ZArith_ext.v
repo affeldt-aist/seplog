@@ -154,7 +154,9 @@ Lemma Zabs_nat_0_inv : forall a, '| a | = O -> a = 0.
 Proof. case=> //= p H; move: (lt_O_nat_of_P p); rewrite H; by inversion 1. Qed.
 
 Lemma Zabs_nat_mult : forall a b, '| a * b | = ('| a | * '| b |)%nat.
-Proof. move=> [|p|p] [|q|q] //=; by rewrite nat_of_P_mult_morphism. Qed.
+Proof.
+move=> [|p|p] [|q|q] //=; by rewrite ?nat_of_P_mult_morphism // muln0.
+Qed.
 
 Lemma Z_of_nat_Zabs_nat z : 0 <= z -> Z<=nat '| z | = z.
 Proof. case : z => //= p Hp; by rewrite Zpos_eq_Z_of_nat_o_nat_of_P. Qed.

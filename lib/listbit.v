@@ -171,9 +171,10 @@ Fixpoint sext (m : nat) (l : list bool) :=
 
 Lemma size_sext m l : size (sext m l) = size l + m.
 Proof.
-elim: m l => [ [] // | n IH [|h t] ].
-by rewrite /= /zeros size_nseq.
-by rewrite /= IH /= addnS.
+elim: m l => [ [] //=| n IH [|h t] /=].
+by move=> _ l; rewrite addn0.
+by rewrite /zeros size_nseq.
+by rewrite IH /= addnS.
 Qed.
 
 Lemma sext_0 : forall n l, sext n (false :: l) = zeros n.+1 ++ l.
@@ -549,7 +550,7 @@ case: (leqP m n) => mn.
 rewrite ltnS (_ : n - m = 0); last by apply/eqP; rewrite subn_eq0 ltnW.
 rewrite minnC.
 move/ltnW/minn_idPl : mn => ->.
-by case: n.
+by case: n => //= n; rewrite addn0.
 Qed.
 
 (** shift right and forget about the freed bits *)
@@ -1581,8 +1582,7 @@ induction l1.
       by rewrite /= size_nseq.
     * rewrite IHl2 //.
       rewrite (add_no_overflow (size l1 + size l2).+2) //.
-      - rewrite /= size_cat /= size_nseq.
-        by auto.
+      - by rewrite /= size_cat /= size_nseq addnS.
       - by rewrite size_umul /= addSn addnS.
   + rewrite /=.
     destruct l2; first by done.

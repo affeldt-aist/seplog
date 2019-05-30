@@ -13,6 +13,8 @@ Local Open Scope C_expr_scope.
 
 Require Import while_bipl.
 
+Reserved Notation "P ** Q" (at level 80, right associativity).
+
 Module Type CENV.
 
 Parameter g : wfctxt.
@@ -58,11 +60,12 @@ Include (StateBiplProp C_StateBipl).
 
 Local Open Scope statebipl_scope.
 
-Inductive con' (P Q : assert) s : heap -> Prop :=
+Variant con' (P Q : assert) s : heap -> Prop :=
 | con_c: forall h1 h2, h1 # h2 ->
   P s h1 -> Q s h2 -> con' P Q  s (h1 \U h2).
-Definition con := con'.
-Notation "P ** Q" := (con P Q) (at level 80, right associativity) : C_assert_scope.
+Definition con := nosimpl con'.
+Notation "P ** Q" := (con P Q) : C_assert_scope.
+
 Local Open Scope C_assert_scope.
 
 Lemma conC (P Q : assert) : P ** Q <==> Q ** P.

@@ -14,7 +14,7 @@ corresponding to the following papers:
 
 ## Requirements
 
-Coq version 8.9.0, mathcomp development version
+Coq version 8.9.1, MathComp 1.9.0
 
 ## Install
 

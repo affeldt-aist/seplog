@@ -1981,7 +1981,7 @@ elim/last_ind=> [k|t h IH k H].
   move/Permutation_sym; move/Permutation_nil=> -> /=.
   by apply Permutation_refl.
 - rewrite -cats1.
-  apply perm_trans with
+  apply Permutation.perm_trans with
     (map (fun x => nth def (t ++ h :: nil) x) (iota O (size t) ++ size t :: nil)); last first.
     rewrite -cats1 size_cat /= addnC /= in H.
     apply Permutation_map; rewrite -/(iota (size t) 1) -iota_add addn1; exact/Permutation_sym.
@@ -2044,9 +2044,9 @@ rewrite -cat1s !catA => H Hn.
 move: (IH _ _ H).
 rewrite !size_cat /= Hn => /(_ (refl_equal _)) => K.
 apply Permutation_cons_inv with h.
-eapply perm_trans.
+eapply Permutation.perm_trans.
   apply Permutation_cons_cat.
-eapply perm_trans.
+eapply Permutation.perm_trans.
   apply K.
 apply Permutation_sym.
 by apply Permutation_cons_cat.
@@ -2066,7 +2066,7 @@ case/memP => l1 [l2 [Hl1l2 _]].
 exists l1, l2; split; first by [].
 apply Permutation_app_inv_r with (n :: nil).
 rewrite -{2}/(iota n 1) -iota_add.
-apply perm_trans with (sh :: st) => //.
+apply Permutation.perm_trans with (sh :: st) => //.
 rewrite Hl1l2 -catA.
 apply Permutation_app.
 - by apply Permutation_refl.
@@ -2085,7 +2085,7 @@ Ltac Permut n :=
       | 1 => fail
       | _ =>
           let l0' := constr:(X2 ++ X1 :: nil) in
-          (apply (@perm_trans _ (X1 :: X2) l0' X3);
+          (apply (@Permutation.perm_trans _ (X1 :: X2) l0' X3);
             [ apply permut_rotate | compute; Permut (Peano.pred n) ])
       end
   end.
@@ -2151,7 +2151,7 @@ elim.
     rewrite H' List.app_comm_cons.
     apply Permutation_cons_app.
     move: {IH}(IH _ _ Hlent Z) => IH.
-    apply perm_trans with (h' :: remove1 h t') => //=.
+    apply Permutation.perm_trans with (h' :: remove1 h t') => //=.
     apply perm_skip.
     rewrite H'.
     by apply Permutation_remove1.
@@ -2284,9 +2284,9 @@ have IH_hyp : (forall i, i < n -> nth def (l0 ++ l1) i = nth def k0 (nth 0 (s0 +
   - by rewrite -k_def.
   - by rewrite -l_def -k_def -sh_st.
 move: {IH}(IH _ len_s0s1 perm_s0s1 def _ _ len_l0l1 len_k0 IH_hyp) => IH.
-apply perm_trans with (elt :: (l0 ++ l1)).
+apply Permutation.perm_trans with (elt :: (l0 ++ l1)).
 - by apply Permutation_sym, Permutation_cons_app, Permutation_refl.
-- apply perm_trans with (elt :: k0).
+- apply Permutation.perm_trans with (elt :: k0).
   + by apply perm_skip.
   + apply Permutation_cons_app; rewrite -List.app_nil_end; by apply Permutation_refl.
 Qed.

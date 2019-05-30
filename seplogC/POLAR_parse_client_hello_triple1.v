@@ -407,7 +407,7 @@ apply hoare_seq with (
   - rewrite -/success -/min_SI -/error Z_of_nat_Zabs_nat; last by rewrite /the_n_plus5; omega.
     rewrite -/Hin_left_success (_: '| the_n_plus5 | - '| (u2Z in_left) | = '| the_n |); last first.
       rewrite in_left_5 Z2uK // Zabs_nat_Z_of_nat // /the_n_plus5 Zabs_nat_Zplus //; last by omega.
-      by rewrite (_ : '| 5 | = 5) // plusE addnC -addnBA.
+      by rewrite (_ : '| 5 | = 5) // plusE addnC -addnBA ?addn0.
     by rewrite -/Hbu_new in_left_5 Z2uK.
   - rewrite -/Hssl_in_left -/Hbu -/Hpre -/Hnexp; by Ent_permut.
 

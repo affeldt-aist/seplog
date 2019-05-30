@@ -1084,11 +1084,11 @@ move Htest : (client_extensions_present _ _ _ _) => [] /=.
     have X2 : (size (cipher_suites0 ++ compression_methods0 ++ extensions0) -
             size
             (compression_methods0 ++ extensions0))%nat = size cipher_suites0.
-      by rewrite size_cat -addnBA // subnn.
+      by rewrite size_cat -addnBA // subnn addn0.
     rewrite X2 in H8.
     have X3 : (size (compression_methods0 ++ extensions0) -
           size extensions0)%nat = size compression_methods0.
-      by rewrite size_cat -addnBA // subnn.
+      by rewrite size_cat -addnBA // subnn addn0.
     rewrite X3 in H8.
     exfalso.
     move: Htest H8.
@@ -1099,10 +1099,10 @@ move Htest : (client_extensions_present _ _ _ _) => [] /=.
   have -> : (size
                (session_id0 ++ cipher_suites0 ++ compression_methods0 ++ nil) -
              size (cipher_suites0 ++ compression_methods0 ++ nil))%nat = size session_id0.
-    by rewrite size_cat -addnBA // subnn.
+    by rewrite size_cat -addnBA // subnn addn0.
   have -> : (size (cipher_suites0 ++ compression_methods0 ++ nil) -
              size (compression_methods0 ++ nil))%nat = size cipher_suites0.
-    by rewrite size_cat -addnBA // subnn.
+    by rewrite size_cat -addnBA // subnn addn0.
   rewrite subn0 cats0.
   by move=> ->.
 Qed.

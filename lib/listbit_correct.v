@@ -1046,8 +1046,7 @@ induction k.
   rewrite (shl_u2Z k n lst H l) // in H2; last by rewrite ltnW.
   rewrite (shl_u2Z k.+1 n lst H l) //.
   cutrewrite (2 ^^ (l + k.+1) - 2 ^^ k.+1 = 2 * (2 ^^ (l + k) - 2 ^^ k)); last first.
-    rewrite (_ : l + k.+1 = (l + k).+1 )%nat; last by auto.
-    rewrite !ZpowerS; omega.
+    rewrite addnS !ZpowerS; omega.
   rewrite ZpowerS mulZC -mulZA (mulZC (2 ^^ k)); omega.
 Qed.
 
@@ -1070,9 +1069,7 @@ unfold shl_ext.
 induction k.
 rewrite /= cats0 addn0; omega.
 cutrewrite (lst ++ zeros k.+1 = (lst ++ zeros k) ++ zeros 1); last by rewrite /= -catA -nseqS.
-rewrite u2Z_app_zeros.
-cutrewrite (l + k.+1 = (l + k).+1)%nat; last by auto.
-rewrite 2!ZpowerS [2 ^^ 0]/= ZpowerS; omega.
+rewrite u2Z_app_zeros addnS 2!ZpowerS [2 ^^ 0]/= ZpowerS; omega.
 Qed.
 
 (** properties of shrl_lst / u2Z *)
@@ -2333,8 +2330,7 @@ destruct n.
           by move=> ?; subst b1.
         rewrite (umulC n.+1) //; last by rewrite /= size_nseq.
         rewrite -/(zeros n). rewrite (_ : false :: zeros n = zeros n.+1) // umull0 [size _]/= size_nseq addl0; last first.
-          rewrite /= size_cat /= size_nseq H0.
-          by rewrite (_ : (n.+1 + n.+2)%nat = (n.+1 + n.+1).+1).
+          by rewrite /= size_cat /= size_nseq H0 [in RHS]addnS.
         rewrite u2Z_false u2Z_zeros u2Z_app_zeros; ring.
       - have -> : cplt2 (true :: false :: a1) = cplt true :: cplt2 (false :: a1).
           apply cplt2_prop.

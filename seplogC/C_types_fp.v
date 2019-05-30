@@ -989,7 +989,7 @@ Proof.
 elim => // hd tl Hind a Hin Halign /=.
 set x := eq_comparable _ _.
 case: x => [Heq | Hneq].
-- subst; rewrite eq_refl //= padd_0 //=; apply align_gt0.
+- subst; rewrite eq_refl //= padd_0 //= ?addn0 //; apply align_gt0.
 - set ob := eq_ind_r _ _ _.
   set ob' := ob _; generalize ob'; clear ob ob'; move => ob.
   set a' := a + _.

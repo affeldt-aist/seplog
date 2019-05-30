@@ -2105,7 +2105,7 @@ Lemma elts_union_sing_Perm l d x rx : Permutation l (elts d) ->
   Permutation ((x, rx) :: l) (elts (sing x rx \U d)).
 Proof.
 move=> H_k_d Hnotin.
-eapply perm_trans; last first.
+eapply Permutation.perm_trans; last first.
 - apply elts_union_sing_Perm'.
   move: H_k_d.
   move/Permutation_sym.
@@ -2835,13 +2835,13 @@ case: ifP => hd_d.
 - have [d' Hd'] : exists d', perm_eq d (hd :: d').
     (* TODO: pull out a lemma out of this? *)
     exists (filter (predC (pred1 hd)) d).
-    apply perm_eq_trans with (filter (pred1 hd) d ++ filter (predC (pred1 hd)) d).
-    rewrite perm_eq_sym.
-    apply/perm_eqlP.
+    apply perm_trans with (filter (pred1 hd) d ++ filter (predC (pred1 hd)) d).
+    rewrite perm_sym.
+    apply/permPl.
     by apply perm_filterC.
     rewrite -cat1s.
     rewrite perm_cat2r.
-    suff : filter (pred1 hd) d = cons hd [::]. by move=> ->; apply perm_eq_refl.
+    suff : filter (pred1 hd) d = cons hd [::]. by move=> ->; apply perm_refl.
     rewrite -(filter_mem_cons u_d hd_d).
     apply eq_filter => x /=.
     by rewrite in_cons in_nil orbC.
@@ -2850,7 +2850,7 @@ case: ifP => hd_d.
     rewrite /= in_cons eqxx /=.
     apply/incP' => x Hx.
     move/incP' in Hinc; apply/Hinc.
-    move/perm_eq_mem in Hd'.
+    move/perm_mem in Hd'.
     by rewrite Hd' in_cons Hx orbC.
   rewrite inc_cons_L in Hinc.
   case/andP : Hinc => Hinc1 Hinc2.
@@ -2864,30 +2864,30 @@ case: ifP => hd_d.
       * apply/negP => abs.
         have {abs}abs : ~ x \in cons hd d'.
           contradict abs.
-          by move/perm_eq_mem : Hd' => ->.
+          by move/perm_mem : Hd' => ->.
         rewrite in_cons in abs.
         move/negP : abs.
         rewrite negb_or.
         by rewrite x_d' andbC.
       * apply/negP => abs.
         have {abs}abs : x \in cons hd d'.
-          by move/perm_eq_mem : Hd' => <-.
+          by move/perm_mem : Hd' => <-.
         rewrite in_cons in abs.
         case/orP : abs => abs.
         - move/eqP : abs => ?; subst x.
           by rewrite Hx in hd_tl.
         - by rewrite abs in x_d'.
     * apply IH => //.
-      - apply perm_eq_uniq in Hd'.
+      - apply perm_uniq in Hd'.
         rewrite /= u_d in Hd'.
         symmetry in Hd'.
         by case/andP : Hd'.
       - apply inc_cons_R_inv in Hinc1 => //.
         apply/negP => abs.
-        apply perm_eq_uniq in Hd'.
+        apply perm_uniq in Hd'.
         by rewrite /= u_d abs /= in Hd'.
-  + apply perm_eq_size.
-    by rewrite perm_eq_sym.
+  + apply perm_size.
+    by rewrite perm_sym.
 - apply IH => //.
   apply inc_cons_R_inv in Hinc => //.
   by apply/negbT.
