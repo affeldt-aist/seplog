@@ -10,10 +10,13 @@ Export mips_bipl.
 Import expr_m.
 Require Import while.
 
+(** * Operational semantics *)
+
+Declare Scope mips_cmd_scope.
+Declare Scope goto_cmd_scope.
+
 Local Close Scope positive_scope.
 Local Open Scope heap_scope.
-
-(** * Operational semantics *)
 
 (** The syntax of one-step, non-branching instructions is formalized as a
 (non-recursive) inductive type. The type constructors have the same

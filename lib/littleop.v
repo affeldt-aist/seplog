@@ -256,7 +256,7 @@ Defined.
 
 End MIAbelean.
 
-Arguments int_abelean [n].
+Arguments int_abelean {n}.
 
 Require Import ssrZ ZArith_ext.
 

@@ -83,7 +83,7 @@ Lemma wp_assign_T e : wp_assign str_t e TT <==> TT.
 Proof. done. Qed.
 
 Lemma wp_assign_F e : wp_assign str_t e FF <==> FF.
-Proof. move=> s h; split; by [case=> {s h} s h [] | case]. Qed.
+Proof. move=> s h; split; by [case=> {}s {}h [] | case]. Qed.
 
 Lemma wp_assign_ex (e : exp sigma t) {A} (P : A -> assert) :
   (wp_assign str_t e (sepex x, P x)) <==> sepex y, wp_assign str_t e (P y).
@@ -289,7 +289,7 @@ Lemma ent_R_lookup_trans (pv : t.-phy) (lv : t.-log) (P R : assert) :
   R ===> wp_lookup str_t e P.
 Proof.
 move=> pv_lv H' H s h Hh.
-move: (H' _ _ Hh) => {H'}H'.
+move: (H' _ _ Hh) => {}H'.
 case: H' Hh => h1 h2 h1dh2 H1 H2 Hh.
 rewrite /phylog_conv in pv_lv.
 move/log_mapsto_heap_get_conv : (H1).
@@ -477,9 +477,9 @@ rewrite hp.unioneh => ?; subst h2.
 move eqnh : h => h'.
 case: Hh2 (eqnh) => h1 h0 h1h0 Hh1 _ eqnh'; subst h' h.
 rewrite (@nth_decomp _ pv0 l i i_sz_l) in Hh1.
-have {Hh1}Hh1 : (e |--> take i l **
-                (e \+ [Z_of_nat i]sc) |pe~> nth pv0 l i **
-                (e \+ [Z_of_nat i.+1]sc) |--> drop i.+1 l) s h1.
+have {}Hh1 : (e |--> take i l **
+             (e \+ [Z_of_nat i]sc) |pe~> nth pv0 l i **
+             (e \+ [Z_of_nat i.+1]sc) |--> drop i.+1 l) s h1.
   clear h1h0 Hei Hh.
   apply (mapstos_cat i) in Hh1; last 2 first.
     by rewrite size_take i_sz_l.
@@ -1559,7 +1559,7 @@ rewrite not_is_zero_1.
 move/eqP/s2Z_inj => H _.
 rewrite Z2s_Z2u_k // in H.
 set lhs := _ `% 32 in H.
-have {H}H : u2Z lhs = u2Z zero32 by rewrite H.
+have {}H : u2Z lhs = u2Z zero32 by rewrite H.
 rewrite /lhs {lhs} u2Z_rem' in H; last first.
   apply (@ltZ_trans (2 ^^ 1)%Z) => //; exact/max_u2Z.
 exists ((i32<=i8 he Hhe `>> 1) `% 31); split => //=.

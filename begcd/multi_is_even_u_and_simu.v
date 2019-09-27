@@ -174,7 +174,7 @@ move=> u_v Hregs.
       + by apply Zmod_2_Zeven.
       + rewrite /var_mint in Hstate_mint; case: Hstate_mint.
         rewrite -ZbetaE; tauto.
-    have {Ha0}Ha0 : [a0 ]_ st2 = one32.
+    have {}Ha0 : [a0 ]_ st2 = one32.
       rewrite -Ha0.
       symmetry. Reg_unchanged. rewrite [modified_regs _ ]/=; by Uniq_not_In.
     move/semop_prop_m.exec_cmd0_inv : Hst'.

@@ -8,6 +8,8 @@ Import MachineInt.
 
 Reserved Notation "\S_{ n } l" (at level 4, format "'\S_{'  n  '}'  l").
 
+Declare Scope multi_int_scope.
+
 Local Open Scope zarith_ext_scope.
 Local Open Scope machine_int_scope.
 
@@ -309,7 +311,7 @@ elim => // hd tl _.
 case=> l'.
 - rewrite take0 [_ ++ _]/= => _ H.
   rewrite [_ ^^ _]/= in H.
-  have {H} H : lSum l.+1 (hd :: tl) = 0 by move: (min_lSum l.+1 (hd :: tl)) => ?; omega.
+  have {}H : lSum l.+1 (hd :: tl) = 0 by move: (min_lSum l.+1 (hd :: tl)) => ?; omega.
   by apply lSum_0_inv in H.
 - case=> H.
   rewrite ltnS => l'l.
@@ -317,7 +319,7 @@ case=> l'.
   rewrite [take _ _]/= [_ ++ _]/= => H'.
   rewrite -IH //.
   apply Znot_ge_lt => H''.
-  have {H''} H'' : 2 ^^ (l'.+1 * n) <= 2 ^^ n * lSum l tl.
+  have {}H'' : 2 ^^ (l'.+1 * n) <= 2 ^^ n * lSum l tl.
     rewrite /= mulSn ZpowerD.
     apply leZ_wpmul2l; [exact: expZ_ge0 | exact: Z.ge_le].
   move: (min_u2Z hd) => ?; omega.

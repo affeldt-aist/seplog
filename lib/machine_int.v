@@ -34,6 +34,8 @@ Reserved Notation "a '`|`' b" (at level 50, format "'[' a  `|`  b ']'").
 Reserved Notation "a '`(+)' b" (at level 50).
 Reserved Notation "a '`||' b " (at level 68, left associativity, format "'[' a  `||  b ']'").
 
+Declare Scope machine_int_scope.
+
 Set Implicit Arguments.
 Unset Strict Implicit.
 
@@ -438,7 +440,7 @@ Lemma mk_int_pi' : forall n l (H : size l = n) n' l' (H' : size l' = n') (n_n' :
 Proof.
 move=> n l H n' l' H' n_n' H''; subst l'.
 move: (n_n') H H'.
-rewrite n_n' => {n_n'}n_n'.
+rewrite n_n' => {}n_n'.
 have : n_n' = refl_equal n'.
 apply proof_irrelevance.
 rewrite /eq_rect.
@@ -452,7 +454,7 @@ Lemma mk_int_pi'' : forall n l (H : size l = n) n' (n_n' : n = n'),
 Proof.
 move=> n l H n' n_n'.
 move: (n_n') H.
-rewrite n_n' => {n_n'}n_n'.
+rewrite n_n' => {}n_n'.
 have : n_n' = refl_equal n' by apply proof_irrelevance.
 by move=> ->.
 Qed.
@@ -636,7 +638,7 @@ Lemma Z2u_inj {n} : forall a b, (0 <= a < 2 ^^ n)%Z -> (0 <= b < 2 ^^ n)%Z ->
   Z2u n a = Z2u n b -> a = b.
 Proof.
 move=> a b Ha Hb ab.
-have {ab}ab : u2Z (Z2u n a) = u2Z (Z2u n b) by rewrite ab.
+have {}ab : u2Z (Z2u n a) = u2Z (Z2u n b) by rewrite ab.
 by rewrite !Z2uK in ab.
 Qed.
 
@@ -1943,7 +1945,7 @@ move=> n [a Ha] /= H.
 move: (bitZ.s2Z_u2Z_neg n a Ha H) => ?; omega.
 Qed.
 
-Lemma u2Z_Z2s_neg' : forall (p : positive) n, - 2 ^^ n.-1 < Zneg p < 0 -> 
+Lemma u2Z_Z2s_neg' : forall (p : positive) n, - 2 ^^ n.-1 < Zneg p < 0 ->
   u2Z (Z2s n (Zneg p)) = 2 ^^ n - Zpos p.
 Proof.
 move=> p n H.
@@ -2152,7 +2154,7 @@ have [H2 | H2] : (- 2 ^^ m <= bitZ.s2Z lst < 0 \/ 0 <= bitZ.s2Z lst < 2 ^^ m) by
   apply (bitZ.s2Z_shl _ _ e _ _ H4 x) => //; by left.
 - have H1 : (m < l)%nat by ssromega.
   case (bitZ.s2Z_u2Z_pos_zeros _ _ e _ H1 H2) => x H4.
-  have H3 :(l - m > n)%nat by ssromega.
+  have H3 : (l - m > n)%nat by ssromega.
   apply (bitZ.s2Z_shl _ _ e _ _ H3 x) => //; by right.
 Qed.
 
@@ -2209,7 +2211,7 @@ have H : bits.shrl (2 ^ n - 1) a = bits.zeros (2 ^ n - 1) ++ head true a :: nil.
   by rewrite /= take0.
   apply/leP; by rewrite subn1 leq_pred.
 destruct a.
-  suff : False by done.
+  exfalso.
   move/esym/eqP : Ha => /=; by rewrite expn_eq0.
 destruct b; [right | left]; apply mk_int_pi; rewrite H /bits.adjust_u.
 - case: ifP => // Hcond.
@@ -2375,20 +2377,20 @@ destruct (@optionT_dec (int n)).
   rewrite cats0.
   move=> ?; subst a'.
   by apply mk_int_pi.
-suff : False by done.
+exfalso.
 rewrite /int_flat /= in e.
 destruct eq_nat_dec => //.
 by rewrite cats0 in n0.
 Qed.
-    
+
 Lemma int_flat_take : forall n k q (H : n = (q * k)%nat) (l : list (int k)) x x',
   k <> O -> int_flat H l = Some x ->
   int_flat H (take n l) = Some x' -> x = x'.
 Proof.
 move=> n k q H l x x' Hk.
 rewrite /int_flat.
-destruct eq_nat_dec; last by done.
-destruct eq_nat_dec; last by done.
+destruct eq_nat_dec; last by [].
+destruct eq_nat_dec; last by [].
 case => H1 [] H2; subst x x'.
 apply mk_int_pi.
 rewrite H in e; apply len_flat_map_inv in e => //; last by case.
@@ -2399,15 +2401,15 @@ Qed.
 Lemma int_lst_injection : forall n, injection (fun x : int n => int_lst x).
 Proof. move=> n [x Hx] [y Hy] /= x_y. by apply mk_int_pi. Qed.
 
-Lemma int_flat_inj n k l1 l2 nk x : n != O -> 
+Lemma int_flat_inj n k l1 l2 nk x : n != O ->
   forall (H : nk = (k * n)%nat),
     int_flat H l1 = Some x -> int_flat H l2 = Some x ->
     l1 = l2.
 Proof.
 move=> Hk H.
 rewrite /int_flat.
-destruct eq_nat_dec; last by done.
-destruct eq_nat_dec; last by done.
+destruct eq_nat_dec; last by [].
+destruct eq_nat_dec; last by [].
 destruct x.
 case=> l1_x [] l2_x.
 subst lst.
@@ -2457,7 +2459,7 @@ case: optionT_dec.
 move=> H'.
 move H3 : (int_flat_Some (k:=k) Hn (l:=a) H) => h3.
 destruct h3 => {H3}.
-suff : False by done.
+exfalso.
 by rewrite H' in e.
 Qed.
 
@@ -2516,7 +2518,7 @@ move=> q a Hn.
 have Hn' : n = O by rewrite Hn muln0; subst n.
 subst n.
 destruct a as [ [|ha ta] Ha]; last first.
-  suff : False by done.
+  exfalso.
   by rewrite muln0 in Ha.
 rewrite /= /int_flat [size _]/=.
 destruct eq_nat_dec; last by rewrite muln0 in n.
@@ -2599,7 +2601,7 @@ destruct eq_nat_dec => //.
   rewrite size_takel //=.
     by destruct ha.
   by rewrite Hb Hn mulSn addSn ltnS leq_addr.
-suff : False by done.
+exfalso.
 rewrite /= -(cat_take_drop k.+1 b) in a_b.
 apply cat_inv in a_b.
 case: a_b => a_b a_b'.
@@ -2682,7 +2684,7 @@ move=> n k nk [l1 H1] [l2 H2] Hn H.
 rewrite /int_break.
 move=> K.
 apply mk_int_pi.
-destruct n; first by done.
+destruct n; first by [].
 move: (len_takes H1 H) => K1.
 move: (len_takes H2 H) => K2.
 apply map_inj2 with (n := k) (k := n.+1) in K => //; last first.
@@ -3180,12 +3182,12 @@ case: ifP => Hk.
   case: ifP => Hl.
     rewrite 2!(addC a).
     move/add_reg.
-    have {mk}mk : (0 <= Z<=nat m * k < 2 ^^ n)%Z.
+    have {}mk : (0 <= Z<=nat m * k < 2 ^^ n)%Z.
       rewrite (Z.abs_eq k) in mk; last exact/leZP.
       split => //.
       move/leZP in Hk.
       apply mulZ_ge0 => //; exact: Zle_0_nat.
-    have {ml}ml : (0 <= Z<=nat m * l < 2 ^^ n)%Z.
+    have {}ml : (0 <= Z<=nat m * l < 2 ^^ n)%Z.
       rewrite (Z.abs_eq l) in ml; last exact/leZP.
       split => //.
       move/leZP in Hl.
@@ -3204,10 +3206,10 @@ case: ifP => Hl.
   move/leZP in Hl; omega.
 rewrite 2!(addC a).
 move/add_reg/cplt2_inj.
-have {mk}mk : (0 <= Z<=nat m * `|k| < 2 ^^ n)%Z.
+have {}mk : (0 <= Z<=nat m * `|k| < 2 ^^ n)%Z.
   split => //; apply mulZ_ge0; by [apply Zle_0_nat | apply normZ_ge0].
-have {ml}ml : (0 <= Z<=nat m * `|l| < 2 ^^ n)%Z.
-  split => //; apply mulZ_ge0; by [apply Zle_0_nat | apply normZ_ge0].
+have {}ml : (0 <= Z<=nat m * `|l| < 2 ^^ n)%Z.
+split => //; apply mulZ_ge0; by [apply Zle_0_nat | apply normZ_ge0].
 move/(Z2u_inj mk ml)/Z.mul_reg_l => H.
 have : Z<=nat m <> Z0 by move/Z_of_nat_0 => ?; subst.
 case/H/Z.abs_eq_cases => //.

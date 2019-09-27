@@ -159,7 +159,7 @@ have : s2Z slen <> - 2 ^ 31.
   by rewrite abs' in nk_231.
 have : uniq(rk, a0,r0) by Uniq_uniq r0.
 move/abs_triple_bang/(_ slen) => Habs_triple.
-move/Habs_triple => {Habs_triple} Habs_triple.
+move/Habs_triple => {}Habs_triple.
 apply frame_rule_R => //.
 rewrite [modified_regs _]/=.
 by Inde.

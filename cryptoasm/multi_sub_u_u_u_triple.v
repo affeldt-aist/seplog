@@ -95,7 +95,7 @@ apply hoare_lwxs_back_alt'' with (fun s h => exists C nj nbor,
 
 move=> s h [[C' [nj [nbor [HlenC [Hra [Hrb [Hrc [Hrk [Hmem [Hrj [Hjk2 [Hrt [Hrbor [Hnbor HInv]]]]]]]]]]]]] Hjk]];
   rewrite /= in Hjk. move/eqP in Hjk.
-have {Hjk}Hjk : (nj < nk)%nat by ssromega.
+have {}Hjk : (nj < nk)%nat by ssromega.
 
 exists (B `32_ nj); split.
 - Decompose_32 B nj B1 B2 HlenB1 HB'; last by rewrite Hb.

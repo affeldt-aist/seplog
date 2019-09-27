@@ -1,5 +1,9 @@
 (* seplog (c) AIST 2005-2013. R. Affeldt, N. Marti, et al. GNU GPLv3. *)
 (* seplog (c) AIST 2014-2018. R. Affeldt et al. GNU GPLv3. *)
+From mathcomp Require Import ssreflect ssrbool eqtype ssrnat seq.
+Require Import Max_ext ssrnat_ext ZArith_ext seq_ext uniq_tac.
+Require Import order finmap integral_type.
+Require while.
 
 (** This file provides:
   - a module "var" for the variables of a programming language
@@ -12,10 +16,9 @@
   These modules are parameterized by the type of data held into variables.
 *)
 
-From mathcomp Require Import ssreflect ssrbool eqtype ssrnat seq.
-Require Import Max_ext ssrnat_ext ZArith_ext seq_ext uniq_tac.
-Require Import order finmap integral_type.
-Require while.
+Declare Scope seplog_expr_scope.
+Declare Scope heap_scope.
+Declare Scope seplog_assert_scope.
 
 Module Type VAR.
 Parameter v : eqType.

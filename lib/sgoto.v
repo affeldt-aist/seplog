@@ -10,6 +10,8 @@ Require Import seq_ext goto.
 
    This corresponds to Section 3.1 of %\cite{saabasuustalu2007}%#[Saabas&Uustalu2007]#. *)
 
+Declare Scope sgoto_scope.
+
 Module SGoto (while_semop_deter_m : while.WHILE_SEMOP_DETER).
 
 Module Import goto_deter_m := Goto_Deter while_semop_deter_m.
@@ -517,7 +519,7 @@ induction sc.
 - (* sO *) move=> k l s l' s' Hwf /= H _.
   case/redseq_nil : H => <- <-; by apply exec_sgoto_refl.
 - (* commands *) move=> k l0 s l' s' Hwf H Hl'.
-  have {Hl'}Hl' : l <> l' by rewrite /= in Hl'; tauto.
+  have {}Hl' : l <> l' by rewrite /= in Hl'; tauto.
   case: (label_dec l l0) => l_l0.
   + (* case where the command will be executed *) subst.
     by apply exec_sgoto_cmd0, (redseq_sC_inv _ _ _ _ H l0 s l' s' c).
@@ -526,7 +528,7 @@ induction sc.
     case=> ? ?; subst.
     apply exec_sgoto_refl => /=; tauto.
 - (* branches *) move=> k l0 s l' s' Hwf H Hl'.
-  have {Hl'}Hl' : l <> l' by rewrite /= in Hl'; tauto.
+  have {}Hl' : l <> l' by rewrite /= in Hl'; tauto.
   destruct b.
   + case (label_dec l l0) => l_l0.
     * subst l0.

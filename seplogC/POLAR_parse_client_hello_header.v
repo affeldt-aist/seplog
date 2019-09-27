@@ -164,7 +164,7 @@ have Hl : l = (S621.handshake :: S621.SSLv30_maj :: l `_ min_ver :: n' l) ++
     by rewrite subnn (_ : i.+3.+4.+4 = csuites + (i - 33))%nat // addnBA.
   move/negbT in H4.
   rewrite -lt0n subn1 /= in H4.
-  have {H4}H4 : (sess_len l < i - 33)%nat.
+  have {}H4 : (sess_len l < i - 33)%nat.
     rewrite ltn_neqAle H3 andbT.
     rewrite lt0n in H4.
     move: H4; apply: contra => /eqP ->.
@@ -176,7 +176,7 @@ have Hl : l = (S621.handshake :: S621.SSLv30_maj :: l `_ min_ver :: n' l) ++
   have H2' : (33 < i)%nat.
     rewrite -subn_gt0; by apply: leq_ltn_trans H4.
   case: ifP => H5.
-    have {H5}H5 : (i = 34 + sess_len l)%nat.
+    have {}H5 : (i = 34 + sess_len l)%nat.
       apply/eqP.
       rewrite ltn_subRL -ltnS -addSn ltnS in H4.
       rewrite eqn_leq H4 andbT.
@@ -219,7 +219,7 @@ have Hl : l = (S621.handshake :: S621.SSLv30_maj :: l `_ min_ver :: n' l) ++
     rewrite -leqn0 -ltnNge -subnDA ltn_subRL addn0 in H7.
     rewrite -subn_gt0.
     by apply: leq_ltn_trans H7.
-  have {H6}H6 : (ciph_len l < i - 35 - sess_len l)%nat.
+  have {}H6 : (ciph_len l < i - 35 - sess_len l)%nat.
     rewrite ltn_neqAle H6 andbT.
     move: H7; apply contra => H7.
     move/eqP : H7 => ->.
@@ -425,7 +425,7 @@ Proof.
 move=> Hzero i_s i_zero.
 apply/negPn/negP => abs.
 rewrite -ltnNge ltnS in abs.
-have {abs i_s} abs : size s = i.+1.
+have {i_s} {}abs : size s = i.+1.
   rewrite leq_eqVlt in abs.
   case/orP : abs => [/eqP // | abs].
   exfalso.

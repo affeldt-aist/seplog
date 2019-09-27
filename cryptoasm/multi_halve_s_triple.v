@@ -634,7 +634,7 @@ have no_overflow : u2Z (store.lo s) = 0.
     have H1 : 2 * \S_{ nk.+1 } A' + 1 < \B^nk.+1.
       rewrite HSum'.
       by apply max_lSum.
-    have {H1}H1 : 2 * \S_{ nk.+1 } A' <= \B^nk.+1 by omega.
+    have {}H1 : 2 * \S_{ nk.+1 } A' <= \B^nk.+1 by omega.
     rewrite ZbetaE in H1.
     rewrite (_ : (nk.+1 * 32 = (nk.+1 * 32 - 1).+1)%nat) in H1; last by rewrite mulSn -subSn.
     rewrite (_ : 2 ^^ (nk.+1 * 32 - 1).+1 = 2 * 2 ^^ (nk.+1 * 32 - 1) ) in H1; last by [].

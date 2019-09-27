@@ -179,7 +179,7 @@ split.
         repeat syntax_m.seplog_m.assert_m.expr_m.Store_upd.
         + case: (Z_zerop (s2Z lz')) => lz'_neq0.
             by rewrite lz'_neq0 /= /ZIT.sub /= -Z'_x_y lz'_neq0.
-          have {Ha3}Ha3 : u2Z [a3]_st' = 0.
+          have {}Ha3 : u2Z [a3]_st' = 0.
             have Htmp : `|u2Z [a3 ]_ st' * \B^k + \S_{ k } Z'| < \B^k.
               apply Zabs_Zsgn_1 in lz'_neq0.
               rewrite -[X in X < _]Zmult_1_l -lz'_neq0 -Z.abs_mul addZC Z'_x_y.

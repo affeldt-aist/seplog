@@ -4,10 +4,12 @@ Require Import Permutation.
 From mathcomp Require Import ssreflect ssrfun ssrbool eqtype ssrnat seq.
 Require Import Init_ext ssrnat_ext.
 
-Set Implicit Arguments.
-Unset Strict Implicit.
+Declare Scope seq_ext_scope.
 
 Reserved Notation "l |{ a , n )" (at level 59, no associativity).
+
+Set Implicit Arguments.
+Unset Strict Implicit.
 
 Lemma tac_not_In_cons {A: Type} l (a1 a2 : A) : ~ List.In a1 (a2 :: nil) -> ~ List.In a1 l ->
   ~ List.In a1 (a2 :: l).
@@ -2019,7 +2021,7 @@ Lemma Permutation_size {A : Type} (l1 l2 : seq A) : Permutation l1 l2 -> size l1
 Proof.
 elim => //.
 by move=> x l l' _ /= ->.
-by move=> {l1 l2}l1 l2 l3 _ ->.
+by move=> {}l1 {}l2 l3 _ ->.
 Qed.
 
 Lemma Permutation_cons_cat {A : Type} : forall (l : seq A) (x : A),
@@ -2188,7 +2190,7 @@ have [Hi | [Hi | Hi]] : i < size s0 \/ i = size s0 \/ size s0 < i.
   by left; apply/ltP.
   by auto.
   by right; right; apply/ltP.
-- have {Hin}Hin : i < n.+1 by rewrite ltnW.
+- have {}Hin : i < n.+1 by rewrite ltnW.
   move: {H}(H _ Hin) => H.
   rewrite nth_cat Hlenl0 Hi in H.
   rewrite (_ : nth _ _ i = nth 0 s0 i) in H; last first.
@@ -2197,7 +2199,7 @@ have [Hi | [Hi | Hi]] : i < size s0 \/ i = size s0 \/ size s0 < i.
     apply List.in_or_app; left; by apply In_nth.
   by rewrite nth_cat Hlenl0 Hi nth_cat Hi.
 - destruct s1 as [|hs1 ts1]; subst i.
-  + have {Hs}Hs : size s0 = n by rewrite size_cat /= in Hs; ssromega.
+  + have {}Hs : size s0 = n by rewrite size_cat /= in Hs; ssromega.
     by rewrite Hs ltnn in Hin.
   + rewrite -ltnS in Hin.
     move: {H}(H _ Hin) => H.

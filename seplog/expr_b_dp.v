@@ -1,7 +1,7 @@
 (* seplog (c) AIST 2005-2013. R. Affeldt, N. Marti, et al. GNU GPLv3. *)
 (* seplog (c) AIST 2014-2018. R. Affeldt et al. GNU GPLv3. *)
 From mathcomp Require Import ssreflect ssrfun ssrbool eqtype ssrnat seq.
-Require Import Max ROmega.
+Require Import Max.
 Require Import ssrZ ZArith_ext seq_ext ssrnat_ext.
 Require Import seplog integral_type.
 

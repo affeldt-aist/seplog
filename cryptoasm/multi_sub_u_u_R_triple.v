@@ -94,7 +94,7 @@ apply hoare_lwxs_back_alt'' with (fun s h => exists B' nj nbor,
 move=> s h [[B' [nj [nbor [HlenC [Hra [Hrb [Hrk [Hmem [Hrj [Hjk2 [Hrt [Hrbor [Hnbor [HInv Hnth]]]]]]]]]]]]] Hjk]];
   rewrite /= in Hjk. move/eqP in Hjk.
 
-have {Hjk}Hjk : (nj < nk)%nat.
+have {}Hjk : (nj < nk)%nat.
   rewrite ltn_neqAle Hjk2 andbT; apply/eqP.
   rewrite Hrj Hrk in Hjk.
   contradict Hjk; by rewrite Hjk.
@@ -467,7 +467,7 @@ move=> Hset nk va vb Hna A B Ha Hb HAB.
 eapply hoare_prop_m.hoare_weak; last by eapply multi_sub_u_u_R_triple; eauto.
 move=> s h [A' [HlenA [Hra [Hrb [Hrk [Hmem [Hbor Hsum]]]]]]].
 have X : u2Z [bor]_s = 0.
-  have {Hsum}Hsum : u2Z [bor ]_ s * \B^nk + (\S_{ nk } A - \S_{ nk } B - \S_{ nk } A') = 0 * \B^nk + 0.
+  have {}Hsum : u2Z [bor ]_ s * \B^nk + (\S_{ nk } A - \S_{ nk } B - \S_{ nk } A') = 0 * \B^nk + 0.
     rewrite Hsum; ring.
   apply poly_eq0_inv in Hsum.
   tauto.

@@ -6,13 +6,15 @@ Require while.
 Require Import goto sgoto.
 
 (** * Hoare Logic of %\sgoto%#SGoto#
-   
+
    %\label{sec:sgoto_hoare}%
 
-   This corresponds to Section 3.2 of %\cite{saabasuustalu2007}%#[Saabas&Uustalu2007]#. 
-   The type %\coqdockw{assert}%#assert# was defined in 
+   This corresponds to Section 3.2 of %\cite{saabasuustalu2007}%#[Saabas&Uustalu2007]#.
+   The type %\coqdockw{assert}%#assert# was defined in
    %Section \ref{sec:while}%#the module for the While language#.
 *)
+
+Declare Scope sgoto_hoare_scope.
 
 Module SGoto_Hoare (while_hoare_deter_m : while.WHILE_HOARE_DETER).
 
@@ -34,7 +36,7 @@ Definition restrict_cplt (P : assn) d : assn := fun l => while.Not (fun _ _ => L
 Lemma restrict_dom : forall l d (P : assn) s h, List.In l d -> P l s h -> restrict P d l s h.
 Proof. done. Qed.
 
-Lemma restrict_cplt_dom : forall (P : assn) l s h d, P l s h -> ~ List.In l d -> restrict_cplt P d l s h. 
+Lemma restrict_cplt_dom : forall (P : assn) l s h d, P l s h -> ~ List.In l d -> restrict_cplt P d l s h.
 Proof. done. Qed.
 
 Reserved Notation "'[^' P '^]' c '[^' Q '^]'" (at level 82, no associativity).
@@ -42,7 +44,7 @@ Reserved Notation "'[^' P '^]' c '[^' Q '^]'" (at level 82, no associativity).
 (** printing ===> %\ensuremath{\Longrightarrow}%*)
 
 (** Figure 3 (%\figurethree%#Hoare rules of SGoto#) in %\cite{saabasuustalu2007}%#[Saabas&Uustalu2007]#.
-   %\coqdocvar{wp0} is explained in Section \ref{sec:while}.% 
+   %\coqdocvar{wp0} is explained in Section \ref{sec:while}.%
    %$\Longrightarrow$ used in the rule \coqdocvar{hoare\_sgoto\_conseq} is the entailment for \coqdockw{assert}.% *)
 
 Local Open Scope sgoto_scope.
@@ -52,19 +54,19 @@ Local Open Scope sgoto_hoare_scope.
 
 Inductive hoare_sgoto : assn -> scode -> assn -> Prop :=
 | hoare_cmd : forall l c P,
-  [^ fun pc => fun s h => pc = l /\ (wp0 c (P (S l))) s h \/ pc <> l /\ P pc s h ^] 
+  [^ fun pc => fun s h => pc = l /\ (wp0 c (P (S l))) s h \/ pc <> l /\ P pc s h ^]
      sC l c [^ P ^]
 | hoare_jmp : forall l j Q,
-  [^ fun pc => fun s h => pc = l /\ (Q j s h \/ j = l) \/ pc <> l /\ Q pc s h ^] 
-     sB l (jmp j) [^ Q ^] 
+  [^ fun pc => fun s h => pc = l /\ (Q j s h \/ j = l) \/ pc <> l /\ Q pc s h ^]
+     sB l (jmp j) [^ Q ^]
 | hoare_branch : forall l b j Q,
-  [^ fun pc => fun s h => 
+  [^ fun pc => fun s h =>
      pc = l /\ (~~ eval_b b (s, h) /\ Q (S l) s h \/ eval_b b (s, h) /\ ( Q j s h \/ j = l)) \/
-     pc <> l /\ Q pc s h ^] 
-     sB l (cjmp b j) [^ Q ^] 
+     pc <> l /\ Q pc s h ^]
+     sB l (cjmp b j) [^ Q ^]
 | hoare_sO : forall P, [^ P ^] sO [^ P ^]
 | hoare_sS : forall sc0 sc1 P,
-  [^ restrict P (sdom sc0) ^] sc0 [^ P ^] -> [^ restrict P (sdom sc1) ^] sc1 [^ P ^] -> 
+  [^ restrict P (sdom sc0) ^] sc0 [^ P ^] -> [^ restrict P (sdom sc1) ^] sc1 [^ P ^] ->
   [^ P ^] sc0 [+] sc1 [^ restrict_cplt P (sdom (sc0 [+] sc1)) ^]
 | hoare_sgoto_conseq : forall sc (P Q P' Q': assn),
   (forall l, P l ===> P' l) -> (forall l, Q' l ===> Q l) ->
@@ -137,7 +139,7 @@ move=> sc Pi Pi'; elim=> //=; clear sc Pi Pi'.
     move=> Hexec.
     move: Hexec sc1 sc2 P Hsc0 IHsc0 Hsc1 IHsc1 Hsc l0 s0 h0 HP_l0 Hst0 Hst'.
     elim => //; move=> {sc st0 st'}.
-    + move=> sc1 sc2 l0 st0 s' s'' HInl0sc1 Hexec_sc1 _(*IHsc1*) Hsc IHsc sc1' sc2' Pi. 
+    + move=> sc1 sc2 l0 st0 s' s'' HInl0sc1 Hexec_sc1 _(*IHsc1*) Hsc IHsc sc1' sc2' Pi.
       move=> Hressc1 IHsc1' Hressc2 IHsc2 Hsc'; subst.
       case: Hsc' => X Y; subst sc1' sc2'.
       move=> l0' s0 h0 HPi_l0 [? ?]; subst.
@@ -147,7 +149,7 @@ move=> sc Pi Pi'; elim=> //=; clear sc Pi Pi'.
       - move: (proj2 (IHsc1' _ _ _ X) _ _ _ Hexec_sc1).
         move/(IHsc _ _ _ Hressc1 IHsc1' Hressc2 IHsc2 (refl_equal _) _ _ _); tauto.
       - move: {IHsc1'}(proj1 (IHsc1' _ _ _ X)); tauto.
-    + move=> sc1 sc2 l0 st0 s' s'' HInl0sc2 Hexec_sc2 _(*IHsc2*) Hexec_sc IHsc sc1' sc2' Pi. 
+    + move=> sc1 sc2 l0 st0 s' s'' HInl0sc2 Hexec_sc2 _(*IHsc2*) Hexec_sc IHsc sc1' sc2' Pi.
       move=> Hressc1 IHsc1' Hressc2 IHsc2 Hsc'; subst.
       case: Hsc' => X Y; subst sc1' sc2'.
       move=> l0' s0 h0 HPi_l0 [? ?]; subst.
@@ -165,7 +167,7 @@ move=> sc Pi Pi'; elim=> //=; clear sc Pi Pi'.
     rewrite Hst0 Hst' Hsc in Hexec.
     move: Hexec sc1 sc2 P Hsc0 IHsc0 Hsc1 IHsc1 Hsc l0 s0 h0 l' s' h' HP_l0 Hst0 Hst'.
     elim => //; move=> {sc st0 st'}.
-    + move=> sc1 sc2 l0 st0 s' s'' HInl0sc1 Hexec_sc1 _(*IHsc1*) Hsc IHsc sc1' sc2' Pi. 
+    + move=> sc1 sc2 l0 st0 s' s'' HInl0sc1 Hexec_sc1 _(*IHsc1*) Hsc IHsc sc1' sc2' Pi.
       move=> Hressc1 IHsc1' Hressc2 IHsc2 Hsc'; subst.
       case: Hsc' => X Y; subst sc1' sc2'.
       move=> l0' s0 h0 l'_ s'0 h' HPi_l0 [? ?]; subst => Y.
@@ -176,7 +178,7 @@ move=> sc Pi Pi'; elim=> //=; clear sc Pi Pi'.
       - move: ((proj2 (IHsc1' _ _ _ X)) _ _ _ Hexec_sc1) => H.
         by move: {IHsc1' IHsc2 IHsc} (IHsc _ _ _ Hressc1 IHsc1' Hressc2 IHsc2 (refl_equal _) _ _ _ _ _ _  H (refl_equal _) (refl_equal _)).
       - by inversion Hsc.
-    + move=> sc1 sc2 l0 st0 s' s'' HInl0sc2 Hexec_sc2 _(*IHsc2*) Hexec_sc IHsc sc1' sc2' Pi. 
+    + move=> sc1 sc2 l0 st0 s' s'' HInl0sc2 Hexec_sc2 _(*IHsc2*) Hexec_sc IHsc sc1' sc2' Pi.
       move=> Hressc1 IHsc1' Hressc2 IHsc2 Hsc'; subst.
       case: Hsc' => X Y; subst sc1' sc2'.
       move=> l0' s0 h0 l'_ s'_ h'_ HPi_l0 [? ?]; subst.
@@ -274,16 +276,16 @@ elim .
           by eapply exec_sgoto_cjmp_false; eauto.
       * right; split; first by auto.
         apply (proj2 Hwlp), exec_sgoto_refl => /=; tauto.
-    + by rewrite /while.entails.   
+    + by rewrite /while.entails.
 - move=> sc0 IHsc0 sc2 IHsc1 Hwf Q.
-  apply hoare_sgoto_conseq with (P' := wlp_semantics (sc0 [+] sc2) Q) 
+  apply hoare_sgoto_conseq with (P' := wlp_semantics (sc0 [+] sc2) Q)
     (Q' := restrict_cplt (wlp_semantics (sc0 [+] sc2) Q) (sdom (sc0 [+] sc2))).
   + by rewrite /while.entails.
   + move=> l s h.
     rewrite /restrict_cplt /wlp_semantics; case=> Hres1 Hres2.
     by apply (proj2 Hres2), exec_sgoto_refl.
   + apply hoare_sS.
-    * apply hoare_sgoto_conseq with (P' := wlp_semantics sc0 (wlp_semantics (sc0 [+] sc2) Q)) 
+    * apply hoare_sgoto_conseq with (P' := wlp_semantics sc0 (wlp_semantics (sc0 [+] sc2) Q))
       (Q' := wlp_semantics (sc0 [+] sc2) Q).
       - move=> l s h.
         rewrite /restrict /while.And; case=> H2 l_sc0; split.
@@ -303,7 +305,7 @@ elim .
       - by rewrite /while.entails.
       - apply IHsc0.
         by eapply wellformed_inv_L; eauto.
-    * apply hoare_sgoto_conseq with (P' := wlp_semantics sc2 (wlp_semantics (sc0 [+] sc2) Q)) 
+    * apply hoare_sgoto_conseq with (P' := wlp_semantics sc2 (wlp_semantics (sc0 [+] sc2) Q))
       (Q' := wlp_semantics (sc0 [+] sc2) Q).
       - move=> l s h.
         rewrite /restrict /while.And; case=> H2 l_sc2; split.
@@ -345,4 +347,3 @@ apply hoare_sgoto_conseq with (P' := wlp_semantics sc Q) (Q' := Q).
 Qed.
 
 End SGoto_Hoare.
-

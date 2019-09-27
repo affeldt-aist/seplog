@@ -54,8 +54,8 @@ by Assert_upd.
 
 (** multu r0 r0 *)
 
-apply hoare_multu with (fun s h => exists C, 
-  size C = nk /\ [one]_s = one32 /\ [a]_s = va /\ 
+apply hoare_multu with (fun s h => exists C,
+  size C = nk /\ [one]_s = one32 /\ [a]_s = va /\
   [b]_s = vb /\ [c]_s = vc /\ u2Z [k]_s = Z_of_nat nk /\
   u2Z [j]_s = 0 /\ u2Z [t]_s = u2Z vc /\ store.multi_null s /\
   (var_e a |--> A ** var_e b |--> B ** var_e c |--> C) s h ).
@@ -106,7 +106,7 @@ apply hoare_lwxs_back_alt'' with (fun s h => exists nj C,
 
 move=> s h [[nj [C [HlenC [Hone [Hra [Hrb [Hrc [Hrk [Hmem [Hrj [Hjk2 [Hm [Hrt Hinv]]]]]]]]]]]]] Hjk];
   rewrite /= in Hjk; move/eqP in Hjk.
-have {Hjk}Hjk : (nj < nk)%nat.
+have {}Hjk : (nj < nk)%nat.
   rewrite ltn_neqAle Hjk2 andbT; apply/eqP/Z_of_nat_inj_neq; by rewrite -Hrj -Hrk.
 exists (A `32_ nj); split.
 - Decompose_32 A nj A1 A2 HlenA1 HA'; last by rewrite Ha.

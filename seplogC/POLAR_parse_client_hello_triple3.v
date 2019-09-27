@@ -12,6 +12,7 @@ Require Import rfc5246.
 Import RFC5932.
 Require Import POLAR_library_functions POLAR_library_functions_triple.
 Require Import POLAR_ssl_ctxt POLAR_parse_client_hello POLAR_parse_client_hello_header.
+Require Import POLAR_parse_client_hello_triple4.
 
 Close Scope select_scope.
 
@@ -169,8 +170,6 @@ unfold ssl_parse_client_hello4.
 Hoare_seq_replace (goto_have_cipher_0 :: Hses_length :: reqmin_sslcontext :: Hbuf ::
                    Hbu :: init_ciphers :: Hciph_len :: Hsess_len :: Hciph_len_even :: nil)
                   (inv_outer :: nil); last first.
-
-Require Import POLAR_parse_client_hello_triple4.
 
   by apply POLAR_parse_client_hello_triple4 with (BU := BU) (in_left0 := in_left0).
 
@@ -367,7 +366,7 @@ apply hoare_seq with inv_inner.
     set tmp := \b _. rewrite -> (@ground_bbang_sbang tmp Logic.eq_refl) at 1.
     rewrite gb_neq gb_eq_e 2!ge_cst_e.
     apply ent_L_sbang_con.
-    move=> CI_i; have {CI_i} CI_i : CI `32_ i != `( 0 )s_32 by move: CI_i; apply contra => /eqP ->.
+    move=> CI_i; have {}CI_i : CI `32_ i != `( 0 )s_32 by move: CI_i; apply contra => /eqP ->.
     rewrite Z2s_Z2u_k // in CI_i.
     have H_CI : last (Z2u _ 0) CI = (Z2u _ 0).
       case: HCI; case => CI' [] _ -> _.
@@ -688,7 +687,7 @@ apply hoare_seq with inv_inner.
           have abs' : (Z<=s (si32<=phy (@ground_exp g sigma _ ([ Z<=nat 128 * 2 ]sc) erefl)) < Z<=s (si32<=phy (@ground_exp g sigma _ ciph_len_exp erefl)))%Z.
             eapply Zlt_gb; [exact abs | exact Hyp1 | exact Hyp2].
           rewrite s2Z_ge_s_cst_e in abs'; last by done.
-          have {abs'}abs' : (256 < ciph_len_value_Z)%Z by exact abs'.
+          have {}abs' : (256 < ciph_len_value_Z)%Z by exact abs'.
           clear -Hciph_len_bound_Z abs'.
           omega.
         rewrite [in X in _ ===> X (*i < size CI*)** _]leq_eqVlt Hi orbC.
@@ -863,7 +862,7 @@ apply hoare_seq with inv_inner.
       rewrite gb_eq_e in H1.
       move/eqP in H1.
       suff H : (Z<=nat (k + 1) * 2 < ciph_len_value_Z + 2)%Z.
-        have {H1}H1 : (exists k, ciph_len_value_Z = 2 * k)%Z.
+        have {}H1 : (exists k, ciph_len_value_Z = 2 * k)%Z.
           exists (Z<=nat tmp).
           unfold ciph_len_value_Z, ciph_len_value.
           set goal := [_]ge.
@@ -985,7 +984,7 @@ apply hoare_seq with inv_inner.
       set lhs := [ _ ]ge.
       set rhs := [ _ ]ge.
       move=> lhs_rhs.
-      have {lhs_rhs}lhs_rhs: Z<=s (si32<=phy lhs) = Z<=s (si32<=phy rhs) by rewrite lhs_rhs.
+      have {}lhs_rhs: Z<=s (si32<=phy lhs) = Z<=s (si32<=phy rhs) by rewrite lhs_rhs.
       rewrite s2Z_ge_s_cst_e in lhs_rhs; last by rewrite /=; omega.
       rewrite /rhs -/ciph_len_value_Z in lhs_rhs; omega.
     rewrite -> bbang_sc_lt_e_sbang; last 2 first.
@@ -993,7 +992,7 @@ apply hoare_seq with inv_inner.
       simpl; omega.
     rewrite -> bbang_sc_le_e_sbang => //; last by simpl; omega.
     rewrite sbang_con.
-    apply ent_sbang_L => {Hk'}Hk'.
+    apply ent_sbang_L => {}Hk'.
     rewrite Cltn_add2r_pos //; last 3 first.
       omega.
       omega.

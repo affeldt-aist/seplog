@@ -17,6 +17,11 @@ Require Import Init_ext.
 
 (** ** Generic definition of then %\while\%#While# Language and Hoare logic *)
 
+Declare Scope lang_scope.
+Declare Scope while_cmd_scope.
+Declare Scope while_assert_scope.
+Declare Scope while_hoare_scope.
+
 Section Lang.
 
 (** A state is a pair of a store and a mutable memory. *)
@@ -135,7 +140,7 @@ Definition hoare_semantics_total (P : assert) (c : cmd) (Q : assert) : Prop :=
 
 End Lang.
 
-Arguments cmd [cmd0 expr_b].
+Arguments cmd {cmd0 expr_b}.
 Arguments cmd_cmd0 [cmd0 expr_b].
 Arguments seq [cmd0 expr_b].
 Arguments ifte [cmd0 expr_b].
@@ -1191,7 +1196,7 @@ move=> H0 P Q c; elim; clear P Q c.
   apply H1; tauto.
 - (* while *) move=> P t c A R Rwf V a.
   elim a using (well_founded_induction Rwf).
-  move=> {a} a Hrec H IHhoare s h [HP Ha].
+  move=> {}a Hrec H IHhoare s h [HP Ha].
   case/boolP : (eval_b t (s, h)) => Htest.
   - case: (IHhoare a _ _ (conj HP (conj Htest Ha))) => s' [h' [Hexec [HP' HR]]].
     move: {Hrec}(Hrec _ HR H IHhoare) => Hrec.

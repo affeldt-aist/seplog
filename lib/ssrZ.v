@@ -7,7 +7,7 @@ Require Import ZArith.
 (* SSReflect-like lemmas for Coq Z *)
 (***********************************)
 
-Local Open Scope Z_scope.
+Declare Scope zarith_ext_scope.
 
 Notation "`| x |" := (Z.abs x) : zarith_ext_scope.
 Notation "'Z<=nat'" := (Z.of_nat) (at level 9) : zarith_ext_scope.
@@ -16,6 +16,7 @@ Notation "'gcdZ'" := Z.gcd : zarith_ext_scope.
 Notation "'sgZ'" := Z.sgn : zarith_ext_scope.
 Notation "'divZ'" := Z.div : zarith_ext_scope.
 
+Local Open Scope Z_scope.
 Local Open Scope zarith_ext_scope.
 
 Lemma eqZP : Equality.axiom Zeq_bool.
@@ -24,7 +25,7 @@ Proof. move=> x y; apply: (iffP idP) => H; by apply/Zeq_is_eq_bool. Qed.
 Canonical Z_eqMixin := EqMixin eqZP.
 Canonical Z_eqType := Eval hnf in EqType Z Z_eqMixin.
 
-Arguments eqZP [x y].
+Arguments eqZP {x y}.
 
 Definition addZ0 := Zplus_0_r.
 Definition add0Z := Zplus_0_l.

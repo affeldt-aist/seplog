@@ -11,6 +11,12 @@ Require Import finmap.
 (* Institut f\ur Informatik, Technische Universit\at M\unchen, 2006            *)
 (*******************************************************************************)
 
+Declare Scope statebipl_scope.
+Declare Scope seplog_scope.
+Declare Scope lang_scope.
+Declare Scope whilesemop_scope.
+Declare Scope whilehoare_scope.
+
 Module Type StateBipl.
 
 (** A state is a pair of a store and a mutable memory. *)
@@ -499,7 +505,7 @@ where "l |~ s >- c ---> t" := (exec l s c t) : whilesemop_scope.
 
 Lemma iexec_exec n l s c t : l |~ s >- c -^ n -> t -> l |~ s >- c ---> t.
 Proof.
-elim=> // {n c s t} n => [* | * | | * | * | | * | | | * ].
+elim=> // {c s t} {}n => [* | * | | * | * | | * | | | * ].
 - by apply exec_none.
 - by apply exec_cmd0.
 - move=> s s1 s2 c d _ Kc _ Kd; by apply exec_seq with s1.
@@ -1127,7 +1133,7 @@ apply hoare_ind2 with l => //.
 
 apply H4 with lnew => //.
 split => // t t_lnew.
-case: (H8 _ t_lnew) => {H7}H7 H7'.
+case: (H8 _ t_lnew) => {}H7 H7'.
 split => // pro Hpro.
 move: (H7' _ Hpro) => Hhoare.
 apply hoare_ind2 with l => //.
@@ -1731,17 +1737,17 @@ elim H using hoare_ind2; clear H l' P Q c.
     by inversion Psh'.
   + move=> n IHn i_lnew IH H P'0 Q'0 i' PQi'.
     have H' : forall t : ftriple,
-      Ensembles.In _ l' t -> 
+      Ensembles.In _ l' t ->
       l |= n {{ (fpre t)}} call (fcallee t) {{ (fpost t) }}.
       move=> t tl''.
       apply hoare_semantics_Sn.
       by apply H.
-    have H'' : forall t : ftriple, 
+    have H'' : forall t : ftriple,
       Ensembles.In _ lnew t -> l |= n {{ (fpre t) }} call (fcallee t) {{ (fpost t)}}.
       move=> t Ht.
       destruct t.
       by apply (IHn i_lnew) => //.
-    have H''' : forall t, Ensembles.In _ lnew t -> 
+    have H''' : forall t, Ensembles.In _ lnew t ->
        Procs.get (fcallee t) l <> None /\
        (forall pro, Procs.get (fcallee t) l = Some pro ->
         l |= n {{ (fpre t) }} pro {{ (fpost t) }}).
@@ -1768,7 +1774,7 @@ elim H using hoare_ind2; clear H l' P Q c.
       done.
     move: (P1) => P1_save.
     apply K in P1_.
-    case: P1_ => {P1}P1 P1'.
+    case: P1_ => {}P1 P1'.
     split.
       contradict P1.
       inversion P1 => //; subst.
@@ -1970,7 +1976,7 @@ move=> l l' ll'; elim.
   split; last by [].
   by apply (proj2 (Hf (fun s0 => l |~ Some s >- cmd_cmd0 c0 ---> Some s0))).
 - move=> c1 IH1 c2 IH2 s.
-  have {IH1}IH1 : l \^ l'
+  have {}IH1 : l \^ l'
       |-{{ fun s0 => s0 = s /\ ~ l |~ Some s0 >- c1 ; c2 ---> None }}
         c1
         {{ fun s0 => l |~ Some s >- c1 ---> Some s0 /\
@@ -1984,7 +1990,7 @@ move=> l l' ll'; elim.
       by eapply exec_seq1_not_None; eauto.
     move=> s0 /= ?; split; first by assumption.
     by eapply exec_seq2_not_None; eauto.
-  have {IH2}IH2 : forall Z, l \^ l'
+  have {}IH2 : forall Z, l \^ l'
         |-{{ fun s0 => l |~ Some Z >- c1 ---> Some s0 /\ ~ l |~ Some s0 >- c2 ---> None}}
           c2
           {{fun s0 => l |~ Some Z >- c1; c2 ---> Some s0 }}.
@@ -2166,7 +2172,7 @@ have H : forall str, str \in Procs.dom l -> forall Z,
       apply Procs.get_None_notin in Hfind; by rewrite Hstr in Hfind.
   split; first by [].
   move=> pro0 [] ?; subst pro0.
-  move: (MGTs_MGT ((*body*) pro) Z) => {MGTs_MGT}MGTs_MGT.
+  move: (MGTs_MGT ((*body*) pro) Z) => {}MGTs_MGT.
   apply hoare_conseq_new => s [] ?; subst Z.
   move=> Hno_err.
   eexists; eexists; split; first by apply MGTs_MGT.
@@ -2407,7 +2413,7 @@ move=> b c d.
 move HC : (If _ Then _ Else _) => C H.
 move: H b c d HC.
 elim => //.
-- (* case: hoare_conseq_new *) move=> l'0 c {P}P {Q}Q IH b c0 d Hc.
+- (* case: hoare_conseq_new *) move=> l'0 c {}P {}Q IH b c0 d Hc.
   subst c.
   rename c0 into c.
   split; apply hoare_complete_n => n Hn s [Ps bs]; split => [abs | s'].
@@ -2427,10 +2433,10 @@ elim => //.
     move/hoare_sound_n => /(_ _ Hn) HC [] P's Q'Q Hc.
     case: {HC}(HC _ P's) => H1 H2; apply Q'Q, H2.
     by apply iexec_ifte_false.
-- (* case: hoare_ifte *) move=> {l'}l'0 {P}P {Q}Q b c d Hc _ Hd _ b' c' d' [] -> -> -> {b' c' d'}.
-  done.
+- (* case: hoare_ifte *) move=> {l'}l'0 {}P {}Q b c d Hc _ Hd _ b' c' d' [] -> -> -> {b' c' d'}.
+  by [].
 - (* case: hoare_exfalso *)
-  move=> {l'}l' {P}P c {Q}Q H' H b c' d Hc.
+  move=> {}l' {}P c {}Q H' H b c' d Hc.
   subst c.
   rename c' into c.
   split.

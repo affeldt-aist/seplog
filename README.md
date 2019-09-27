@@ -14,7 +14,7 @@ corresponding to the following papers:
 
 ## Requirements
 
-Coq version 8.9.1, MathComp 1.9.0
+Coq version 8.10, MathComp 1.9.0
 
 ## Install
 
@@ -22,7 +22,7 @@ coq_makefile -o Makefile -f _CoqProject
 
 #### Install X only, where X \in {SEPLOG,BBS,BEGCD,SEPLOGC}
 
-coq_makefile -o Makefile -f XMake; make
+`coq_makefile -o Makefile -f _CoqProject; make`
 
 #### Doc
 

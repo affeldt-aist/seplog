@@ -7,6 +7,8 @@ Require Import Init_ext String_ext ssrnat_ext Max_ext seq_ext.
 Require Import tuple_ext path_ext finmap.
 Require order.
 
+Declare Scope C_types_scope.
+
 Local Close Scope Z_scope.
 
 (** * C types *)
@@ -628,13 +630,13 @@ rewrite IH /=; last by rewrite rcons_path H1 H2.
 rewrite H1 andbC /=.
 suff -> : last (head a (iter n (cat^~ (a :: p2)) [::] ++ a :: p2))
         (behead (iter n (cat^~ (a :: p2)) [::] ++ a :: p2)) = last a
-p2 by assumption.
+p2 by [].
   clear.
   destruct n as [|n] => //.
   rewrite (_ : head a (iter (succn n) (cat^~ (a :: p2)) [::] ++ a ::
 p2) = a); last first.
     elim: n a p2 => // n IH a p2.
-    move: (IH a p2) => {IH}IH.
+    move: (IH a p2) => {}IH.
     rewrite iterS.
     rewrite -nth0 nth_cat size_cat addnC [size _]/= addSn /=.
     by rewrite -nth0 in IH.
@@ -645,7 +647,7 @@ p2); last first.
     rewrite -2!drop1.
     rewrite drop_cat.
     case: ifP => // abs.
-    suff : false by done.
+    suff : false by [].
     rewrite -{}abs.
     rewrite size_cat addnC [size _]/= addSn.
     by rewrite size_cat addnA addnC [size _]/= addSn.
@@ -749,7 +751,7 @@ split.
       destruct q as [q K1q K2q].
       rewrite /= in H.
       rewrite -H in K2q.
-      have {K2q}K2q : path (nested g) (last a p2) (a :: p2).
+      have {}K2q : path (nested g) (last a p2) (a :: p2).
         rewrite /thead /tnth -H in K2q.
         rewrite nth0 in K2q.
         apply/(pathP a) => i /= Hi.
@@ -922,7 +924,7 @@ Lemma in_path_in_dom : forall n (g : wfctxt) (p : PathNested.t g n),
 Proof.
 elim => [g0 [p Hp Hp0] tg tg_p | n IH g0 [p Hp1 Hp] tg].
   simpl in tg_p.
-  suff -> : tg = thead p by done.
+  suff -> : tg = thead p by [].
   rewrite (tuple_eta p) inE in tg_p.
   case/orP : tg_p => [ /eqP // | ].
   by rewrite behead_tuple1 in_nil.
@@ -938,11 +940,11 @@ simpl in Hp1, Hp, x_t.
 rewrite /complete in H2.
 move: x_t.
 move HH : (Ctxt.get x g1) => [|] // hhh.
-move: (H2 _ _ hhh) => {H2}H2.
+move: (H2 _ _ hhh) => {}H2.
 case/hasP => x01 x02.
 destruct x01 => //= Hs0.
 have : s0 \in unzip2 HH by apply/mapP; exists (s, s0).
-move/H2 => {H2}H2.
+move/H2 => {}H2.
 destruct s0 => //.
 - move: (H2 t)                   .
   rewrite inE eqxx.
@@ -1226,9 +1228,9 @@ Lemma get_fields_mkCenv : get_fields_mkCenv_statement.
 Proof.
 rewrite /get_fields_mkCenv_statement.
 move=> g tg x Hx l Hl.
-have Hx' : Ctxt.get tg g = Some x by done.
+have Hx' : Ctxt.get tg g = Some x by [].
 have -> : Hx = Hx' by apply eq_irrelevance.
-have Hl' : get_fields g tg = l by done.
+have Hl' : get_fields g tg = l by [].
 (*have -> : Hl = Hl' by apply/eq_irrelevance.*)
 destruct g as [g Hg].
 rewrite /get_fields /get_fields' in Hl.

@@ -8,6 +8,9 @@ Require Import machine_int.
 Import MachineInt.
 Require Import multi_int.
 
+Declare Scope rfc5246_scope.
+Declare Scope select_scope.
+
 Local Open Scope machine_int_scope.
 Local Open Scope zarith_ext_scope.
 
@@ -54,9 +57,9 @@ destruct (oZ_of_hex h) => //.
 by destruct (oZ_of_hex h').
 Qed.
 
-Program Definition hex2t (l : string) 
+Program Definition hex2t (l : string)
   (H : (all (fun x => oZ_of_hex x != None) (string2asciis l)) && (String.length l <= 2)%nat) : int 8 :=
-  match hex2ot l with 
+  match hex2ot l with
       | Some z => z
       | None => False_rect _ _
   end.
@@ -280,7 +283,7 @@ Fixpoint decode' k {n m} (t : tls_typ n m) (l : seq byte)
                                  (acc, buf)
                       end
                   end)
-                (true, take len (drop k l)) 
+                (true, take len (drop k l))
                 (nseq len tt) (* NB: upper bound on the number of recursive calls to be done *)
                 in
               if ret then
@@ -387,7 +390,7 @@ move=> n m; elim/tls_typ_nested_ind => {n m}.
       move/leZP in m_a.
       move/negbT in H.
       rewrite -leqNgt in H.
-      have {m_a}m_a : ('|m| <= '|Z_of_nat (size a)|)%nat.
+      have {}m_a : ('|m| <= '|Z_of_nat (size a)|)%nat.
         apply/leP.
         apply Zabs_nat_le.
         split => //.
@@ -413,7 +416,7 @@ move=> n m; elim/tls_typ_nested_ind => {n m}.
     case: ifP => //.
     move/negbT.
     rewrite -leqNgt => H.
-    have {H}H : size a = l' by apply/eqP; rewrite eqn_leq H l'_a.
+    have {}H : size a = l' by apply/eqP; rewrite eqn_leq H l'_a.
     by rewrite -H drop_size subnn drop0.
   rewrite -X -Y size_cat -(addn0 (S41.bytes2nat (take l' a))) leq_add //.
   rewrite Hret1 in Hfold1.
@@ -427,7 +430,7 @@ move=> n m; elim/tls_typ_nested_ind => {n m}.
     by rewrite catA.
     move/negbT in H.
     rewrite -leqNgt addn0 in H.
-    have {H}H : size (drop l' a) = nat<=i8 (take l' a) by apply/eqP; rewrite eqn_leq Hheader H.
+    have {}H : size (drop l' a) = nat<=i8 (take l' a) by apply/eqP; rewrite eqn_leq Hheader H.
     by rewrite -H addn0 subnn drop0 drop_size cats0.
   + subst ret2.
     by rewrite Hfold1 in Hfold2.
@@ -441,7 +444,7 @@ move=> n m; elim/tls_typ_nested_ind => {n m}.
   case: ifP => //.
   move/negbT.
   rewrite -leqNgt => H.
-  have {H}H : m = size a by apply/eqP; rewrite eqn_leq m_a H.
+  have {}H : m = size a by apply/eqP; rewrite eqn_leq m_a H.
   by rewrite -H subnn drop0 H drop_size.
 - (* pair *) move=> n1 m1 n2 m2 tag t1 t2 IH1 IH2 a a' b.
   rewrite /decode /= -decode'_upper; last by apply/leP; apply le_max_l.
@@ -526,7 +529,7 @@ End S45.
 Notation "'\{' i ; .. ; j '\}'":= (cons i .. (cons j nil) ..) (at level 70,
   format "'[v' '\{'  '//' i ';' '//' .. ';' '//' j '//' '\}' ']'", i at level 71, j at level 71) : select_scope.
 
-Definition pack {n m} (T : tls_typ n m) : {n : Z & { m : Z & tls_typ n m } } 
+Definition pack {n m} (T : tls_typ n m) : {n : Z & { m : Z & tls_typ n m } }
  := existT (fun x => {m : Z & tls_typ x m}) n (existT _ m T).
 
 Definition unpack (H : {n : Z & { m : Z & tls_typ n m } } ) :

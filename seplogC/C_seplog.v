@@ -7,13 +7,15 @@ Require littleop.
 Require Import machine_int.
 Import MachineInt.
 Require Import C_types C_types_fp C_value C_expr C_expr_equiv C_expr_ground.
+Require Import while_bipl.
+
+Declare Scope C_assert_scope.
+Declare Scope C_cmd_scope.
+
+Reserved Notation "P ** Q" (at level 80, right associativity).
 
 Local Open Scope C_types_scope.
 Local Open Scope C_expr_scope.
-
-Require Import while_bipl.
-
-Reserved Notation "P ** Q" (at level 80, right associativity).
 
 Module Type CENV.
 
@@ -931,7 +933,7 @@ Lemma add_pe_n_1 {t : g.-typ} (e : exp sigma (:* t)) n (l : seq (t.-phy)) :
   e \+ [Z_of_nat n.+1 ]sc |--> l.
 Proof.
 move=> l1l2_ub.
-have {l1l2_ub}l1l2_ub : Z_of_nat n * Z_of_nat (sizeof t) +
+have {}l1l2_ub : Z_of_nat n * Z_of_nat (sizeof t) +
   Z_of_nat (sizeof t) +
   Z_of_nat (size l) * Z_of_nat (sizeof t) < 2 ^^ 31.
   by rewrite inj_mult inj_plus [size _]/= Z_S 2!Zmult_plus_distr_l mul1Z in l1l2_ub.
@@ -1812,8 +1814,8 @@ Lemma frame_rule0 P c Q : hoare0 P c Q ->
   forall R, inde_cmd c R -> {{ P ** R }} c {{ Q ** R }}.
 Proof.
 elim.
-- (* skip *) move=> {P} P R Hinde; by apply hoare_hoare0, hoare0_skip.
-- (* x <- e *) move=> {P} P ty x Hs e R Hinde.
+- (* skip *) move=> {}P R Hinde; by apply hoare_hoare0, hoare0_skip.
+- (* x <- e *) move=> {}P ty x Hs e R Hinde.
   apply hoare_stren with (wp_assign Hs e (P ** R)); last by apply hoare_hoare0, hoare0_assign.
   rewrite /entails => s h Hmem.
   inversion Hmem; subst; clear Hmem.
@@ -1821,7 +1823,7 @@ elim.
   constructor => //=.
   + by inversion H0; subst; clear H0.
   + by apply (inde_upd_tstore2 _ _ _ _ _ _ _ _ Hinde).
-- move => {P} P ty v Hs e R Hinde.
+- move => {}P ty v Hs e R Hinde.
   apply hoare_stren with (wp_lookup Hs e (P ** R)); last by apply hoare_hoare0, hoare0_lookup.
   rewrite /entails => s h Hmem.
   inversion Hmem; subst; clear Hmem.
@@ -1830,7 +1832,7 @@ elim.
   + apply heap_get_value_union_L => //; by apply H2.
   + econstructor => //.
     by apply (inde_upd_tstore2 _ _ _ _ _ _ _ _ Hinde).
-- move => {P} P ty e1 e2 R Hinde.
+- move => {}P ty e1 e2 R Hinde.
   apply hoare_stren with (wp_mutation e1 e2 (P ** R)); last by apply hoare_hoare0, hoare0_mutation.
   rewrite /entails => s h Hmem.
   inversion Hmem; subst; clear Hmem.

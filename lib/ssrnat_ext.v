@@ -3,6 +3,8 @@
 Require Import Omega.
 From mathcomp Require Import ssreflect ssrfun ssrbool eqtype ssrnat div.
 
+Declare Scope cmp_scope.
+
 Lemma ltn_leq_trans n m p : m < n -> n <= p -> m < p.
 Proof. move=> ?; exact: leq_trans. Qed.
 
@@ -252,7 +254,7 @@ Proof. by []. Qed.
 Lemma cmpP : forall T, Compare.axiom _ (@cmp_lt T) (@cmp_op T).
 Proof. case => s [] //=. Qed.
 
-Arguments cmpP [T x y].
+Arguments cmpP {T x y}.
 
 Delimit Scope cmp_scope with CMP.
 Open Scope cmp_scope.

@@ -10,6 +10,8 @@ Import seplog_Z_m.assert_m.
 Import seplog_Z_m.assert_m.expr_m.
 Import seplog_Z_m.
 
+Declare Scope frag_list_vc_scope.
+
 Local Open Scope heap_scope.
 Local Open Scope seplog_expr_scope.
 Local Open Scope seplog_cmd_scope.

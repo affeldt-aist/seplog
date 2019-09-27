@@ -406,7 +406,7 @@ rewrite /while.entails => s h [[Ha [Hb [Hk [HX [HZsgn [Hmem HSum]]]]]] Hret].
 rewrite /= store.get_r0 Z2uK // in Hret.
 move/eqP in Hret.
 case: HSum => HSum; last first.
-  have {HSum}HSum : [ret ]_ s = zero32 by tauto.
+  have {}HSum : [ret ]_ s = zero32 by tauto.
   by rewrite HSum Z2uK in Hret.
 split; by [tauto | ].
 

@@ -58,7 +58,7 @@ by rewrite subnn.
 
 move=> {Z HlenZ} s h [[Z [next [len_Z [Hnext [r_k [Hextnk [r_Z [r_z Hmem]]]]]]]] Hext]; rewrite /= in Hext.
 repeat (split; trivial).
-have {Hext}Hext : next = O.
+have {}Hext : next = O.
   move/negPn/eqP : Hext.
   rewrite Hnext store.get_r0 /zero32 Z2uK //; exact/Z_of_nat_0.
 subst next.
@@ -75,7 +75,7 @@ apply (hoare_prop_m.hoare_stren (fun s h => exists Z next,
   [z]_s = vz /\ (var_e z |--> nseq (nk - next) zero32 ++ Z) s h)).
 
 move=> s h [[Z [next [HlenZ [Hnext [r_k [r_Z [Hextnk [r_z Hmem]]]]]]]] Hext]; rewrite /= in Hext.
-have {Hext}Hext : (O < next)%nat.
+have {}Hext : (O < next)%nat.
   rewrite ltnNge leqn0; apply/negP => /eqP abs.
   move/eqP : Hext.
   rewrite Hnext store.get_r0 /zero32 Z2uK //.

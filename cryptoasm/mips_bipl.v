@@ -15,6 +15,10 @@ Require while.
   Here, modules are used as name-spaces.
 *)
 
+Declare Scope mips_expr_scope.
+Declare Scope heap_scope.
+Declare Scope mips_assert_scope.
+
 (** General purpose registers *)
 Inductive reg : Set :=
 | r0 : reg (* $0: always return zero, writes are ignored *)
@@ -615,7 +619,7 @@ have HK : 0 <= K.
   case/Zle_0_mult_inv => H1; first omega.
   move: (Zbeta_gt0 1) => ?; omega.
 rewrite store.utoZ_def in H0.
-have {H0}H0 : (u2Z (store.hi s)  + u2Z (store.acx s) * \B^1) * \B^1 +
+have {}H0 : (u2Z (store.hi s)  + u2Z (store.acx s) * \B^1) * \B^1 +
     u2Z (store.lo s) = K * \B^1 + 0.
   rewrite -H0 (Zbeta_S 1); ring.
 apply poly_eq_inv in H0.
@@ -1450,7 +1454,7 @@ elim.
       rewrite Z_S in Hfit; rewrite -Zbeta1E; omega.
     rewrite -{1}(mul1Z 4) Z_div_plus_full // Zabs_nat_Zplus //; last first.
       apply Z_div_pos => //; exact/min_u2Z.
-    rewrite -addnA => {IH}IH.
+    rewrite -addnA => {}IH.
     rewrite Hunion; exact: heap.get_union_R.
 Qed.
 

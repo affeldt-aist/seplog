@@ -91,7 +91,7 @@ apply hoare_lwxs_back_alt'' with (fun s h => exists A' ni, size A' = nk /\
 
 move=> s h [[A' [ni [HlenA' [Hra [Hrk [Hri [Hprev [Hik [Hmem [Hinv1 Hinv2]]]]]]]]]] Hik'].
 rewrite /= in Hik'; move/eqP in Hik'.
-have {Hik'}Hik' : (ni < nk)%nat.
+have {}Hik' : (ni < nk)%nat.
   rewrite ltnNge; apply/negP; contradict Hik'.
   by rewrite Hrk Hri; f_equal; apply/eqP; rewrite eqn_leq Hik.
 exists (A' `32_ ni); split.

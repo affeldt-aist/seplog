@@ -65,7 +65,7 @@ apply (hoare_prop_m.hoare_stren ((fun s h => exists X', size X' = nk /\
 
 move=> s h [X' [HlenX' [r_x [r_a' [r_x' [r_m [r_k [r_alpha [r_e [r_l [r_a [r_one' Hmem]]]]]]]]]]]].
 
-have {Hmem}Hmem :
+have {}Hmem :
   ((var_e x |--> X ** var_e a' |--> A' ** var_e x' |--> X' ++ zero32 :: nil ** var_e m |--> M ++ zero32 :: nil) **
    (var_e a |--> A ++ zero32 :: nil ** var_e a' \+ int_e (Z2u 32 (Z_of_nat (4 * nk))) |~> int_e zero32 ** var_e one' |--> ONE')) s h.
   rewrite (decompose_last_equiv _ A') HlenA' in Hmem.
@@ -137,7 +137,7 @@ apply (hoare_prop_m.hoare_stren ((fun s h => u2Z [k]_s = Z_of_nat nk /\
 
 move=> s h [r_x [r_a [r_a' [r_x' [r_m [r_one' [r_l [r_e [r_k [r_alpha Hmem]]]]]]]]]].
 
-have {Hmem}Hmem : ((var_e a |--> A ++ zero32 :: nil ** var_e a' |--> A' ++ zero32 :: nil ** var_e x' |--> X' ** var_e m |--> M ++ zero32 :: nil) ** (var_e x|--> X ** var_e x' \+ int_e (Z2u 32 (Z_of_nat (4 * nk))) |~> int_e zero32 ** var_e one' |--> ONE')) s h.
+have {}Hmem : ((var_e a |--> A ++ zero32 :: nil ** var_e a' |--> A' ++ zero32 :: nil ** var_e x' |--> X' ** var_e m |--> M ++ zero32 :: nil) ** (var_e x|--> X ** var_e x' \+ int_e (Z2u 32 (Z_of_nat (4 * nk))) |~> int_e zero32 ** var_e one' |--> ONE')) s h.
   rewrite (decompose_last_equiv _ X') HlenX' in Hmem.
   by abstract assoc_comm Hmem.
 case: Hmem => h1 [h2 [Hdisj [Hunion [Hmem1 Hmem2]]]].
@@ -203,7 +203,7 @@ clear Hna'.
 move=> s h [[A0 [A0' [new_va [new_va' [ni [HlenA0 [HlenA0' [r_k [r_alpha [r_e [r_l [r_a [Hnew_na [r_a' [Hna' [r_x' [r_m [r_i [Hi [Hmem [HSumA01 HSumA02]]]]]]]]]]]]]]]]]]]]] r_i'];
   rewrite /= in r_i'. move/leZP in r_i'.
 
-have {r_i'}r_i' : s2Z [i]_s < 0.
+have {}r_i' : s2Z [i]_s < 0.
  apply Znot_ge_lt; contradict r_i'; exact: Z.ge_le.
 exists A0, A0', new_va, new_va'; repeat (split; trivial).
 have Hni : ni = -1.
@@ -268,7 +268,7 @@ apply (hoare_prop_m.hoare_stren ((fun s h => exists A'0, size A'0 = nk /\ [a]_s 
 
 move=> s h [A' [HlenA' [r_k [r_alpha [r_e [r_l [r_a [r_a' [r_x' [r_m [r_i Hmem]]]]]]]]]]].
 
-have {Hmem}Hmem : ((var_e a |--> A  ** var_e a' |--> A' ++ zero32 :: nil ** var_e m |--> M ++ zero32 :: nil) **
+have {}Hmem : ((var_e a |--> A  ** var_e a' |--> A' ++ zero32 :: nil ** var_e m |--> M ++ zero32 :: nil) **
   (var_e x' |--> X' ** var_e a \+ int_e (Z2u 32 (Z_of_nat (4 * nk))) |~> int_e zero32)) s h.
   rewrite (decompose_last_equiv _ A) HlenA in Hmem.
   by abstract assoc_comm Hmem.
@@ -469,7 +469,7 @@ apply (hoare_prop_m.hoare_stren ((fun s h => exists A, size A = nk /\
 move=> s h [ [A [HlenA [r_a' [r_x' [r_a [r_m [r_k [r_alpha [Hmem [r_i [r_e [r_l [r_ei r_ei']]]]]]]]]]]]] Hbneei0];
   rewrite /= in Hbneei0. move/eqP in Hbneei0.
 
-have {Hmem}Hmem : ((((var_e a' |--> A' ** var_e x' |--> X') ** var_e a |--> A ++ zero32 :: nil) ** var_e m |--> M ++ zero32 :: nil) ** (var_e a' \+ int_e (Z2u 32 (Z_of_nat (4 * nk))) |~> int_e zero32)) s h.
+have {}Hmem : ((((var_e a' |--> A' ** var_e x' |--> X') ** var_e a |--> A ++ zero32 :: nil) ** var_e m |--> M ++ zero32 :: nil) ** (var_e a' \+ int_e (Z2u 32 (Z_of_nat (4 * nk))) |~> int_e zero32)) s h.
   rewrite (decompose_last_equiv _ A') HlenA' in Hmem.
   by abstract assoc_comm Hmem.
 case: Hmem => h1 [h2 [Hdisj [Hunion [Hmem1 Hmem2]]]].
@@ -621,7 +621,7 @@ apply (hoare_prop_m.hoare_stren ((fun s h => exists A', size A' = nk /\
 
 move=> s h [r_k [r_alpha [r_e [r_l [r_a [r_a' [r_x' [r_m [hgprx [rone' Hmem]]]]]]]]]].
 
-have {Hmem}Hmem : ((var_e a |--> A ** var_e a' |--> A' ++ zero32 :: nil ** var_e m |--> M ++ zero32 :: nil ** var_e one' |--> ONE') ** (var_e x|-->X**var_e x' |--> X' ++ zero32 :: nil ** var_e a \+ int_e (Z2u 32 (Z_of_nat (4 * nk))) |~> int_e zero32)) s h.
+have {}Hmem : ((var_e a |--> A ** var_e a' |--> A' ++ zero32 :: nil ** var_e m |--> M ++ zero32 :: nil ** var_e one' |--> ONE') ** (var_e x|-->X**var_e x' |--> X' ++ zero32 :: nil ** var_e a \+ int_e (Z2u 32 (Z_of_nat (4 * nk))) |~> int_e zero32)) s h.
   rewrite (decompose_last_equiv _ A) HlenA in Hmem.
   by abstract assoc_comm Hmem.
 case:Hmem => [h1 [h2 [Hdisj [Hunion [Hmem1 Hmem2]]]]].

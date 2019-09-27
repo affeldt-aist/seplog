@@ -99,7 +99,7 @@ apply hoare_lwxs_back_alt'' with (fun s h => exists nj B',
 
 move=> s h [ [nj [B' [HlenC [Hone [r_a [r_b [r_k [mem [r_j [Hjk2 [Hm [r_t [Hinv Hnth]]]]]]]]]]]]] Hjk];
   rewrite /= r_j r_k in Hjk; move/eqP/Z_of_nat_inj_neq in Hjk.
-  have {Hjk}Hjk : (nj < nk)%nat.
+  have {}Hjk : (nj < nk)%nat.
     rewrite ltn_neqAle Hjk2 andbT; exact/eqP.
 exists (A `32_ nj); split.
 - Decompose_32 A nj A1 A2 HlenA1 HA'; last by rewrite Ha.

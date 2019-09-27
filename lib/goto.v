@@ -7,6 +7,8 @@ Require while.
 
    This section corresponds to Section 2 in %\cite{saabasuustalu2007}%#[Saabas&Uustalu2007]#. *)
 
+Declare Scope goto_scope.
+
 Module Goto (while_semop_m : while.WHILE_SEMOP).
 
 Import while_semop_m.

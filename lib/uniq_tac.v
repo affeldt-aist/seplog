@@ -4,6 +4,8 @@ Require Import Omega Permutation.
 From mathcomp Require Import ssreflect ssrbool eqtype ssrnat seq.
 Require Import seq_ext.
 
+Declare Scope uniq_scope.
+
 Reserved Notation "'uniq(' a , .. , b ')'" (at level 10,
   no associativity, format "'[v' 'uniq(' a , .. , b ')' ']'").
 

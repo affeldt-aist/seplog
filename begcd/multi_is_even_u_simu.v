@@ -117,7 +117,7 @@ move: {Htriple}(triple_exec_proj _ _ _ Htriple) => Hexec_proj.
 rewrite {1}/nk Z_of_nat_Zabs_nat in Hexec_proj; last by apply min_u2Z.
 rewrite /heap_mint /heap_cut in Hpre.
 move: {Hexec_proj Hpre}(Hexec_proj _ _ _ _ _ (conj refl_equal (conj refl_equal Hpre)) Hst').
-move/Hpost => {Hpost} Hpost.
+move/Hpost => {}Hpost.
 case: Hpost => Hrk' [Hru' [Hmem Hret]].
 rewrite lSum_Z2ints_pos in Hret; last first.
   move: (proj1 s_st_h u (unsign rk ru)).

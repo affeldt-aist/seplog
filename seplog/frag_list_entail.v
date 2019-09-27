@@ -9,6 +9,9 @@ Import seplog_Z_m.assert_m.
 Import seplog_Z_m.assert_m.expr_m.
 Import seplog_Z_m.
 
+Declare Scope frag_list_scope.
+Declare Scope entail_scope.
+
 Local Close Scope Z_scope.
 Local Close Scope positive_scope.
 Local Open Scope heap_scope.
@@ -1385,10 +1388,10 @@ induction sig2; simpl; intros.
         by map_tac_m.Equal.
     + move: (expr_b_dp_correct (pi =b> e1 \= e)) => H7.
       destruct (expr_b_dp (pi =b> e1 \= e)); simpl in H; try discriminate.
-      move: (H7 refl_equal s)=> {H7} H7.
+      move: (H7 refl_equal s)=> {}H7.
       move: (expr_b_dp_correct (pi =b> e0 \= nat_e 0)) => H8.
       destruct (expr_b_dp (pi =b> e0 \= nat_e 0)); simpl in H.
-      * move: (H8 refl_equal s) => {H8} H8.
+      * move: (H8 refl_equal s) => {}H8.
         case : H => ? ?;subst sig1' sig2'.
         simpl in H2; simpl in  H1.
         eapply Lst_equiv.
@@ -1402,9 +1405,9 @@ induction sig2; simpl; intros.
         by omegab.
         by omegab.
         reflexivity.
-      * move: (cell_in_sigma_correct remainder e0 pi) => {H8} H8.
+      * move: (cell_in_sigma_correct remainder e0 pi) => {}H8.
         destruct (cell_in_sigma pi remainder e0); try discriminate.
-        move: (H8 refl_equal s) => {H8}H8.
+        move: (H8 refl_equal s) => {}H8.
         case : H => ? ?; subst sig1' sig2'.
         simpl in H8; simpl in H2; simpl in H1.
         move: {H8}(H8 _ H0 H3) => H.
@@ -1718,7 +1721,7 @@ Inductive resul (A : Type) : Type :=
   | Good : resul A
   | Error : A -> resul A.
 
-Arguments Good [A].
+Arguments Good {A}.
 Arguments Error [A].
 
 Definition sigma_impl (pi : expr_b) (sig1 sig2 : Sigma) : resul (Sigma * Sigma) :=
@@ -2063,12 +2066,12 @@ Proof.
 induction sig; rewrite /= /while.entails; intros; auto.
 - case: H => H0 [H2 H3].
   move: (expr_b_dp_correct (pi =b> e \!= nat_e 0)) => H.
-  case: ifP => // {H}H.
+  case: ifP => // {}H.
   split; last by [].
   by omegab.
 - case: H => H0 [H2 H3].
   move: (expr_b_dp_correct (pi =b> e \!= nat_e 0)) => H.
-  case: ifP => // {H}H.
+  case: ifP => // {}H.
   split; last by [].
   by omegab.
 - case : H => H0 H1.

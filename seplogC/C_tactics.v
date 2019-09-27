@@ -2204,7 +2204,7 @@ rewrite not_is_zero_1.
 move/eqP/s2Z_inj => H _.
 rewrite Z2s_Z2u_k // in H.
 set lhs := _ `% 32 in H.
-have {H}H : u2Z lhs = u2Z zero32 by rewrite H.
+have {}H : u2Z lhs = u2Z zero32 by rewrite H.
 rewrite /lhs {lhs} in H.
 rewrite u2Z_rem' in H; last by apply (@ltZ_trans (2 ^^ 1)) => //; exact: max_u2Z.
 exists ((i32<=i8 he Hhe `>> 1) `% n).

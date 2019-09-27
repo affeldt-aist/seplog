@@ -259,7 +259,7 @@ apply fwd_sim_seq with (fun st s _ => EGCD.C1 vu vv u v g st /\ uv_bound rk s u 
               rewrite /tmp {tmp}.
               split.
               - repeat (split; first by tauto).
-                have {Hcond}Hcond : ([var_e t3 \!= nat_e 0 ]b_ st)%pseudo_expr by tauto.
+                have {}Hcond : ([var_e t3 \!= nat_e 0 ]b_ st)%pseudo_expr by tauto.
                 rewrite /= in Hcond.
                 by move/eqP : Hcond.
               - tauto.

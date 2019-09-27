@@ -9,6 +9,16 @@ Import MachineInt.
 Require Import mips_bipl mips_cmd mips_seplog mips_frame mips_syntax mips_mint.
 Import mips_bipl.expr_m.
 
+Declare Scope pseudo_expr_scope.
+Declare Scope pseudo_cmd_scope.
+Declare Scope pseudo_hoare_scope.
+Declare Scope asm_expr_scope.
+Declare Scope asm_cmd_scope.
+Declare Scope asm_assert_scope.
+Declare Scope asm_hoare_scope.
+Declare Scope simu_scope.
+Declare Scope assoc_scope.
+
 Local Open Scope machine_int_scope.
 Local Open Scope zarith_ext_scope.
 
@@ -600,7 +610,7 @@ case: (Classical_Prop.classic (exists s', (Some (s, syntax_m.seplog_m.assert_m.h
   move: {Hfwd_sim_R}(Hfwd_sim_R _ _ _ HR HP0 _ Hs') => Hfwd_sim_R.
   case: Hfwd_sim_R => st'_ [h'_ [Hc_ HR'_]].
   by case: (mips_syntax.semop_deter_prop_m.exec_deter _ _ _ Hc _ Hc_) => Hst' Hh'; subst st'_ h'_.
-- have {X}X : forall s', (~ (Some (s, syntax_m.seplog_m.assert_m.heap.emp) -- p --->
+- have {}X : forall s', (~ (Some (s, syntax_m.seplog_m.assert_m.heap.emp) -- p --->
   Some (s', syntax_m.seplog_m.assert_m.heap.emp))%pseudo_cmd) \/ R s' st' h'.
     move/Classical_Pred_Type.not_ex_all_not : X => X s'.
     move/Classical_Prop.not_and_or: {X}(X s').

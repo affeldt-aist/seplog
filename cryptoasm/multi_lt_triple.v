@@ -67,7 +67,7 @@ apply hoare_addiu with (fun s h => u2Z [k]_s = Z_of_nat nk /\ [a]_s = va /\
 
 rewrite /wp_addiu => s h [[r_k [r_a [r_b [Hmem [r_i r_flag]]]]] r_i'].
 repeat Reg_upd.
-have {r_i'}r_i' : [i]_s = zero32.
+have {}r_i' : [i]_s = zero32.
   move/eqP : r_i' => /= /u2Z_inj ->.
   by rewrite store.get_r0.
 repeat (split; trivial).
@@ -115,7 +115,7 @@ move=> s h [ [r_k [r_a [r_b [Hmem [ni [r_i [Hnink [
   [ r_flag [ [r_ret [r_ret2 Hsum] ] |
   [ [r_ret [r_ret2 Hsum]] |
   [gprret [r_i' [r_ret2 Hsum]]]]]]]]]]]]]] Hneq]; rewrite /= in Hneq.
-- have {Hneq}Hneq : u2Z [flag]_s = u2Z zero32.
+- have {}Hneq : u2Z [flag]_s = u2Z zero32.
     move/negPn/eqP : Hneq.
     by rewrite store.get_r0.
   apply u2Z_inj in Hneq; contradiction.

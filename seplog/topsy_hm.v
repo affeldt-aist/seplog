@@ -213,7 +213,7 @@ induction a.
       [(*Heap_emp_clean;*) map_tac_m.Disj | (*Heap_emp_clean;*) map_tac_m.Equal | reflexivity | reflexivity | assumption | assumption].
   + subst b nxt.
     move: (IHa b0 (startl + 2 + n) s h2) => [H H2].
-    move : (H H5) => {H5 H2 H} H.
+    move : (H H5) => {H5 H2} {}H.
     case_sepcon H.
     Compose_sepcon (h1 \U h21) h22; last by done.
     eapply hl_Allocated with (h1 := h1) (h2 := h21);
@@ -511,7 +511,7 @@ Proof.
 move=> H.
 rewrite /Heap_List in H; case_sepcon H.
 case: (hl_app l1 ((a, true) :: l2) startp s h1).
-move/(_ H_h1) => {H_h1} H_h1 _.
+move/(_ H_h1) => {}H_h1 _.
 case_sepcon H_h1.
 inversion_clear H_h1_h12; try discriminate.
 subst nxt.

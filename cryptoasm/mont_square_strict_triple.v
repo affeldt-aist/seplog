@@ -129,7 +129,7 @@ apply (hoare_prop_m.hoare_stren ((fun s h => (u2Z [k]_s = Z_of_nat nk /\
 
 move=> s h [[r_x [r_z [r_m [r_k [r_alpha Sum_Z1]]]]] [Sum_Z2 [r_t Hmem]]].
 
-have {Hmem}Hmem : ((var_e z |--> Z ** var_e m |--> M) **
+have {}Hmem : ((var_e z |--> Z ** var_e m |--> M) **
   (var_e x |--> X ** var_e z \+ int_e (Z2u 32 (Z_of_nat (4 * nk))) |~> int_e zero32 **
     var_e m \+ int_e (Z2u 32 (Z_of_nat (4 * nk))) |~> int_e zero32)) s h.
   by assoc_comm Hmem.
@@ -386,7 +386,7 @@ apply (hoare_prop_m.hoare_stren ((fun s h => [z]_s = vz /\
 
 move=> s h [r_x [r_z [r_m [r_k [r_alpha [r_C [Sum_Z1 [Sum_Z2 [r_t [r_ext Hmem]]]]]]]]]].
 
-have {Hmem}Hmem : ((var_e z |--> Z ++ Cint32 :: nil ** var_e m |--> M ++ zero32 :: nil) ** (var_e x |--> X)) s h.
+have {}Hmem : ((var_e z |--> Z ++ Cint32 :: nil ** var_e m |--> M ++ zero32 :: nil) ** (var_e x |--> X)) s h.
   rewrite 2!decompose_last_equiv len_Z HlenM.
   assoc_comm Hmem.
   by rewrite -r_C.

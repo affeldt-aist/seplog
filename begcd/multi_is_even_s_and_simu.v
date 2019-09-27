@@ -97,7 +97,7 @@ split.
       move/(multi_is_even_s_triple).
       move/(_ k X len ptr H1 slen_231 H2) => hoare_triple.
       move: (frame_rule_R _ _ _ hoare_triple assert_m.TT (assert_m.inde_TT _) (inde_cmd_mult_TT _))
-        => {hoare_triple}hoare_triple.
+        => {}hoare_triple.
       move/soundness : (hoare_triple).
       rewrite /while.hoare_semantics.
       move/(_ s h).
@@ -141,7 +141,7 @@ split.
     move/(multi_is_even_s_triple).
     move/(_ k X len ptr H1 slen_231 H2) => hoare_triple.
     move: (frame_rule_R _ _ _ hoare_triple assert_m.TT (assert_m.inde_TT _) (inde_cmd_mult_TT _))
-      => {hoare_triple}hoare_triple.
+      => {}hoare_triple.
     move/soundness : (hoare_triple).
     rewrite /while.hoare_semantics.
     move/(_ s' h).

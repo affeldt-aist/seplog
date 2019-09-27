@@ -156,7 +156,7 @@ Lemma len_heap2list : forall (n : nat) (a : heap.l) h,
   List.incl (iota a n : list heap.l) (heap.dom h) -> size (heap2list a n h) = n.
 Proof.
 move=> n a h H.
-have {H}H : seq_ext.inc (seq.iota a n : seq.seq ssrnat.nat_eqType) (heap.dom h).
+have {}H : seq_ext.inc (seq.iota a n : seq.seq ssrnat.nat_eqType) (heap.dom h).
   by apply/seq_ext.incP.
 apply heap.dom_proj_exact in H; last first.
   by apply ordset.ordered_iota.

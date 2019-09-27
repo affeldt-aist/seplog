@@ -906,7 +906,7 @@ case: ifP => Hha.
       case.
       by move/(IH _ _ _ _ Hta Htb Htc) => ->.
     * case: ifP => Hhb //.
-      case.                       
+      case.
       by move/(IH _ _ _ _ Hta Htb Htc) => ->.
 - case: ifP => Hhc.
   + case: ifP => Hhx.
@@ -1012,7 +1012,7 @@ Lemma add_leading_bit : forall n l1 l2 c, size l1 = n -> size l2 = n ->
 Proof.
 move=> n l1 l2 c H1 H2.
 rewrite /add /=.
-have Htmp : forall b l, [:: false, b & l] = [:: false; b] ++ l by done.
+have Htmp : forall b l, [:: false, b & l] = [:: false; b] ++ l by [].
 rewrite (Htmp true l1) (Htmp false l2) (Htmp false l1) (Htmp true l2) // !rev_cat.
 by rewrite (add'_leading_bit n) // size_rev.
 Qed.
@@ -1194,11 +1194,11 @@ Lemma add'_app : forall n l m l', size l = n -> size l' = m ->
 Proof.
 induction n.
 - intros.
-  destruct l; last by done.
+  destruct l; last by [].
   by rewrite /= (proj1 (add'C (zeros m) l')) add'l0 // H0.
 - intros.
   simpl.
-  destruct l; first by done.
+  destruct l; first by [].
   case: H => H.
   destruct b; by rewrite /= IHn.
 Qed.
@@ -1329,7 +1329,7 @@ Lemma cplt2_nil : forall l, l <> nil -> cplt2 l <> nil.
 Proof.
 move=> l H H0.
 apply H => {H}.
-destruct l; first by done.
+destruct l; first by [].
 have H : size (cplt2 (b :: l)) = O by rewrite H0.
 by rewrite size_cplt2 in H.
 Qed.
@@ -1339,7 +1339,7 @@ Proof.
 elim => // k IHk.
 rewrite /cplt2 /add in IHk *.
 rewrite size_nseq subSS subn0 cplt1_zeros rev_ones /zext rev_cat rev_zeros /=.
-destruct k; first by done.
+destruct k; first by [].
 rewrite rev_cons carry_add'; last by rewrite size_nseq.
 rewrite size_nseq subSS subn0 cplt1_zeros rev_ones in IHk.
 by rewrite IHk -cats1 -nseqS.
@@ -1434,11 +1434,11 @@ induction k; intros.
       exists h.
       rewrite !cats1; by destruct t; auto.
     * rewrite H1.
-      destruct l'; first by done.
+      destruct l'; first by [].
       rewrite cplt2_involutive_false //; last first.
         move=> [x H3].
         apply H.
-        destruct x; first by done.
+        destruct x; first by [].
         case: H3 => ? H4; subst b.
         by rewrite H1 /= H4 -nseqS // size_nseq.
       rewrite cplt2_involutive_false; last 2 first.
@@ -1459,7 +1459,7 @@ induction k; intros.
       case: H0 => <-.
       by rewrite -addn1.
     * rewrite H1.
-      destruct l'; first by done.
+      destruct l'; first by [].
       by rewrite cplt2_involutive_true // cplt2_involutive_true // cplt1_involutive.
 Qed.
 
@@ -1491,7 +1491,7 @@ induction k.
       elim/last_ind : tl H0 H H1 => // tl' tl'' _ H0 H H1.
       exists tl', tl''; by rewrite cats1.
     inversion_clear H3 as [c H2].
-    have H3 : ( hd :: x ++ [:: c] = (hd :: x) ++ [:: c]) by done.
+    have H3 : ( hd :: x ++ [:: c] = (hd :: x) ++ [:: c]) by [].
     rewrite H2 H3{H3}.
     destruct c.
     * rewrite cplt2_involutive_true //.
@@ -1506,7 +1506,7 @@ induction k.
         have H3 : exists k, tl = zeros k.
           rewrite H2.
           exists x0.
-          destruct x0; first by done.
+          destruct x0; first by [].
           case: H4 => H3 -> /=.
           by rewrite -nseqS.
         contradiction.
@@ -1585,7 +1585,7 @@ induction l1.
       - by rewrite /= size_cat /= size_nseq addnS.
       - by rewrite size_umul /= addSn addnS.
   + rewrite /=.
-    destruct l2; first by done.
+    destruct l2; first by [].
     by rewrite IHl2.
 Qed.
 

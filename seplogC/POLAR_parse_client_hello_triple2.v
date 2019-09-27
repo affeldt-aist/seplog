@@ -11,6 +11,7 @@ Require Import rfc5246.
 Import RFC5932.
 Require Import POLAR_library_functions POLAR_library_functions_triple.
 Require Import POLAR_ssl_ctxt POLAR_parse_client_hello POLAR_parse_client_hello_header.
+Require Import POLAR_parse_client_hello_triple3.
 
 Close Scope select_scope.
 
@@ -907,8 +908,6 @@ Hoare_seq_ext H_goto_have_cipher.
   Ent_R_sbang 0; last by [].
   Rewrite_ground_bexp @sequiv_bop_re_sc => //=.
   exact: oneuc.
-
-Require Import POLAR_parse_client_hello_triple3.
 
 idtac "before apply POLAR_parse_client_hello_triple3".
 

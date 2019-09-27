@@ -5,6 +5,11 @@ Require Import Init_ext ZArith_ext seq_ext ssrnat_ext order finmap.
 Require while.
 Require Import bipl integral_type.
 
+Declare Scope seplog_cmd_scope.
+Declare Scope seplog_hoare_scope.
+Declare Scope temp_seplog_hoare_scope.
+Declare Scope vc_scope.
+
 Module Seplog (A : IntegralType).
 
 Module Import assert_m := Assert A.
@@ -148,7 +153,7 @@ Lemma exec0_free_not_None s h e : ~ |_ s, h _| -- free e ----> None ->
   exists p, [ e ]e_s = p /\ exists z, heap.get p h = |_ z _|.
 Proof.
 move=> H.
-have [// | [x [x0 H0]]] : |_ s, h _| -- free e ----> None \/ 
+have [// | [x [x0 H0]]] : |_ s, h _| -- free e ----> None \/
     exists s' h', |_ s, h _| -- free e ----> |_ s', h' _|.
   have [H1|[x H0]] : heap.get ([ e ]e_s) h = None \/ exists z, heap.get ([ e ]e_s) h = |_ z _|.
     destruct heap.get; by [ right; exists s0 | left ].
@@ -166,8 +171,6 @@ Definition state : Type := (store * heap)%type.
 
 Definition cmd0 : Type := cmd0.
 Definition exec0 : option state -> cmd0 -> option state -> Prop := exec0.
-(*Notation "s -- c ----> t" := (exec0 s c t) (at level 74 , no associativity) : seplog_cmd_scope.*)
-(*Local Open Scope goto_cmd_scope.*)
 
 Definition from_none0 : forall s c, None -- c ----> s -> s = None := from_none0.
 Definition cmd0_terminate : forall (c : cmd0) s, exists s', |_ s _| -- c ----> s' := cmd0_terminate.
@@ -315,8 +318,8 @@ induction bo.
 Qed.
 
 Lemma wp_assigns_lookup : forall l e1 e2 s h P,
-  (exists e0, 
-    ((subst_e_lst l e1 |~> e0) ** 
+  (exists e0,
+    ((subst_e_lst l e1 |~> e0) **
       (subst_e_lst l e1 |~> subst_e_lst l e2 -* wp_assigns l P)) s h) ->
   wp_assigns l (fun s' h' => exists e0, (e1 |~> e0 ** (e1 |~> e2 -* P)) s' h') s h.
 Proof.
@@ -328,7 +331,7 @@ apply entails_wp_assigns with (P1 := fun s0 h0 =>
     (subst_e e1 (var_e a) b |~> e0 **
       (subst_e e1 (var_e a) b |~> subst_e e2 (var_e a) b -*
         (fun s h =>
-          P (store.upd a ([ b ]e_ s) s) h))) s0 h0); last by done.
+          P (store.upd a ([ b ]e_ s) s) h))) s0 h0); last by [].
 rewrite /while.entails /= => s0 h0 [x H1].
 case_sepcon H1.
 case: (abstract_subst_e x a b s0) => x0 H1.
@@ -1020,7 +1023,7 @@ Module map_prop_m := Map_Prop heap.
 Lemma frame_rule0 P c Q : hoare0 P c Q ->
   forall R, inde (modified_vars c) R -> {{ P ** R }} c {{ Q ** R }}.
 Proof.
-elim; move=> {P} P.
+elim; move=> {}P.
 - (* skip *) move=> R H; by apply while.hoare_hoare0, hoare0_skip.
 - (* x <- e *) move=> x e R H.
   apply (hoare_prop_m.hoare_stren (wp_assign x e (P ** R))); last by apply while.hoare_hoare0, hoare0_assign.
@@ -1419,10 +1422,10 @@ Ltac TArray_concat_split_r sz1 sz2:=
 Ltac TArray_concat_split_l_l sz H :=
   match goal with
     | H: Array ?adr ?size ?s ?h |- _ =>
-      let H1 := fresh in 
-      let H2 := fresh in 
-      let H3 := fresh in 
-      let H4 := fresh in 
+      let H1 := fresh in
+      let H2 := fresh in
+      let H3 := fresh in
+      let H4 := fresh in
       assert (H1: size = sz + (size - sz));
         [ssromega |
           rewrite -> H1 in H; clear H1;
@@ -1434,7 +1437,7 @@ Ltac TArray_concat_split_l_l sz H :=
 Ltac TArray_concat_split_l_r sz H:=
   match goal with
     | H: Array ?adr ?size ?s ?h |- _ =>
-      let H1 := fresh in 
+      let H1 := fresh in
       let H2 := fresh in
       let H21 := fresh in
       let H22 := fresh in
@@ -1652,14 +1655,14 @@ by Compose_sepcon h21 (h22 \U h'1).
 Qed.
 
 Inductive cmd' : Type :=
-| skip': cmd' 
-| assign_var_e' : var.v -> expr -> cmd' 
+| skip': cmd'
+| assign_var_e' : var.v -> expr -> cmd'
 (* TODO: rename *)
-| assign_var_deref' : var.v -> expr -> cmd' 
-| assign_deref_expr' : expr -> expr -> cmd' 
-| malloc' : var.v -> expr -> cmd' 
-| free' : expr -> cmd' 
-| while' : expr_b -> assert -> cmd' -> cmd' 
+| assign_var_deref' : var.v -> expr -> cmd'
+| assign_deref_expr' : expr -> expr -> cmd'
+| malloc' : var.v -> expr -> cmd'
+| free' : expr -> cmd'
+| while' : expr_b -> assert -> cmd' -> cmd'
 | seq' : cmd' -> cmd' -> cmd'
 | ifte' : expr_b -> cmd' -> cmd' -> cmd'.
 
@@ -1684,19 +1687,19 @@ Fixpoint proj_cmd (c' : cmd') : @while.cmd cmd0 expr_b :=
     | ifte' b c1 c2 => If b Then proj_cmd c1 Else proj_cmd c2
   end.
 
-(** compute the weakest precondition under the assumption that 
+(** compute the weakest precondition under the assumption that
 while loops are annotated with invariants *)
 Fixpoint wp (c : cmd') (P : assert) {struct c} : assert :=
   match c with
     | skip' => P
     | assign_var_e' x e => wp_assign x e P
-    | assign_var_deref' x e => 
+    | assign_var_deref' x e =>
       fun s h => exists e0, (e |~> e0 ** (e |~> e0 -* wp_assign x e0 P)) s h
-    | assign_deref_expr' e f =>  
+    | assign_deref_expr' e f =>
       fun s h => exists x, ((e |~> x ** (e |~> f -* P)) s h)
-    | (malloc' x e) => 
+    | (malloc' x e) =>
       fun s h => forall n, (cst_e n |~> e -* wp_assign x (cst_e n) P) s h
-    | free' e => fun s h => 
+    | free' e => fun s h =>
 	exists v, heap.get ([ e ]e_s) h = Some v /\ P s (h \d\ [ e ]e_s)
     | while' b Q c' => Q
     | seq' c1 c2 => wp c1 (wp c2 P)
@@ -1720,7 +1723,7 @@ Fixpoint vc (c : cmd') (P : assert) {struct c} : assert :=
     | ifte' b c1 c2 => fun s h => vc c1 P s h /\ vc c2 P s h
   end.
 
-Lemma vc_soundness : forall c' P, (forall s h, vc c' P s h) -> 
+Lemma vc_soundness : forall c' P, (forall s h, vc c' P s h) ->
   {{ wp c' P }} proj_cmd c' {{ P }}.
 Proof.
 induction c'.

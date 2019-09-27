@@ -1116,7 +1116,7 @@ case: (eq_comparable str str') => [ | Hneq].
       move=> i Hi str_dummy ty_dummy Hl.
       move: (Hali i.+1) => /=.
       rewrite ltnS.
-      move/(_ Hi) => {Hali}Hali.
+      move/(_ Hi) => {}Hali.
       apply Hali.
       by rewrite in_cons Hl orbC.
     rewrite padd_add //.
@@ -1132,7 +1132,7 @@ case: (eq_comparable str str') => [ | Hneq].
     move=> i Hi str_dummy ty_dummy Hl.
     move: (Hali i.+1) => /=.
     rewrite ltnS.
-    move/(_ Hi) => {Hali}Hali.
+    move/(_ Hi) => {}Hali.
     apply Hali.
     by rewrite in_cons Hl orbC.
   rewrite padd_add //.

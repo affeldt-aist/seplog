@@ -3,6 +3,8 @@
 From mathcomp Require Import ssreflect eqtype ssrbool seq.
 Require Import bipl seplog integral_type seq_ext.
 
+Declare Scope tactics_scope.
+
 (** Preliminary tests before implementing seplog tactics *)
 
 Module Tactics (A : IntegralType).

@@ -4,6 +4,13 @@ From mathcomp Require Import ssreflect ssrbool.
 Require Import Coq.Classes.RelationClasses.
 Require Import ClassicalChoice.
 
+Declare Scope statebipl_scope.
+Declare Scope seplog_scope.
+Declare Scope lang_scope.
+Declare Scope whilesemop_scope.
+Declare Scope whilehoare_scope.
+Declare Scope whilehoare_scope.
+
 (****************************************************************************)
 (* An extension of the modules in while.v with Separation-logic connectives *)
 (* 1) first define a module L of type LangSemop                             *)
@@ -442,7 +449,7 @@ move: Hexec s h HS s' h' HS' t c HC HP; elim => //.
 - move=> [s h] s' s'' t c H H0 _ H2 H3 s0 h0 HS s'0 h'0 HS' t0 c0 HC HP H4.
   case: HS => ? ?; subst s0 h0.
   case: HC => ? ?; subst t0 c0.
-  destruct s'' as [[s0 h0]|]; last by done.
+  destruct s'' as [[s0 h0]|]; last by [].
   case: HS' => ? ?; subst s'0 h'0.
   destruct s' as [[s1 h1]|].
   + apply (H3 _ _ (refl_equal _) _ _ (refl_equal _) _ _ (refl_equal _)) => //.
@@ -699,7 +706,7 @@ elim => //; clear P Q c'.
   by eapply ent_trans; eauto.
 - move=> P b c Hc IH b' c'.
   case=> X Y; subst.
-  exists P; split; first by done.
+  exists P; split; first by [].
   by split.
 Qed.
 
@@ -1109,7 +1116,7 @@ apply HP.
 Qed.
 
 Lemma hoare_and_left (P P' Q Q' : assert) c :
-  (forall s h s' h', 
+  (forall s h s' h',
     Some (s, h) -- c ---> Some (s', h') ->
     P s h -> Q s' h') -> {{ P' }} c {{ Q' }} ->
   {{ P //\\ P' }} c {{ Q //\\ Q' }}.
@@ -1124,7 +1131,7 @@ by apply H22 => //=.
 apply (H s h) => //=.
 Qed.
 
-Lemma hoare_total_sound' : (forall (P Q : assert) c, hoare0 P c Q -> 
+Lemma hoare_total_sound' : (forall (P Q : assert) c, hoare0 P c Q ->
   hoare_semantics_total P (cmd_cmd0 c) Q) ->
 forall P Q c, {{{ P }}} c {{{ Q }}} -> hoare_semantics_total P c Q.
 Proof.
@@ -1143,7 +1150,7 @@ move=> H0 P Q c; elim; clear P Q c.
   apply H1; tauto.
 - (* while *) move=> P t c A R Rwf V a.
   elim a using (well_founded_induction Rwf).
-  move=> {a} a Hrec H IHhoare s h [HP Ha].
+  move=> {}a Hrec H IHhoare s h [HP Ha].
   case/boolP : (eval_b t (s, h)) => Htest.
   - case: (IHhoare a _ _ (conj HP (conj Htest Ha))) => s' [h' [Hexec [HP' HR]]].
     move: {Hrec}(Hrec _ HR H IHhoare) => Hrec.
@@ -1151,14 +1158,14 @@ move=> H0 P Q c; elim; clear P Q c.
     exists s'', h''; split => //.
     apply while_seq' => //.
     by apply exec_seq with (Some (s',h')).
-  - exists s, h; split; last by done.
+  - exists s, h; split; last by [].
     by apply exec_while_false.
 - (* ifte *) move=> P Q t c d H1 IHhoare1 H2 IHhoare2 s h HP.
   case/boolP : (eval_b t (s, h)) => Htest.
   - case: (IHhoare1 s h) => // s' [h' K1].
     exists s', h'; split; last by tauto.
     constructor; tauto.
-  - case: (IHhoare2 s h); first by done.
+  - case: (IHhoare2 s h); first by [].
     move=> s' [h' [K1 K2]].
     exists s', h'; split; last by assumption.
     by apply exec_ifte_false.

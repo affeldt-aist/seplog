@@ -154,7 +154,7 @@ case: (Zis_gcd_uniqueness_apart_sign _ _ _ _ Hgcd Hgcd') => Hd.
     case: Humod' => q Hq.
     rewrite Humod Hq Z_div_mult // addZ0 in Heq.
     subst d.
-    have {Heq}Heq : (q * u2Z m + v) * \B^1 = 1 by rewrite -Heq; ring.
+    have {}Heq : (q * u2Z m + v) * \B^1 = 1 by rewrite -Heq; ring.
     move: (Zbeta1_1 (q * u2Z m + v)) => Heq'.
     contradiction.
 - rewrite Hd Zle_imp_le_bool //.

@@ -119,8 +119,8 @@ apply hoare_lwxs_back_alt'' with (fun s h => exists Z next, size Z = nk /\
 move=> s h [ [Z [next [HZ [r_x [r_z [r_m [r_k [r_alpha [Hmem [r_ext [Hextk' [Hone [Ht Hinv]]]]]]]]]]]]] Hextk].
 rewrite /= r_ext r_k in Hextk, Hextk'.
 move/eqP in Hextk; move/Nat2Z.inj_le/leP in Hextk'.
-have {Hextk}Hextk : next <> nk by contradict Hextk; rewrite Hextk.
-have {Hextk'}Hextk' : (next < nk)%nat by rewrite ltn_neqAle Hextk' andbT; apply/eqP.
+have {}Hextk : next <> nk by contradict Hextk; rewrite Hextk.
+have {}Hextk' : (next < nk)%nat by rewrite ltn_neqAle Hextk' andbT; apply/eqP.
 exists (X `32_ next); split.
 - Decompose_32 X next X1 X2 HlenX1 HX'; last by rewrite Hx.
   rewrite HX' (decompose_equiv _ _ _ _ _ HlenX1) !assert_m.conAE assert_m.conCE !assert_m.conAE in Hmem.
@@ -610,8 +610,8 @@ apply hoare_lwxs_back_alt'' with (fun s h => exists Z next nint_, size Z = nk /\
 
 move=> s h [[Z [next [nint_ [HZ [r_x [r_z [r_m [Hone [r_k [r_alpha [Hmem [r_ext [Hextk'  [r_X_ [r_int_ [Hint_ [r_int_' [Hm2 [r_t Hinv]]]]]]]]]]]]]]]]]]] Hint_k].
 rewrite /= in Hint_k. move/eqP in Hint_k; rewrite r_int_ r_k in Hint_k.
-have {Hint_k}Hint_k : nint_ <> nk by contradict Hint_k; rewrite Hint_k.
-have {r_int_'}r_int_' : (nint_ < nk)%nat.
+have {}Hint_k : nint_ <> nk by contradict Hint_k; rewrite Hint_k.
+have {}r_int_' : (nint_ < nk)%nat.
   rewrite r_int_ r_k in r_int_'; move/Nat2Z.inj_le/leP in r_int_'.
   rewrite ltn_neqAle r_int_' andbT; exact/eqP.
 
@@ -992,7 +992,7 @@ have -> : Sum_hole nk.+1 nint_.-1 (upd_nth Z nint_.-2 [Z_]_s ++ [C]_s :: nil) +
   have H1__ : (nint_.-1 < nk)%nat by rewrite prednK // (ltn_trans _ Hint_).
   have H1_ : (nint_.-1 < nk.+1)%nat by apply ltnW.
   have H1___ : (nint_.-2 < nk)%nat by rewrite prednK // -ltnS // prednK // (ltn_trans _ Hint_).
-  move/(Sum_hole_shift _ _ H_ _) : H1_ => {H_}H_.
+  move/(Sum_hole_shift _ _ H_ _) : H1_ => {}H_.
   do 2 rewrite nth_cat (@size_upd_nth _ nk) // in H_.
   rewrite H1__ subn1 H1___ nth_upd_nth' in H_; last first.
     destruct nint_; first by [].

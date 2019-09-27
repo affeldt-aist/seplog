@@ -8,9 +8,10 @@ Require Import ssrZ.
 Export ZArith.
 Export Znumtheory.
 
+Declare Scope eqmod_scope.
+
 Local Close Scope positive_scope.
 Local Close Scope Z_scope.
-
 Local Open Scope zarith_ext_scope.
 
 Lemma positiveP : Equality.axiom Pos.eqb.
@@ -210,7 +211,7 @@ Proof.
 move=> a b k H H0 H1.
 case/leZ_eqVlt : H => H.
 subst k; omega.
-have {H1}H1 : a * k = - b by omega.
+have {}H1 : a * k = - b by omega.
 case: (Z_lt_ge_dec a 0) => ?.
 - have H2 :  b > 0.
     suff ? : -b < 0 by omega.
@@ -243,7 +244,7 @@ Lemma poly_eq_inv a b a' b' k :
   a * k + b = a' * k + b' -> a = a' /\ b = b'.
 Proof.
 move=> H H0.
-have {H0}H0 : (a - a') * k + (b - b') = 0 by rewrite mulZBl; omega.
+have {}H0 : (a - a') * k + (b - b') = 0 by rewrite mulZBl; omega.
 have H1 : (0 < k) by omega.
 have H2 : (-k < b - b' < k) by omega.
 move: (poly_eq0_inv _ _ _ (ltZW H1) H2 H0) => ?; omega.
@@ -455,7 +456,7 @@ destruct z => //=; by destruct p.
 destruct z => //=; by destruct p.
 Qed.
 
-Arguments ZevenP [z].
+Arguments ZevenP {z}.
 Prenex Implicits ZevenP.
 
 Definition Zodd_bool z := ~~ Z.even z.
@@ -765,7 +766,7 @@ Proof. by rewrite -ZbetaD. Qed.
 Lemma Zbeta_gt0 l : 0 < \B^l. Proof. exact: expZ_gt0. Qed.
 
 Lemma Zbeta_ge0 n : 0 <= \B^n. Proof. exact: expZ_ge0. Qed.
-Hint Resolve Zbeta_ge0.
+Hint Resolve Zbeta_ge0 : core.
 
 Lemma Zbeta_ge1 l : 1 <= \B^l. Proof. exact: expZ_ge1. Qed.
 

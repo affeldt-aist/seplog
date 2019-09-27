@@ -11,6 +11,8 @@ this files provides:
 - a functor to instantiate finite sets of ordered types
 *)
 
+Declare Scope ordset_scope.
+
 Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive.

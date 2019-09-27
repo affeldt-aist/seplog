@@ -224,7 +224,7 @@ elim; clear P Q c.
   + rewrite -(H2 _ _ _) //; by apply H6.
   + have : List.In rd (modified_regs (mflhxu rd)) by rewrite /=; auto.
     move/(H1 (s, (a, (hi, lo))) h2 rd lo).
-    rewrite /store.upd X => {H1}H1.
+    rewrite /store.upd X => {}H1.
     rewrite -(H2 _ _ _ (a, (hi, lo))) //; tauto.
 - (* mflo *) move=> Q rd R H1 H2.
   apply (hoare_prop_m.hoare_stren (wp_mflo rd (Q ** R))); last by do 2 constructor.

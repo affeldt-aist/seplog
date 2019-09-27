@@ -430,7 +430,7 @@ rewrite /wp_assign; repeat Store_upd.
 repeat (split => //).
 2: by right.
 rewrite /= /ZIT.sub /ZIT.div.
-have {H9}H9 : ([B ]_ s - [x ]_ s) * [y ]_ s = [u ]_ s * 2 - [A ]_ s * [x ]_ s * 2.
+have {}H9 : ([B ]_ s - [x ]_ s) * [y ]_ s = [u ]_ s * 2 - [A ]_ s * [x ]_ s * 2.
   rewrite -H9; ring.
 rewrite -mulZBl -(mulZC 2) in H9.
 case: H12 => H12.
@@ -671,7 +671,7 @@ move=> s h /= [H1 [H2 [H3 [Hxg [Hyg [H4 [H5 [Hu [Hv [HA [HB HC]]]]]]]]]]]; by re
 (** outer_loop *)
 eapply while.hoare_conseq; last exact: (outer_loop_triple g x y u v A B C D vx vy Hset Hvx Hvy).
 - move=> s h /= [[Hx [Hy [Hg [Hu_pos [Hv_pos [Hxg [Hyg [HAB [HCD [Hgcd Hparity]]]]]]]]]] Heq].
-  have {Heq}Heq : [u]_s = 0.
+  have {}Heq : [u]_s = 0.
     move: Heq.
     rewrite -ZIT.gebNgt => /ZIT.geP.
     rewrite /ZIT.ge => ?; omega.
@@ -1557,7 +1557,7 @@ apply while.hoare_ifte.
   repeat Store_upd.
   rewrite /= /ZIT.eqb /ZIT.rem in Htest.
   move/eqP in Htest.
-  have {Htest}Htest : Zodd [u]_s.
+  have {}Htest : Zodd [u]_s.
     rewrite /= /ZIT.rem in Htest.
     apply not_Zmod_2_Zodd; by rewrite Htest.
   split; first by [].
@@ -2567,12 +2567,12 @@ split.
         omega.
       rewrite Htmp tuv1; ring.
     have Htmp : [u1 ]_ s - [v1 ]_ s <= 0 by omega.
-    have {Htmp}Htmp : [u ]_ s * ([u1 ]_ s - [v1 ]_ s) <= 0.
+    have {}Htmp : [u ]_ s * ([u1 ]_ s - [v1 ]_ s) <= 0.
       apply mulZ_ge0_le0 => //; omega.
     omega.
-  have {Htmp}Htmp : - [v ]_ s * ([u2 ]_ s - [v2 ]_ s) < [v3 ]_ s by omega.
+  have {}Htmp : - [v ]_ s * ([u2 ]_ s - [v2 ]_ s) < [v3 ]_ s by omega.
   apply/leZP/negPn/negP; rewrite -ltZNge' => /ltZP abs.
-  have {Htmp}Htmp : - [v ]_ s * ([u2 ]_ s - [v2 ]_ s) < [v]_s by omega.
+  have {}Htmp : - [v ]_ s * ([u2 ]_ s - [v2 ]_ s) < [v]_s by omega.
   rewrite mulNZ -mulZN in Htmp.
   apply Zlt_Zmult_inv' in Htmp; last 2 first.
     omega.

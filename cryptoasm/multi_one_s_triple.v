@@ -92,7 +92,7 @@ apply hoare_ifte_bang.
   move: H; apply monotony => h1 //.
     apply mapsto_ext => //=.
     by rewrite sext_Z2u // addi0.
-  apply currying => {h1} h1 H.
+  apply currying => {}h1 H.
   rewrite !assert_m.conAE in H.
   do 5 rewrite assert_m.conCE !assert_m.conAE in H.
   rewrite -mapsto2_mapstos.
@@ -178,8 +178,8 @@ rewrite Hslen.
 move/ltZP in H1.
 move/eqP in H2.
 rewrite store.get_r0 Z2uK // in H2.
-have {H1 H2}H1 : 0 < s2Z slen.
-  have {H2}H2 : s2Z [ a0 ]_ s <> 0.
+have {H2} {}H1 : 0 < s2Z slen.
+  have {}H2 : s2Z [ a0 ]_ s <> 0.
     contradict H2.
     rewrite (_ : 0 = s2Z (Z2u 32 0)) in H2; last by rewrite s2Z_u2Z_pos' // Z2uK.
     by rewrite (s2Z_inj H2) Z2uK.
@@ -206,11 +206,11 @@ apply while.hoare_seq with (!(fun s => [rx ]_ s = vx) **
     rewrite [mapstos]lock.
     do 1 rewrite assert_m.conCE !assert_m.conAE.
     rewrite -lock.
-    move: H; apply monotony => // {h}h H.
+    move: H; apply monotony => // {}h H.
     rewrite [mapstos]lock.
     do 2 rewrite assert_m.conCE !assert_m.conAE.
     rewrite -lock.
-    move: H; apply monotony => // {h}h.
+    move: H; apply monotony => // {}h.
     apply bangify => <-.
     by rewrite Z2u_u2Z.
   apply hoare_prop_m.hoare_weak with (
@@ -227,8 +227,8 @@ apply while.hoare_seq with (!(fun s => [rx ]_ s = vx) **
     rewrite [mapstos]lock.
     do 2 rewrite assert_m.conCE !assert_m.conAE.
     rewrite -lock.
-    move: H; apply monotony => {h}h //.
-    apply monotony => {h}h //.
+    move: H; apply monotony => {}h //.
+    apply monotony => {}h //.
     by rewrite assert_m.conCE.
   apply frame_rule_L; last 2 first.
     rewrite [modified_regs _]/=; rewrite /bang; by Inde.
@@ -249,7 +249,7 @@ move=> s h H.
 exists ptr; split.
   rewrite -mapsto2_mapstos in H.
   do 3 rewrite assert_m.conCE 3!assert_m.conAE in H.
-move: H; apply monotony => // {h} h.
+move: H; apply monotony => // {}h.
 by rewrite sext_Z2u.
 rewrite /update_store_lw.
 rewrite -mapsto2_mapstos.
@@ -296,24 +296,24 @@ have a0_ptr : [a0]_s = ptr.
   tauto.
 rewrite -mapsto2_mapstos [_ |--> _]/= in H.
 do 4 rewrite assert_m.conCE 4!assert_m.conAE in H.
-move: H; apply monotony => // {h}h.
+move: H; apply monotony => // {}h.
   apply mapsto_ext => //=.
   by rewrite addi0.
-apply currying => {h}h H.
+apply currying => {}h H.
 rewrite !assert_m.conAE in H.
 rewrite -mapsto2_mapstos [_ |--> _]/=.
 rewrite -!assert_m.conAE.
 do 1 rewrite assert_m.conCE !assert_m.conAE.
-move: H; apply monotony => {h}h // H.
+move: H; apply monotony => {}h // H.
 do 4 rewrite assert_m.conCE !assert_m.conAE in H.
 do 2 rewrite assert_m.conCE !assert_m.conAE.
-move: H; apply monotony => {h}h // H.
-move: H; apply monotony => {h}h // H.
+move: H; apply monotony => {}h // H.
+move: H; apply monotony => {}h // H.
 do 2 rewrite assert_m.conCE !assert_m.conAE in H.
 apply con_and_bang_inv_L in H.
 case: H => H' H.
 do 2 rewrite assert_m.conCE !assert_m.conAE in H.
-move: H; apply monotony => {h}h //.
+move: H; apply monotony => {}h //.
   apply mapsto_ext => //.
   by rewrite /= addi0.
 move=> H.

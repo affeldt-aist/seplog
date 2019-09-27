@@ -6,12 +6,12 @@ Require Import Init_ext ssrZ ZArith_ext String_ext Max_ext.
 Require Import machine_int seq_ext ssrnat_ext tuple_ext path_ext.
 Require order finmap.
 Import MachineInt.
+Require Import C_types C_types_fp C_value.
+
+Declare Scope C_expr_scope.
 
 Local Close Scope Z_scope.
 Local Open Scope zarith_ext_scope.
-
-Require Import C_types C_types_fp C_value.
-
 Local Open Scope C_types_scope.
 
 Definition env_get str {g} (s : g.-env) : option (g.-typ) := assoc_get str s.
@@ -432,7 +432,7 @@ move=> str1_str2.
 rewrite /store_get /store_upd /=.
 move Heq : (option_dec (assoc_get str2 (assoc_upd str1 (existT phy t val) s))) => [s'|].
 - case: s' Heq => [[i [lst Hlst]] /= Hl] Heq.
-  move: (not_eq_sym str1_str2) => {str1_str2}str1_str2.
+  move: (not_eq_sym str1_str2) => {}str1_str2.
   move Heq_rhs : (option_dec (assoc_get str2 s)) => [s'|].
   + case: s' Heq_rhs => [[i' [lst' Hlst']] Hl'] Heq_rhs .
     have ? : lst = lst'.

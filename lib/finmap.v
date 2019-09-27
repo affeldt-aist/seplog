@@ -1078,7 +1078,7 @@ elim=> [[h1 h2] /= tl b | [h1 h2] /= tl IH [x1 x2] y w H].
       - right; by rewrite in_cons H.
       - move: (IH (x1,x2) y w).
         rewrite /add_seq Y.
-        case/(_ H) => {H}H.
+        case/(_ H) => {}H.
         + by left.
         + right; by rewrite in_cons H orbC.
     * move=> H.
@@ -1090,7 +1090,7 @@ elim=> [[h1 h2] /= tl b | [h1 h2] /= tl IH [x1 x2] y w H].
         + right; by rewrite in_cons H.
         + move: (IH (x1,x2) y w).
           rewrite /add_seq Y.
-          case/(_ H) => {H}H.
+          case/(_ H) => {}H.
           * by left.
           * right; by rewrite in_cons H orbC.
 Qed.
@@ -2021,7 +2021,7 @@ elim => [/= lk // | [n z] tl IH /= l2 k].
     by intuition.
   apply disj_cons_inv in Hdis; case : Hdis.
   move/seq_ext.disj_sym.
-  move/IH => {IH}IH _.
+  move/IH => {}IH _.
   rewrite /add_seq.
   case: ifP => X.
   + move: (unzip1_upd_seq (app_seq tl l2) n z ) => Z.
@@ -2845,7 +2845,7 @@ case: ifP => hd_d.
     rewrite -(filter_mem_cons u_d hd_d).
     apply eq_filter => x /=.
     by rewrite in_cons in_nil orbC.
-  have {Hinc}Hinc : inc (cons hd d') (cons hd tl).
+  have {}Hinc : inc (cons hd d') (cons hd tl).
     (* TODO: pull out a lemmas out of this? *)
     rewrite /= in_cons eqxx /=.
     apply/incP' => x Hx.
@@ -2862,7 +2862,7 @@ case: ifP => hd_d.
       apply eq_in_filter => x Hx /=.
       case/boolP : (x \in d') => x_d'.
       * apply/negP => abs.
-        have {abs}abs : ~ x \in cons hd d'.
+        have {}abs : ~ x \in cons hd d'.
           contradict abs.
           by move/perm_mem : Hd' => ->.
         rewrite in_cons in abs.
@@ -2870,7 +2870,7 @@ case: ifP => hd_d.
         rewrite negb_or.
         by rewrite x_d' andbC.
       * apply/negP => abs.
-        have {abs}abs : x \in cons hd d'.
+        have {}abs : x \in cons hd d'.
           by move/perm_mem : Hd' => <-.
         rewrite in_cons in abs.
         case/orP : abs => abs.
@@ -3997,12 +3997,12 @@ Proof.
 move=> [h0 Hh0] [k Hk] d1 d2.
 rewrite /difs /disj /=; move/disP => H1 /disP H2.
 apply/disP => x; split => Hx.
-- move/(proj1 (H1 _)) : (Hx) => /inP {H1}H1.
-  move/(proj1 (H2 _)) : Hx => /inP {H2}H2.
+- move/(proj1 (H1 _)) : (Hx) => /inP {}H1.
+  move/(proj1 (H2 _)) : Hx => /inP {}H2.
   exact/inP/notin_unzip1_del_seq_app.
 - move=> Hx'.
-  move/(proj1 (H1 _)) : (Hx') => /inP {H1}H1.
-  move/(proj1 (H2 _)) : Hx' => /inP {H2}H2.
+  move/(proj1 (H1 _)) : (Hx') => /inP {}H1.
+  move/(proj1 (H2 _)) : Hx' => /inP {}H2.
   move: Hx.
   exact/inP/notin_unzip1_del_seq_app.
 Qed.

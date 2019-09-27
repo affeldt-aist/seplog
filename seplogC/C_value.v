@@ -6,8 +6,10 @@ Require Import Init_ext ssrZ ZArith_ext String_ext Max_ext.
 Require Import machine_int seq_ext ssrnat_ext tuple_ext path_ext.
 Require order finmap.
 Import MachineInt.
-
 Require Import C_types C_types_fp.
+
+Declare Scope C_value_scope.
+Declare Scope heap_scope.
 
 Local Open Scope C_types_scope.
 
@@ -540,8 +542,8 @@ Arguments log_of_ulong [g] _ _ _.
 Arguments log_of_ptr [g] _ _ _ _.
 Arguments log_of_styp [g] _ _ _ _.
 Arguments log_of_atyp [g] _ _ _ _ _ _.
-Arguments logs [g] _.
-Arguments nil_logs [g].
+Arguments logs {g} _.
+Arguments nil_logs {g}.
 Arguments cons_logs [g] _ _ _ _.
 Arguments alog [g] _ _.
 Arguments nil_alog [g] _.
@@ -1536,31 +1538,31 @@ move=> g0 t pv lv H h a; split.
 - destruct 1.
   + move: H0.
     move V : (phy<=log v) => lv X; move: X V.
-    case => {a}a {lv}lv {h}h H1 H2 H3 H4 H5.
+    case => {}a {}lv {}h H1 H2 H3 H4 H5.
     constructor => //.
     case/andP: H => _ /eqP ->.
     congruence.
   + move: H0.
     move V : (phy<=log v) => lv X; move: X V.
-    case => {a}a {lv}lv {h}h H1 H2 H3 H4 H5.
+    case => {}a {}lv {}h H1 H2 H3 H4 H5.
     constructor => //.
     case/andP: H => _ /eqP ->.
     congruence.
   + move: H0.
     move V : (phy<=log v) => lv X; move: X V.
-    case => {a}a {lv}lv {h}h H1 H2 H3 H4 H5.
+    case => {}a {}lv {}h H1 H2 H3 H4 H5.
     constructor => //.
     case/andP: H => _ /eqP ->.
     congruence.
   + move: H0.
     move V : (phy<=log v) => lv X; move: X V.
-    case => {a}a {lv}lv {h}h H1 H2 H3 H4 H5.
+    case => {}a {}lv {}h H1 H2 H3 H4 H5.
     constructor => //.
     case/andP: H => _ /eqP ->.
     congruence.
   + move: H0.
     move V : (phy<=log v) => lv X; move: X V.
-    case => {a}a {lv}lv {h}h H1 H2 H3 H4 H5.
+    case => {}a {}lv {}h H1 H2 H3 H4 H5.
     constructor => //.
     case/andP: H => _ /eqP ->.
     congruence.

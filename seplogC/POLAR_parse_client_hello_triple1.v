@@ -13,6 +13,7 @@ Require Import rfc5246.
 Import RFC5932.
 Require Import POLAR_library_functions POLAR_library_functions_triple.
 Require Import POLAR_ssl_ctxt POLAR_parse_client_hello POLAR_parse_client_hello_header.
+Require Import POLAR_parse_client_hello_triple2.
 
 Local Close Scope select_scope.
 
@@ -232,7 +233,7 @@ Hoare_L_stren_by BU19 (Hbuf1 :: Hbuf1_majversion :: nil).
 
 Hoare_L_contract_bbang Hbuf1; Hoare_L_contract_bbang Hbuf1_majversion.
 clear Hbuf1 Hbuf1_majversion.
-apply hoare_pullout_sbang => {BU19}BU19.
+apply hoare_pullout_sbang => {}BU19.
 
 pose Hbuf3 := `! \b __buf3 \= [ BU1 `_ 11 ]pc.
 Hoare_seq_ext Hbuf3.
@@ -341,7 +342,7 @@ apply hoare_stren_pull_out with (a := (45 <= the_n /\ the_n <= 512)%Z).
   apply bop_re_ge_Zge in H.
   apply Z.ge_le in H.
   rewrite 2!(ground_exp_sem (store0 sigma)) s2Z_ge_s_cst_e in H; last by done.
-  have {H}H : (45 <= the_n)%Z.
+  have {}H : (45 <= the_n)%Z.
     apply: (leZ_trans H).
     apply Zeq_le.
     rewrite /the_n si32_of_phy_gb_or_e sint_shl_e_to_i32_ge ge_cast_sint_cst_8c phy_of_si32K concat_shl.
@@ -355,7 +356,7 @@ apply hoare_stren_pull_out with (a := (45 <= the_n /\ the_n <= 512)%Z).
   apply bop_re_le_Zle in H0.
   rewrite 2!(ground_exp_sem (store0 sigma)) in H0.
   rewrite s2Z_ge_s_cst_e in H0; last by done.
-  have {H0}H0 : (the_n <= 512)%Z.
+  have {}H0 : (the_n <= 512)%Z.
     apply: (leZ_trans _ H0).
     apply Zeq_le.
     rewrite /the_n si32_of_phy_gb_or_e sint_shl_e_to_i32_ge ge_cast_sint_cst_8c phy_of_si32K concat_shl.
@@ -568,7 +569,7 @@ Hoare_L_contract_bbang Hbuf0 ;
 Hoare_L_contract_bbang Hbuf0_128 ;
 Hoare_L_contract_bbang Hbuf0_handshake.
 clear Hbuf0 Hbuf0_128 Hbuf0_handshake.
-apply hoare_pullout_sbang => {BU18}BU18.
+apply hoare_pullout_sbang => {}BU18.
 
 pose Hbuf0 := `! \b __buf0 \= ([  BU2 `_ 13 ]pc : exp sigma (ityp: uchar)).
 Hoare_seq_ext Hbuf0.
@@ -607,7 +608,7 @@ Hoare_L_stren_by BU2_13 (Hbuf0 :: Hbuf0_clienthello :: nil).
   rewrite gb_eq_e 2!ge_cst_e; case/eqP => ->.
   by rewrite /S74.client_hello -Z2uE.
 
-apply hoare_pullout_sbang => {BU2_13}BU2_13.
+apply hoare_pullout_sbang => {}BU2_13.
 
 Hoare_L_contract_bbang Hbuf0; Hoare_L_contract_bbang Hbuf0_clienthello.
 clear Hbuf0 Hbuf0_clienthello.
@@ -755,7 +756,7 @@ Hoare_L_stren_by BU2_17 (Hbuf4 :: Hbuf4_majversion :: nil).
 
 Hoare_L_contract_bbang Hbuf4 ; Hoare_L_contract_bbang Hbuf4_majversion.
 rewrite {Hbuf4 Hbuf4_majversion}.
-apply hoare_pullout_sbang => {BU2_17}BU2_17.
+apply hoare_pullout_sbang => {}BU2_17.
 
 clear Hssl_minver.
 
@@ -938,7 +939,7 @@ Hoare_L_stren_by BU2_14 (Hbuf1 :: Hbuf1_0 :: nil).
 
 Hoare_L_contract_bbang Hbuf1 ; Hoare_L_contract_bbang Hbuf1_0.
 rewrite {Hbuf1 Hbuf1_0}.
-unfold BU2_14; apply hoare_pullout_sbang => {BU2_14}BU2_14.
+unfold BU2_14; apply hoare_pullout_sbang => {}BU2_14.
 
 (** _buf2 <-* __buf \+ [ 2 ]sc; *)
 
@@ -990,8 +991,6 @@ Hoare_seq_ext Hbuf3.
       apply monotony_L.
       rewrite -lock (nth_map zero8); last by rewrite sz_BU2 sz_BU1 sz_BU.
       by Ent_monotony0.
-
-Require Import POLAR_parse_client_hello_triple2.
 
 idtac "before apply POLAR_parse_client_hello_triple2".
 

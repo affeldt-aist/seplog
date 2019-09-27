@@ -7,6 +7,8 @@ Import MachineInt.
 Require Import mips_cmd.
 Export mips_cmd.
 
+Declare Scope mips_hoare_scope.
+
 Local Close Scope positive_scope.
 Local Open Scope heap_scope.
 Import expr_m.

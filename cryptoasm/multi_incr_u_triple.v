@@ -62,7 +62,7 @@ by Assert_upd.
 
 (** while (bne j k) *)
 
-apply hoare_prop_m.hoare_while_invariant with (fun s h => exists nj A', 
+apply hoare_prop_m.hoare_while_invariant with (fun s h => exists nj A',
   size A' = nk /\ [one]_s = one32 /\ [a]_s = va /\
   u2Z [k]_s = Z_of_nat nk /\
   (var_e a |--> A') s h /\
@@ -98,7 +98,7 @@ apply hoare_lwxs_back_alt'' with (fun s h => exists nj A',
 
 move=> s h [ [nj [A' [HlenC [Hone [r_a [r_k [mem [r_j [Hjk2 [Hm [r_t [Hinv Hnth]]]]]]]]]]]] Hjk];
   rewrite /= r_j r_k in Hjk.
-  have {Hjk}Hjk : (nj < nk)%nat.
+  have {}Hjk : (nj < nk)%nat.
     rewrite ltn_neqAle Hjk2 andbT.
     by apply: contra Hjk => /eqP ->.
 exists (A `32_ nj); split.

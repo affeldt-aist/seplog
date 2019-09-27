@@ -318,7 +318,7 @@ by map_tac_m.Disj.
 by map_tac_m.Equal.
 exact X_M.
 
-have {Hmem}Hmem : ((var_e x |--> X ** var_e y |--> Y ++ zero32 :: nil ** var_e m |--> M ++ zero32 :: nil) **
+have {}Hmem : ((var_e x |--> X ** var_e y |--> Y ++ zero32 :: nil ** var_e m |--> M ++ zero32 :: nil) **
     (var_e x \+ int_e (Z2u 32 (Z_of_nat (4 * nk))) |~> int_e zero32 ** var_e l |--> L ** var_e b2k |--> B2K)) s h.
   rewrite (decompose_last_equiv _ X) HlenX in Hmem.
   by assoc_comm Hmem.
@@ -442,7 +442,7 @@ exists heap.emp, h; repeat (split; trivial).
 by map_tac_m.Disj.
 by map_tac_m.Equal.
 
-have {Hmem}Hmem : ((var_e y |--> Y ** var_e x |--> X ++ zero32 :: nil ** var_e m |--> M ++ zero32 :: nil ** var_e b2k |--> B2K) **
+have {}Hmem : ((var_e y |--> Y ** var_e x |--> X ++ zero32 :: nil ** var_e m |--> M ++ zero32 :: nil ** var_e b2k |--> B2K) **
     (var_e y \+ int_e (Z2u 32 (Z_of_nat (4 * nk))) |~> int_e zero32 ** var_e l |--> L)) s h.
   rewrite (decompose_last_equiv _ Y) HlenY in Hmem.
   by assoc_comm Hmem.

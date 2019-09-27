@@ -687,7 +687,7 @@ exact/Z.ge_le/string_last''.
 (**  var_e c1 *<- var_e str_tmp. *)
 apply hoare_mutation_backwards'.
 move=> s h [[x [Hmem [Hc1 [Hc2 [Hstr_tmp [Hx _]]]]]] Hstr_tmp_is_0].
-have {Hstr_tmp_is_0}Hstr_tmp_is_0 : [ str_tmp ]_ s = 0.
+have {}Hstr_tmp_is_0 : [ str_tmp ]_ s = 0.
   eval_b2Prop_hyps.
   tauto.
 have H : (x = size (str0 :: str_lst) - 1)%nat.

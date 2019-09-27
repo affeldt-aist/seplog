@@ -22,7 +22,7 @@ Lemma multi_is_even_u_triple k a ret : uniq(k, a, ret, r0) ->
   forall nk A va, size A = nk ->
   {{ fun s h => u2Z [ k ]_s = Z_of_nat nk /\ [a]_s = va /\ (var_e a |--> A) s h }}
   multi_is_even_u k a ret
-  {{ fun s h => 
+  {{ fun s h =>
     u2Z [ k ]_s = Z_of_nat nk /\ [a]_s = va /\ (var_e a |--> A) s h /\
     (Zeven (\S_{ nk } A) -> [ret]_s = one32) /\ (Zodd (\S_{ nk } A) -> [ret]_s = zero32) }}.
 Proof.
@@ -41,7 +41,7 @@ destruct nk; last by rewrite Hk store.get_r0 Z2uK in Hk'.
 repeat Reg_upd; repeat (split => //).
 by Assert_upd.
 move=> _; by rewrite sext_Z2u // add0i.
- 
+
 (** lw ret zero16 a *)
 
 apply hoare_lw_back_alt'' with (fun s h => u2Z [k ]_ s = Z_of_nat nk /\ [a ]_ s = va /\
@@ -65,7 +65,7 @@ exists (List.hd zero32 A); split.
 
 (** andi ret ret one16 *)
 
-apply hoare_andi with (fun s h => 
+apply hoare_andi with (fun s h =>
   u2Z [k ]_ s = Z_of_nat nk /\ [a ]_ s = va /\ (var_e a |--> A) s h /\
   (Zeven (\S_{ nk } A) -> [ret]_s = zero32) /\ (Zodd (\S_{ nk } A) ->  [ret]_s = one32)).
 
@@ -74,7 +74,7 @@ rewrite /wp_andi; repeat Reg_upd.
 repeat (split; trivial).
 - by Assert_upd.
 - move => Hparity.
-  have {Hparity}Hparity : Zeven (u2Z [ret]_sm).
+  have {}Hparity : Zeven (u2Z [ret]_sm).
     destruct nk => //.
     + rewrite Hret.
       destruct A => //.
@@ -84,7 +84,7 @@ repeat (split; trivial).
   apply int_even_and_1 in Hparity.
   by rewrite zext_Z2u.
 - move=> Hparity.
-  have {Hparity}Hparity : Zodd (u2Z [ret]_sm).
+  have {}Hparity : Zodd (u2Z [ret]_sm).
     apply Zodd_lSum in Hparity.
     by rewrite Hret -nth0.
   apply int_odd_and_1 in Hparity.

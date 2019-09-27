@@ -6,6 +6,8 @@ Require Import machine_int.
 Import MachineInt.
 Require Import C_types C_types_fp C_value C_expr C_pp POLAR_ssl_ctxt.
 
+Declare Scope POLAR_scope.
+
 Module Import C_LittleOp_m := C_Pp_f parse_client_env.
 Export C_LittleOp_m.
 

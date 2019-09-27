@@ -157,10 +157,10 @@ rewrite (_ :  wp_assign a b
 rewrite /wp_assign /=.
 apply assert_m.assert_ext => s0 h0; split => [ [H1 H2] | [H1 H2] ].
 - rewrite eval_b_upd_subst in H1.
-  split; first by done.
+  split; first by [].
   by apply subst_Sigma2store_update'.
 - rewrite -eval_b_upd_subst in H1.
-  split; first by done.
+  split; first by [].
   by apply subst_Sigma2store_update.
 Qed.
 
@@ -410,7 +410,7 @@ induction L.
   move=> h1' [X1 X2] h' Hh'.
   red in H2_h2.
   have H8 : h2 # h1' /\ (e |~> x1) (store.upd x v s0) h1'.
-    split; first by done.
+    split; first by [].
     Mapsto.
     rewrite fresh_e_eval //; by Max_inf_resolve.
   generalize (H2_h2 h1' H8 _ Hh') => H1.
@@ -430,7 +430,7 @@ induction L.
   move=> h1' [X1 X2] h' Hh'.
   red in H0_h2.
   have H8 : h2 # h1' /\ (e |~> e0) s h1'.
-    split; first by done.
+    split; first by [].
     Mapsto.
     rewrite fresh_e_eval //; by Max_inf_resolve.
     rewrite fresh_e_eval //; by Max_inf_resolve.
@@ -446,7 +446,7 @@ induction L.
   move=> h1' [X1 X2] h' Hh'.
   red in H0_h2.
   have H8 : h2 # h1' /\ (e |~> e0) (store.upd x v s) h1'.
-    split; first by done.
+    split; first by [].
     Mapsto.
     rewrite fresh_e_eval //; by Max_inf_resolve.
     rewrite fresh_e_eval //; by Max_inf_resolve.
@@ -719,7 +719,7 @@ induction 1.
   rewrite /imp => h2' [X1 X2] h' Hh'.
   apply IHtritra.
   split; first by exact pi1_true.
-  Compose_sepcon h1 h2'; first by done.
+  Compose_sepcon h1 h2'; first by [].
   split; [by Mapsto | exact H3_h2'].
 - rewrite /while.entails /= in IHtritra * => s h [pi1_true H3].
   case_sepcon H3.
@@ -740,8 +740,8 @@ induction 1.
   Compose_sepcon h2 h1.
   by Mapsto.
   rewrite /imp => h2' [X1 X2] h' Hh'.
-  apply IHtritra; split; first by done.
-  Compose_sepcon h1 h2'; first by done.
+  apply IHtritra; split; first by [].
+  Compose_sepcon h1 h2'; first by [].
   split; [by Mapsto | exact H3_h2'].
 - rewrite /while.entails /= => s h [H4 H5].
   rewrite /while.entails in IHtritra.
@@ -882,7 +882,7 @@ induction 1.
   rewrite /wp_assign /= store.get_upd' in H15.
   suff : wp_assigns l
     (fun s0 h0 => wpAssrt_interp L (store.upd x ([ cst_e x0 ]e_ (store.upd x'' x0 s)) s0) h0)
-    (store.upd x'' x0 s) h by done.
+    (store.upd x'' x0 s) h by [].
   by apply intro_fresh_var with x'.
 - (** case tritra_subst_mutation *) rewrite /while.entails /= in IHtritra * => s h.
   move/IHtritra. by apply wp_assigns_lookup.
@@ -894,11 +894,11 @@ induction 1.
   split.
   apply (wp_assigns_imp l (fun s h => eval_b b s) (fun s h => wpAssrt_interp L1 s h) s h) => H0.
   move: (H2 (wp_assigns_subst_b_lst true _ _ _ _ H0)) => H4.
-  suff <- : wpAssrt_interp L1 = (fun s => fun h => wpAssrt_interp L1 s h) by done.
+  suff <- : wpAssrt_interp L1 = (fun s => fun h => wpAssrt_interp L1 s h) by [].
   apply assert_m.assert_ext; rewrite /while.equiv /=; tauto.
   apply (wp_assigns_imp l (fun s h => ~~ eval_b b s) (fun s h => wpAssrt_interp L2 s h) s h) => H0.
   move: (H3 (wp_assigns_subst_b_lst false _ _ _ _ H0)) => H4.
-  suff <- : wpAssrt_interp L2 = (fun s => fun h => wpAssrt_interp L2 s h) by done.
+  suff <- : wpAssrt_interp L2 = (fun s => fun h => wpAssrt_interp L2 s h) by [].
   apply assert_m.assert_ext; rewrite /while.equiv /=; tauto.
 - (** case regle generale *) rewrite /while.entails /= => s h {H2 H3} [H2 H3].
   case_sepcon H3.
@@ -1009,7 +1009,7 @@ apply tritra_destruct_lst with (x' := x').
   by Resolve_le_max.
 - eapply tritra_precond_stre; [idtac | by apply H1].
   rewrite /while.entails => s h [H4 H5].
-  split; first by done.
+  split; first by [].
   simpl in H5; case_sepcon H5.
   case_sepcon H5_h2.
   case_sepcon H5_h2_h21.
@@ -1117,8 +1117,8 @@ eapply tritra_destruct_lst with (x' := x').
   case_sepcon H5_h2.
   case_sepcon H5_h2_h21.
   simpl.
-  Compose_sepcon (h212 \U h22 \U h1) h211; last by done.
-  Compose_sepcon h1 (h212 \U h22); first by done.
+  Compose_sepcon (h212 \U h22 \U h1) h211; last by [].
+  Compose_sepcon h1 (h212 \U h22); first by [].
   by Compose_sepcon h22 h212.
 Qed.
 
@@ -1151,12 +1151,12 @@ apply tritra_destruct_lst with (x' := x').
   case_sepcon H5_h2.
   case_sepcon H5_h2_h21.
   simpl.
-  Compose_sepcon (h211 \U h22 \U h1) h212; last by done.
-  Compose_sepcon h1 (h211 \U h22); first by done.
+  Compose_sepcon (h211 \U h22 \U h1) h212; last by [].
+  Compose_sepcon h1 (h211 \U h22); first by [].
   by Compose_sepcon h22 h211.
 - eapply tritra_precond_stre; [idtac | by apply H2].
   rewrite /while.entails => s h [H4 H5].
-  split; first by done.
+  split; first by [].
   simpl in H5.
   case_sepcon H5.
   case_sepcon H5_h2.
@@ -1620,10 +1620,10 @@ destruct A; simpl; intros.
         apply tritra_precond_stre with (pi,
           remove_empty_heap pi (star_assoc_left (star_com (star sig1 (singl e0 e1))) frag_list_entail.emp)).
         rewrite /while.entails => s0 h [H2 H3].
-        split; first by done.
+        split; first by [].
         apply remove_empty_heap_correct' => //.
         apply star_assoc_left_correct'.
-        Compose_sepcon h assert_m.heap.emp; last by done.
+        Compose_sepcon h assert_m.heap.emp; last by [].
         by apply star_com_correct'.
         apply H0.
         case: H => ?; subst l0.
@@ -1672,7 +1672,7 @@ destruct A; simpl; intros.
           split; auto.
           apply remove_empty_heap_correct' => //.
           apply star_assoc_left_correct'.
-          Compose_sepcon h assert_m.heap.emp; last by done.
+          Compose_sepcon h assert_m.heap.emp; last by [].
           by apply star_com_correct'.
         + apply H0.
           case : H => ?; subst l0.
@@ -1690,7 +1690,7 @@ destruct A; simpl; intros.
           apply H0.
           case : H => ?; subst l0.
           rewrite /=; by right; left.
-        + move: (expr_b_dp_correct (pi =b> (e0 \!= e1) \&& ((e0 \+ nat_e 1) \= subst_e_lst l e))) => {H1}H1.
+        + move: (expr_b_dp_correct (pi =b> (e0 \!= e1) \&& ((e0 \+ nat_e 1) \= subst_e_lst l e))) => {}H1.
           destruct (expr_b_dp (pi =b> (e0 \!= e1) \&& ((e0 \+ nat_e 1) \= subst_e_lst l e))); try discriminate.
           * apply tritra_subst_lookup_lst' with (x' :=
               triple_vfresh (pi, star sig1 (lst e0 e1)) (wpSubst l (wpLookup s e A))).
@@ -1709,7 +1709,7 @@ destruct A; simpl; intros.
               split; auto.
               apply remove_empty_heap_correct' => //.
               apply star_assoc_left_correct'.
-              Compose_sepcon h assert_m.heap.emp; last by done.
+              Compose_sepcon h assert_m.heap.emp; last by [].
               by apply star_com_correct'.
             - apply H0.
               case : H => ?; subst l0.
@@ -1760,7 +1760,7 @@ destruct A; simpl; intros.
        rewrite /while.entails => s0 h [H2 h3]; split; first by [].
        apply remove_empty_heap_correct' => //.
        apply star_assoc_left_correct'.
-       Compose_sepcon h assert_m.heap.emp; last by done.
+       Compose_sepcon h assert_m.heap.emp; last by [].
        by apply star_com_correct'.
        apply H0.
        case: H => ?; subst l.
@@ -1779,30 +1779,30 @@ destruct A; simpl; intros.
         apply tritra_precond_stre with (pi,
           remove_empty_heap pi (star_assoc_left (star_com (star sig1 (cell e0))) frag_list_entail.emp)).
         rewrite /while.entails => s0 h [H2 H3].
-        split; first by done.
+        split; first by [].
         apply remove_empty_heap_correct' => //.
         apply star_assoc_left_correct'.
-        Compose_sepcon h assert_m.heap.emp; last by done.
+        Compose_sepcon h assert_m.heap.emp; last by [].
         by apply star_com_correct'.
         case: H => ?; subst l.
         apply H0; by left.
     * apply tritra_precond_stre with (pi,
        remove_empty_heap pi (star_assoc_left (star_com (star sig1 frag_list_entail.emp)) frag_list_entail.emp)).
       rewrite /while.entails => s0 h [H2 H3].
-      split; first by done.
+      split; first by [].
       apply remove_empty_heap_correct' => //.
       apply star_assoc_left_correct'.
-      Compose_sepcon h assert_m.heap.emp; last by done.
+      Compose_sepcon h assert_m.heap.emp; last by [].
       by apply star_com_correct'.
       case: H => ?; subst l.
       apply H0; by left.
     * apply tritra_precond_stre with (pi,
         remove_empty_heap pi (star_assoc_left (star_com (star sig1 (star sig2_1 sig2_2))) frag_list_entail.emp)).
       rewrite /while.entails => s0 h [H2 H3].
-      split; first by done.
+      split; first by [].
       apply remove_empty_heap_correct' => //.
       apply star_assoc_left_correct'.
-      Compose_sepcon h assert_m.heap.emp; last by done.
+      Compose_sepcon h assert_m.heap.emp; last by [].
       by apply star_com_correct'.
       case : H => ?; subst l.
       apply H0; by left.
@@ -1815,7 +1815,7 @@ destruct A; simpl; intros.
         reflexivity.
         apply H0 => /=; by left.
         apply H0 => /=; by right; left.
-      - move: (expr_b_dp_correct (pi =b> (e0 \!= e1) \&& ((e0 \+ nat_e 1) \= e))) => {H1} H1.
+      - move: (expr_b_dp_correct (pi =b> (e0 \!= e1) \&& ((e0 \+ nat_e 1) \= e))) => {}H1.
         destruct (expr_b_dp (pi =b> (e0 \!= e1) \&& ((e0 \+ nat_e 1) \= e))).
         + case: H => ?; subst l.
           eapply tritra_lookup_lst'.
@@ -1831,7 +1831,7 @@ destruct A; simpl; intros.
           split; first by [].
           apply remove_empty_heap_correct' => //.
           apply star_assoc_left_correct'.
-          Compose_sepcon h assert_m.heap.emp; last by done.
+          Compose_sepcon h assert_m.heap.emp; last by [].
           by apply star_com_correct'.
           case: H => ?; subst l.
           apply H0; by left.
@@ -1867,10 +1867,10 @@ destruct A; simpl; intros.
           remove_empty_heap pi
           (star_assoc_left (star_com (star sig1 (singl e1 e2))) frag_list_entail.emp)).
         rewrite /while.entails => s h [H2 H3].
-        split; first by done.
+        split; first by [].
         apply remove_empty_heap_correct' => //.
         apply star_assoc_left_correct'.
-        Compose_sepcon h assert_m.heap.emp; last by done.
+        Compose_sepcon h assert_m.heap.emp; last by [].
         by apply star_com_correct'.
         case : H => ?; subst l.
         apply H0; by left.
@@ -1886,10 +1886,10 @@ destruct A; simpl; intros.
       - apply tritra_precond_stre with (pi, remove_empty_heap pi
           (star_assoc_left (star_com (star sig1 (cell e1))) frag_list_entail.emp)).
         rewrite /while.entails => s h [H3 H4].
-        split; first by done.
+        split; first by [].
         apply remove_empty_heap_correct' => //.
         apply star_assoc_left_correct'.
-        Compose_sepcon h assert_m.heap.emp; last by done.
+        Compose_sepcon h assert_m.heap.emp; last by [].
         by apply star_com_correct'.
         case: H => ?; subst l.
         apply H0; by left.
@@ -1897,10 +1897,10 @@ destruct A; simpl; intros.
         remove_empty_heap pi
         (star_assoc_left (star_com (star sig1 frag_list_entail.emp)) frag_list_entail.emp)).
       rewrite /while.entails => s h [H2 H3].
-      split; first by done.
+      split; first by [].
       apply remove_empty_heap_correct' => //.
       apply star_assoc_left_correct'.
-      Compose_sepcon h assert_m.heap.emp; last by done.
+      Compose_sepcon h assert_m.heap.emp; last by [].
       by apply star_com_correct'.
       case: H => ?; subst l.
       apply H0; by left.
@@ -1908,10 +1908,10 @@ destruct A; simpl; intros.
         remove_empty_heap pi
         (star_assoc_left (star_com (star sig1 (star sig2_1 sig2_2))) frag_list_entail.emp)).
       rewrite /while.entails => s h [H2 H3].
-      split; first by done.
+      split; first by [].
       apply remove_empty_heap_correct' => //.
       apply star_assoc_left_correct'.
-      Compose_sepcon h assert_m.heap.emp; last by done.
+      Compose_sepcon h assert_m.heap.emp; last by [].
       by apply star_com_correct'.
       case: H => ?; subst l.
       apply H0; by left.
@@ -1926,7 +1926,7 @@ destruct A; simpl; intros.
         reflexivity.
         apply H0 => /=; by left.
         apply H0 => /=; by right; left.
-      - move: (expr_b_dp_correct (pi =b> ((e1 \+ nat_e 1) \= e) \&& (e1 \!= e2))) => {H1}H1.
+      - move: (expr_b_dp_correct (pi =b> ((e1 \+ nat_e 1) \= e) \&& (e1 \!= e2))) => {}H1.
         destruct (expr_b_dp (pi =b> ((e1 \+ nat_e 1) \= e) \&& (e1 \!= e2))).
         + case : H => ?; subst l.
           eapply tritra_mutation_lst'.
@@ -1939,10 +1939,10 @@ destruct A; simpl; intros.
             remove_empty_heap pi
             (star_assoc_left (star_com (star sig1 (lst e1 e2))) frag_list_entail.emp)).
           rewrite /while.entails => s h [H2 H3].
-          split; first by done.
+          split; first by [].
           apply remove_empty_heap_correct' => //.
           apply star_assoc_left_correct'.
-          Compose_sepcon h assert_m.heap.emp; last by done.
+          Compose_sepcon h assert_m.heap.emp; last by [].
           by apply star_com_correct'.
           case: H => ?; subst l.
           apply H0; by left.

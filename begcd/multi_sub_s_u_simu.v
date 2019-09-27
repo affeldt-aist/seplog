@@ -193,7 +193,7 @@ rewrite /state_mint; split.
         rewrite assoc.get_union_sing_neq; last by Uniq_neq.
         rewrite assoc.get_union_sing_eq k_rk.
         by case/(_ (refl_equal _)).
-      move/Hh12' => {Hh12'}Hh12'.
+      move/Hh12' => {}Hh12'.
       rewrite size_Z2ints k_rk rk_s_s' in Hh12'.
       rewrite {}Hh12'.
       rewrite heap.proj_union_L; last by rewrite -heap.disjE; heap_tac_m.Disj.

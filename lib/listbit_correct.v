@@ -14,6 +14,8 @@ Require Import listbit.
 Reserved Notation "'.[' l ']u'" (at level 30, format "'[' .[  l  ]u ']'").
 Reserved Notation "'.[' l ']s'" (at level 30, format "'[' .[  l  ]s ']'").
 
+Declare Scope listbit_correct_scope.
+
 Local Open Scope zarith_ext_scope.
 
 Module bitZ.
@@ -82,7 +84,7 @@ elim => [ [] // a [] // _ | n IH ].
     rewrite mulZC.
     by move/Zodd_not_Zeven.
   + rewrite addZ0 ZpowerS mulZC => H'.
-    have {H'}H' : .[h ]u = 2 ^^ n by move/eqZ_mul2l : H'; apply.
+    have {}H' : .[h ]u = 2 ^^ n by move/eqZ_mul2l : H'; apply.
     move/IH : H' => ->.
     by rewrite /= -nseqS.
 Qed.
@@ -1104,7 +1106,7 @@ elim.
       by rewrite -Hlenlst.
       by rewrite size_cat /= size_nseq // addnC.
     rewrite (u2Z_app (zeros n)) zeros_app u2Z_zeros /= in H.
-    have {H}H : u2Z (rcons hd tl) = 0.
+    have {}H : u2Z (rcons hd tl) = 0.
       move: (min_u2Z (rcons hd tl)) => ?; omega.
     by move/(u2Z_zeros_inv (n.+1)) : H => ->.
 - move=> k IHk [|n].
@@ -1346,7 +1348,7 @@ move Hlen : (size l) => [|].
   destruct l => //.
   by move/ltZZ: (leZ_ltZ_trans H (expZ_gt0 n)).
 move/max_s2Z.
-move/(leZ_ltZ_trans H) => {H}H.
+move/(leZ_ltZ_trans H) => {}H.
 rewrite ltnS -Zpower_2_le; exact/leZP/ltZW.
 Qed.
 
@@ -1387,7 +1389,7 @@ elim=> //.
     by move/Zodd_not_Zeven.
   + simpl u2Z.
     rewrite addZ0 ZpowerS => H'.
-    have {H'}H' : .[h ]s = - 2 ^^ n.
+    have {}H' : .[h ]s = - 2 ^^ n.
       rewrite Zopp_mult_distr_r in H'.
       move/eqZ_mul2l : H'; by apply.
     move/IH : H' => ->.
@@ -1722,7 +1724,7 @@ induction n.
       simpl size.
       lapply H4; last first.
         contradict H0; by rewrite H0.
-      move=> {H4}H4.
+      move=> {}H4.
       rewrite ZpowerS; omega.
   + rewrite cplt2_prop; last 2 first.
       by move=> [ [|k] Hk].

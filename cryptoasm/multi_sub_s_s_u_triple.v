@@ -98,8 +98,8 @@ move/(_ (fun s h => [rz ]_ s = vz /\ [ry ]_ s = vy /\ u2Z [rk ]_ s = Z_of_nat nk
   (var_e rx \+ int_e four32 |--> ptrx :: nil ** int_e ptrx |--> VX) **
   var_e ry |--> VY) vx slenx) => Htmp.
 lapply Htmp; last by Inde.
-move=> {Htmp}Htmp; lapply Htmp; last by Inde.
-move=> {Htmp}Htmp.
+move=> {}Htmp; lapply Htmp; last by Inde.
+move=> {}Htmp.
 eapply while.hoare_conseq; last exact: Htmp.
 move=> {Htmp} s h.
 move=> [Hrx [Hra0 [Hra1 [Hra1' [H1 H2]]]]].
@@ -258,7 +258,7 @@ move/leZP in Ha1.
 apply Zsgn_pos.
 rewrite -Ha1''.
 apply Zsgn_pos.
-have {Ha1'}Ha1' : 0 <> s2Z [a1]_s.
+have {}Ha1' : 0 <> s2Z [a1]_s.
   move/eqP in Ha1'.
   contradict Ha1'.
   by rewrite store.get_r0 Z2uK // -s2Z_u2Z_pos.
@@ -593,7 +593,7 @@ case: Ha1'.
   move=> abs; by rewrite abs in Ha1''.
 case=> //.
 move=> abs; by rewrite abs in Ha1''.
-move=> {Ha1''}Ha1''; rewrite Ha1'' /= in Ha1.
+move=> {}Ha1''; rewrite Ha1'' /= in Ha1.
 symmetry in Ha1.
 by apply Zsgn_neg in Ha1.
 by Assert_upd.

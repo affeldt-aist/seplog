@@ -82,7 +82,7 @@ rewrite {1}/nk Z_of_nat_Zabs_nat in Hexec_proj; last by apply min_u2Z.
 rewrite /heap_mint /heap_cut -heap.proj_app in Hpre.
 move: {Hexec_proj Hpre}(Hexec_proj _ _ _ _ _ (conj (refl_equal _) (conj (refl_equal _) (conj (refl_equal _) Hpre))) Hst').
 rewrite heap.proj_app.
-move/Hpost => {Hpost} Hpost.
+move/Hpost => {}Hpost.
 case: Hpost => Hrk' [Hru' [Hrv' [Hret Hmem]]].
 rewrite lSum_Z2ints_pos in Hret; last first.
   move: (proj1 s_st_h u (unsign rk ru)).
