@@ -423,11 +423,18 @@ Parameter int_break_inj : forall n k nk (l1 l2 : int nk) ,
 
 End MACHINE_INT.
 
+Definition int_lst n (b : int n) := match b with mk_int lst _ => lst end.
+
+Definition int_prf n (b : int n) : size (int_lst b) = n :=
+  match b return size (int_lst b) = n with mk_int l prf => prf end.
+
 Module MachineInt : MACHINE_INT
 with Definition u2Zc := fun n (a : int n) => match a with mk_int lst _ => bitZ.u2Z lst end
 with Definition s2Zc := fun n (a : int n) => match a with mk_int lst _ => bitZ.s2Z lst end
 with Definition Z2uc := fun n (l : Z) => mk_int (bits.size_adjust_u n (bitZ.Z2u l))
-with Definition Z2sc := fun n (l : Z) => mk_int (bits.size_adjust_s n (bitZ.Z2s l)).
+with Definition Z2sc := fun n (l : Z) => mk_int (bits.size_adjust_s n (bitZ.Z2s l))
+with Definition add := fun l (a b : int l) => mk_int
+  (bits.size_add l (int_lst a) (int_lst b) (int_prf a) (int_prf b) false).
 
 Definition make_int : forall (n : nat) (lst : list bool), size lst = n -> int n := mk_int.
 
@@ -447,7 +454,7 @@ rewrite /eq_rect.
 move=> -> H H'; by apply mk_int_pi.
 Qed.
 
-Definition int_lst n (b : int n) := match b with mk_int lst _ => lst end.
+(*Definition int_lst n (b : int n) := match b with mk_int lst _ => lst end.*)
 
 Lemma mk_int_pi'' : forall n l (H : size l = n) n' (n_n' : n = n'),
   int_lst (eq_rect n int (mk_int H) _ n_n') = l.
@@ -461,8 +468,8 @@ Qed.
 
 Definition bits n (b : int n) := rev (int_lst b).
 
-Definition int_prf n (b : int n) : size (int_lst b) = n :=
-  match b return size (int_lst b) = n with mk_int l prf => prf end.
+(*Definition int_prf n (b : int n) : size (int_lst b) = n :=
+  match b return size (int_lst b) = n with mk_int l prf => prf end.*)
 
 Lemma dec_int : forall l (a b : int l), { a = b } + { a <> b }.
 Proof.

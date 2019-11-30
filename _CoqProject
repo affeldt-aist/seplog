@@ -250,3 +250,5 @@ seplogC/C_pp_examples.v
 -R ./cryptoasm Cryptoasm
 -R ./begcd Begcd
 -R ./seplogC SeplogC
+-R . seplog
+
