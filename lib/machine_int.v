@@ -434,7 +434,17 @@ with Definition s2Zc := fun n (a : int n) => match a with mk_int lst _ => bitZ.s
 with Definition Z2uc := fun n (l : Z) => mk_int (bits.size_adjust_u n (bitZ.Z2u l))
 with Definition Z2sc := fun n (l : Z) => mk_int (bits.size_adjust_s n (bitZ.Z2s l))
 with Definition add := fun l (a b : int l) => mk_int
-  (bits.size_add l (int_lst a) (int_lst b) (int_prf a) (int_prf b) false).
+  (bits.size_add l (int_lst a) (int_lst b) (int_prf a) (int_prf b) false)
+with Definition int_and := fun n (a b : int n) =>
+  mk_int (bits.size_and n (int_lst a) (int_lst b) (int_prf a) (int_prf b))
+with Definition int_or := fun n (a b : int n) =>
+  mk_int (bits.size_or n (int_lst a) (int_lst b) (int_prf a) (int_prf b))
+with Definition int_xor := fun n (a b : int n) =>
+  mk_int (bits.size_xor n (int_lst a) (int_lst b) (int_prf a) (int_prf b))
+with Definition shl := fun m n (a: int n) => mk_int (bits.size_shl m n (int_lst a) (int_prf a))
+with Definition shrl := fun m n (a : int n) => mk_int (bits.size_shrl n m (int_lst a) (int_prf a))
+with Definition mul := fun n (a b : int n) => mk_int
+  (bits.size_adjust_u n (bits.umul (int_lst a) (int_lst b))).
 
 Definition make_int : forall (n : nat) (lst : list bool), size lst = n -> int n := mk_int.
 
