@@ -2,7 +2,7 @@
 (* seplog (c) AIST 2014-2018. R. Affeldt et al. GNU GPLv3. *)
 Require Import ssreflect.
 From mathcomp Require Import eqtype.
-Require Import bipl.
+Require Import ZArith bipl.
 Require Import expr_b_dp.
 Require Import topsy_hm.
 
@@ -11,6 +11,7 @@ Import seplog_Z_m.
 
 Local Open Scope seplog_expr_scope.
 Local Open Scope seplog_cmd_scope.
+Local Open Scope Z_scope.
 
 (*
 113 Error hmFree(Address address)

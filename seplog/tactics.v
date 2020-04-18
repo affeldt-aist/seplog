@@ -1,9 +1,11 @@
 (* seplog (c) AIST 2005-2013. R. Affeldt, N. Marti, et al. GNU GPLv3. *)
 (* seplog (c) AIST 2014-2018. R. Affeldt et al. GNU GPLv3. *)
 From mathcomp Require Import ssreflect eqtype ssrbool seq.
-Require Import bipl seplog integral_type seq_ext.
+Require Import bipl seplog integral_type seq_ext ZArith.
 
 Declare Scope tactics_scope.
+
+Local Open Scope Z_scope.
 
 (** Preliminary tests before implementing seplog tactics *)
 

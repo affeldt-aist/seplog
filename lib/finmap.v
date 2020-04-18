@@ -1,6 +1,6 @@
 (* seplog (c) AIST 2005-2013. R. Affeldt, N. Marti, et al. GNU GPLv3. *)
 (* seplog (c) AIST 2014-2018. R. Affeldt et al. GNU GPLv3. *)
-Require Import Classical Permutation.
+Require Import Classical Permutation Lia.
 From mathcomp Require Import ssreflect ssrfun ssrbool eqtype ssrnat seq.
 Require Import seq_ext.
 Require Import order ordset ordset_pairs uniq_tac.
@@ -4502,7 +4502,7 @@ with
     | H : ?x2 # ?x1 |- ?x1 # ?x2 => apply disj_sym; auto
     | |- ?x1 # emp => apply (disjhe x1)
     | |- emp # ?x1 => apply disj_sym; apply (disjhe x1)
-    | |- sing ?l1 ?v1 # sing ?l2 ?v2 => eapply disj_sing; omega
+    | |- sing ?l1 ?v1 # sing ?l2 ?v2 => eapply disj_sing; lia
   end.
 
 Lemma Disj_test1 : forall h h1 h2, h # (h1 \U h2) -> h # h2.

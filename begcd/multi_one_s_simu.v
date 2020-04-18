@@ -4,7 +4,7 @@ From mathcomp Require Import ssreflect ssrfun ssrbool eqtype ssrnat seq.
 Require Import ssrZ ZArith_ext seq_ext uniq_tac.
 Require Import machine_int multi_int encode_decode integral_type.
 Import MachineInt.
-Require Import mips_bipl mips_tactics mips_syntax mips_mint.
+Require Import mips_bipl mips_cmd mips_tactics mips_syntax mips_mint.
 Import mips_bipl.expr_m.
 Require Import simu.
 Import simu.simu_m.

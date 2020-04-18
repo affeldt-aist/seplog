@@ -5,12 +5,14 @@ From mathcomp Require Import eqtype.
 Require Import bipl.
 Require Import expr_b_dp.
 Require Import topsy_hm.
+Require Import ZArith.
 
 Import seplog_Z_m.assert_m.expr_m.
 Import seplog_Z_m.
 
 Local Open Scope seplog_expr_scope.
 Local Open Scope seplog_cmd_scope.
+Local Open Scope Z_scope.
 
 (*
 140 #define ENTRYSIZE(ptr) ((unsigned long)(ptr->next) - \
@@ -19,7 +21,7 @@ Local Open Scope seplog_cmd_scope.
 *)
 Definition ENTRYSIZE (x tmp : var.v) :=
   tmp <-* x -.> next ;
-  tmp <- var_e tmp \- var_e x \- cst_e 2 ;
+  tmp <- var_e tmp \- var_e x \- cst_e 2;
   If (nat_e 0 \> var_e tmp) Then
     tmp <- nat_e 0
   Else

@@ -2,11 +2,12 @@
 (* seplog (c) AIST 2014-2018. R. Affeldt et al. GNU GPLv3. *)
 From mathcomp Require Import ssreflect ssrfun ssrbool eqtype ssrnat seq.
 Require Import ZArith.
-Notation "m ^ n" := (expn m n) : nat_scope. (* TODO: kludge *)
 Require Import Znumtheory.
 Require Import ssrZ.
 Export ZArith.
 Export Znumtheory.
+
+Notation "m ^ n" := (expn m n) : nat_scope. (* TODO: kludge *)
 
 Declare Scope eqmod_scope.
 
@@ -231,7 +232,7 @@ case: (Z_lt_ge_dec a 0) => ?.
       rewrite -H1.
       apply mulZ_gt0; omega.
     have H5 : k <= a * k.
-      cutrewrite (k = 1 * k); last omega.
+      rewrite (_ : k = 1 * k); last omega.
       apply leZ_pmul => //; omega.
     rewrite H1 in H5.
     have ? : -k >= b by omega.

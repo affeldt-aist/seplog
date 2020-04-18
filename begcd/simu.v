@@ -1701,7 +1701,7 @@ Ltac Var_unchanged :=
 Ltac Rewrite_var v st :=
   match goal with
     | |- context [syntax_m.seplog_m.assert_m.expr_m.store.get v ?st'] =>
-      cutrewrite (syntax_m.seplog_m.assert_m.expr_m.store.get v st' =
+      rewrite (_ : syntax_m.seplog_m.assert_m.expr_m.store.get v st' =
         syntax_m.seplog_m.assert_m.expr_m.store.get v st);
         [ idtac |
           symmetry;
@@ -1715,7 +1715,7 @@ Ltac Rewrite_var v st :=
 Ltac Rewrite_reg rk st :=
   match goal with
     |- context [store.get ?rk ?st'] =>
-      cutrewrite (store.get rk st' = store.get rk st) ;
+      rewrite (_ : store.get rk st' = store.get rk st) ;
         [ idtac |
           symmetry ;
           mips_syntax.Reg_unchanged ;

@@ -298,6 +298,7 @@ End C_Pp_f.
 
 Require Import ZArith.
 Require Import Setoid.
+Local Open Scope Z_scope.
 
 Lemma s2Z_Z2u : forall {n:nat} (z:Z), 0 <= z < 2 ^^ Peano.pred n -> s2Z (Z2u n z) = z.
 Proof.

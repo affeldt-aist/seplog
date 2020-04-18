@@ -1,4 +1,9 @@
--arg "-w -notation-overridden"
+-arg -w -arg -projection-no-head-constant
+-arg -w -arg -redundant-canonical-projection
+-arg -w -arg -notation-overridden
+-arg -w -arg -duplicate-clear
+-arg -w -arg -ambiguous-paths
+
 lib/Init_ext.v
 lib/ssrnat_ext.v
 lib/Max_ext.v
@@ -168,55 +173,6 @@ cryptoasm/copy_s_s_triple.v
 cryptoasm/multi_halve_s_triple.v
 cryptoasm/multi_halve_s_noneucl_triple.v
 cryptoasm/multi_is_even_s_triple.v
-begcd/simu.v
-begcd/multi_zero_u_simu.v
-begcd/multi_zero_u_safe_termination.v
-begcd/multi_one_u_simu.v
-begcd/multi_one_u_safe_termination.v
-begcd/multi_zero_s_simu.v
-begcd/multi_zero_s_safe_termination.v
-begcd/multi_one_s_simu.v
-begcd/multi_one_s_safe_termination.v
-begcd/multi_negate_simu.v
-begcd/multi_negate_safe_termination.v
-begcd/multi_halve_u_simu.v
-begcd/multi_halve_u_safe_termination.v
-begcd/multi_halve_s_simu.v
-begcd/multi_double_u_simu.v
-begcd/multi_double_u_safe_termination.v
-begcd/multi_lt_simu.v
-begcd/multi_add_s_u_simu.v
-begcd/multi_sub_s_u_simu.v
-begcd/multi_sub_s_s_simu.v
-begcd/multi_add_s_u_safe_termination.v
-begcd/multi_sub_s_u_safe_termination.v
-begcd/multi_add_s_s_u_simu.v
-begcd/multi_sub_s_s_u_simu.v
-begcd/multi_sub_s_s_s_simu.v
-begcd/multi_add_s_s_u_safe_termination.v
-begcd/multi_sub_s_s_u_safe_termination.v
-begcd/multi_sub_s_s_s_safe_termination.v
-begcd/copy_s_u_simu.v
-begcd/copy_s_u_safe_termination.v
-begcd/copy_s_s_simu.v
-begcd/copy_s_s_safe_termination.v
-begcd/copy_u_u_safe_termination.v
-begcd/multi_is_even_u_simu.v
-begcd/multi_is_even_s_simu.v
-begcd/begcd.v
-begcd/multi_is_even_u_and_prg.v
-begcd/multi_is_even_u_and_simu.v
-begcd/multi_is_even_s_and_prg.v
-begcd/multi_is_even_s_and_simu.v
-begcd/pick_sign_simu.v
-begcd/multi_halve_s_safe_termination.v
-begcd/begcd_mips0.v
-begcd/begcd_mips_prelude.v
-begcd/begcd_mips_init.v
-begcd/begcd_mips_halve.v
-begcd/begcd_mips_reset.v
-begcd/begcd_mips_subtract.v
-begcd/begcd_mips.v
 seplogC/C_types.v
 seplogC/C_types_fp.v
 seplogC/C_value.v
@@ -245,10 +201,5 @@ seplogC/POLAR_parse_client_hello_triple2.v
 seplogC/POLAR_parse_client_hello_triple1.v
 seplogC/POLAR_parse_client_hello_pp.v
 seplogC/C_pp_examples.v
--R ./lib Lib
--R ./seplog Seplog
--R ./cryptoasm Cryptoasm
--R ./begcd Begcd
--R ./seplogC SeplogC
--R . seplog
 
+-R . seplog

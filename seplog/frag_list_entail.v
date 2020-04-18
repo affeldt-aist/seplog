@@ -1033,7 +1033,7 @@ induction sig; simpl; intros; try discriminate.
   exists ([ e0 ]e_ s).
   by Mapsto.
   red; intros; eapply H4.
-  cutrewrite ([ e ]e_ s = [ e1 ]e_ s).
+  rewrite (_ : [ e ]e_ s = [ e1 ]e_ s).
   assumption.
   by omegab.
 - generalize (expr_b_dp_correct _ H s); intros.
@@ -1042,7 +1042,7 @@ induction sig; simpl; intros; try discriminate.
   inversion_clear H3.
   split.
   exists x; Mapsto.
-  cutrewrite ([ e0 ]e_ s = [ e ]e_ s).
+  rewrite (_ : [ e0 ]e_ s = [ e ]e_ s).
   by omegab.
   symmetry.
   by omegab.
@@ -1668,7 +1668,7 @@ destruct (elim_common_subheap pi sig1 sig2 emp).
   case_sepcon H4.
   rewrite /assert_m.emp in H4_h01.
   subst h01.
-  cutrewrite (h0 = h02); last by map_tac_m.Equal.
+  rewrite (_ : h0 = h02); last by map_tac_m.Equal.
   by apply H1.
   simpl.
   by Compose_sepcon h assert_m.heap.emp.

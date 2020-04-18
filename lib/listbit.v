@@ -544,13 +544,10 @@ rewrite size_take // size_nseq {}len_t.
 rewrite -ltnS.
 case: (leqP m n) => mn.
   rewrite -subSn // ltnS leq_subLR.
-  case: (boolP (m == 0)) => [/eqP ->|m0]; first by rewrite min0n ltnn.
-  move/minn_idPl : (mn) => ->.
+  case: (boolP (m == 0)) => [/eqP ->|m0]; first by rewrite ltnn.
   by rewrite -{1}(add0n n) ltn_add2r lt0n m0 addnBA // addnC addnK.
 rewrite ltnS (_ : n - m = 0); last by apply/eqP; rewrite subn_eq0 ltnW.
-rewrite minnC.
-move/ltnW/minn_idPl : mn => ->.
-by case: n => //= n; rewrite addn0.
+by case: n mn => //= n; rewrite addn0.
 Qed.
 
 (** shift right and forget about the freed bits *)
@@ -1141,7 +1138,7 @@ Proof.
 induction m.
 - simpl; intros.
   by rewrite !cats0.
-- cutrewrite (zeros m.+1 = zeros m ++ [:: false]); last by rewrite -nseqS.
+- rewrite (_ : zeros m.+1 = zeros m ++ [:: false]); last by rewrite -nseqS.
   unfold add.
   move=> n l1 l2 H H0.
   rewrite !rev_cat.

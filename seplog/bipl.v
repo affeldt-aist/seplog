@@ -1311,7 +1311,7 @@ Lemma mapstos'_cons_sepcon a l st s h : (st |---> a :: l) s h ->
   (st |~> cst_e a ** (st \+ nat_e 1) |---> l) s h.
 Proof.
 intros.
-cutrewrite (a :: l = (a :: nil) ++ l) in H; [idtac | auto].
+rewrite (_ : a :: l = (a :: nil) ++ l) in H; [idtac | auto].
 apply mapstos'_app_sepcon in H.
 simpl in H.
 unfold mapstos' at 1 in H.

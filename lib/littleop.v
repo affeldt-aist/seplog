@@ -3,7 +3,7 @@
 From mathcomp Require Import ssreflect ssrbool seq eqtype ssrnat.
 From mathcomp Require Import path.
 Require Import ssrZ seq_ext.
-Require Export Setoid Relation_Definitions.
+Require Export Setoid Relation_Definitions ZArith.
 Require Import Init_ext.
 
 Class Abelian {A: Type} (op: A -> A -> A) := {
@@ -246,7 +246,7 @@ Section MIAbelean.
 Variable n : nat.
 
 Instance int_abelean: Abelian (@add n).
-eapply Build_Abelian with (equiv := eq) (zero := Z2u n 0).
+eapply Build_Abelian with (equiv := eq) (zero := Z2u n Z0).
 apply  @eq_equivalence.
 move => x; apply addi0.
 move => x y ; apply addC.
@@ -261,7 +261,7 @@ Arguments int_abelean {n}.
 Require Import ssrZ ZArith_ext.
 
 Instance Z_abelean : Abelian Z.add.
-eapply Build_Abelian with (equiv := eq) (zero := 0%Z).
+eapply Build_Abelian with (equiv := eq) (zero := 0).
 apply  @eq_equivalence.
 move => x; omega.
 move => x y ; omega.

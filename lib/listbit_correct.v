@@ -1047,7 +1047,7 @@ induction k.
   move/IHk : H2 => H2 {IHk}.
   rewrite (shl_u2Z k n lst H l) // in H2; last by rewrite ltnW.
   rewrite (shl_u2Z k.+1 n lst H l) //.
-  cutrewrite (2 ^^ (l + k.+1) - 2 ^^ k.+1 = 2 * (2 ^^ (l + k) - 2 ^^ k)); last first.
+  rewrite (_ : 2 ^^ (l + k.+1) - 2 ^^ k.+1 = 2 * (2 ^^ (l + k) - 2 ^^ k)); last first.
     rewrite addnS !ZpowerS; omega.
   rewrite ZpowerS mulZC -mulZA (mulZC (2 ^^ k)); omega.
 Qed.
@@ -1070,7 +1070,7 @@ Proof.
 unfold shl_ext.
 induction k.
 rewrite /= cats0 addn0; omega.
-cutrewrite (lst ++ zeros k.+1 = (lst ++ zeros k) ++ zeros 1); last by rewrite /= -catA -nseqS.
+rewrite (_ : lst ++ zeros k.+1 = (lst ++ zeros k) ++ zeros 1); last by rewrite /= -catA -nseqS.
 rewrite u2Z_app_zeros addnS 2!ZpowerS [2 ^^ 0]/= ZpowerS; omega.
 Qed.
 
@@ -1577,7 +1577,7 @@ induction l.
               rewrite H1 /= size_cat size_nseq in H.
               by case: H => <-; rewrite addnC addnK.
               rewrite ltnS in H0.
-            cutrewrite ((l' + (l-l')%nat)%nat = l); last first.
+            rewrite (_ : (l' + (l-l')%nat)%nat = l); last first.
               rewrite H1 /= size_cat size_nseq in H.
               case: H => <-; rewrite addnBA //.
               by rewrite addnC addnK.

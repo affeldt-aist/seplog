@@ -1,5 +1,5 @@
 From mathcomp Require Import ssreflect ssrbool eqtype ssrnat seq.
-Require Import machine_int seq_ext ssrZ ZArith_ext.
+Require Import machine_int seq_ext ssrZ ZArith_ext String.
 Import MachineInt.
 Require Import C_pp.
 Require Import POLAR_parse_client_hello.

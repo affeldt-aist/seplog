@@ -17,6 +17,7 @@ Require Import expr_b_dp.
 Import seplog_Z_m.assert_m.
 Import seplog_Z_m.assert_m.expr_m.
 Import seplog_Z_m.
+Import BinNums.
 
 Local Open Scope seplog_expr_scope.
 Local Open Scope seplog_cmd_scope.
@@ -52,52 +53,52 @@ Inductive ps1 : assrt -> assrt -> Prop :=
 | ps1_incons : forall pi1 pi2 sig1 sig2,
   (forall s, [ pi1 ]b_ s -> False) ->
   ps1 (pi1, sig1) (pi2, sig2)
-  
-| ps1_tauto : forall pi1 pi2, 
-  (forall s, [ pi1 ]b_ s -> [ pi2 ]b_ s) -> 
+
+| ps1_tauto : forall pi1 pi2,
+  (forall s, [ pi1 ]b_ s -> [ pi2 ]b_ s) ->
   ps1 (pi1, epsi) (pi2, epsi)
-  
+
 | ps1_coml : forall pi1 sig1 sig2 L,
   ps1 (pi1, star sig2 sig1) L -> ps1 (pi1, star sig1 sig2) L
-  
+
 | ps1_comr : forall pi1 sig1 sig2 L,
   ps1 L (pi1, star sig2 sig1)  -> ps1 L (pi1, star sig1 sig2)
-  
+
 | ps1_assocl : forall pi1 sig1 sig2 sig3 L,
   ps1 (pi1, star (star sig1 sig2) sig3) L ->
   ps1 (pi1, star sig1 (star sig2 sig3)) L
-  
+
 | ps1_assocr : forall pi1 sig1 sig2 sig3 L,
   ps1 L (pi1, star (star sig1 sig2) sig3)  ->
   ps1 L (pi1, star sig1 (star sig2 sig3))
-  
+
 | ps1_epseliml : forall pi1 sig1 L,
   ps1 (pi1, sig1) L ->
   ps1 (pi1, star sig1 epsi) L
-  
+
 | ps1_epselimr : forall pi1 sig1 L,
   ps1 L (pi1, sig1) ->
   ps1 L (pi1, star sig1 epsi)
-  
+
 | ps1_epsintrol : forall pi1 sig1 L,
   ps1 (pi1, star sig1 epsi) L ->
   ps1 (pi1, sig1) L
-  
+
 | ps1_epsintror : forall pi1 sig1 L,
   ps1 L (pi1, star sig1 epsi) ->
   ps1 L (pi1, sig1)
-  
+
 | ps1_star_elim : forall pi1 pi2 sig1 sig2 e1 e2 e3 e4,
   (forall s, eval_b pi1 s -> [ e1 \= e3 ]b_ s) ->
-  (forall s , eval_b pi1 s -> [ e2 \= e4 ]b_ s) ->    
+  (forall s , eval_b pi1 s -> [ e2 \= e4 ]b_ s) ->
   ps1 (pi1, sig1) (pi2, sig2) ->
   ps1 (pi1, star sig1 (singl e1 e2)) (pi2, star sig2 (singl e3 e4))
-  
+
 | ps1_star_elim' : forall pi1 pi2 sig1 sig2 e1 e2 e3,
   (forall s, eval_b pi1 s -> [ e1 \= e3 ]b_ s) ->
   ps1 (pi1, sig1) (pi2, sig2) ->
   ps1 (pi1, star sig1 (singl e1 e2)) (pi2, star sig2 (cell e3))
-  
+
 | ps1_star_elim'' : forall pi1 pi2 sig1 sig2 e1 e3,
   (forall s, eval_b pi1 s -> [ e1 \= e3 ]b_ s) ->
   ps1 (pi1, sig1) (pi2, sig2) ->
@@ -195,13 +196,13 @@ Ltac ps1_turnr :=
   end.
 
 Ltac ps1_resolve := repeat apply ps1_assocr; repeat apply ps1_assocl;
-  match goal with 
+  match goal with
     | |- ps1 (?pi1, star ?sig1 epsi) ?L => ps1_turnl; idtac
     | |- ps1 ?L (?Pi, cell ?e) => ps1_turnr; idtac
     | |- ps1 ?L (?Pi, singl ?e1 ?e2) => ps1_turnr; idtac
     | |- ps1 (?Pi, cell ?e) ?L => ps1_turnl; idtac
     | |- ps1 (?Pi, singl ?e1 ?e2) ?L => ps1_turnl; idtac
-      
+
 (*    | |- ps1 (?pi1, epsi) (?pi2, epsi) => apply ps1_tauto; [intros; Omega_exprb]*)
     | |- ps1 (?pi1, epsi) (?pi2, epsi) => apply ps1_tauto; do 2 intro; omegab
     | |- ps1 (?pi1, epsi) (?pi2, epsi) => apply ps1_incons; do 2 intro; omegab
@@ -210,16 +211,16 @@ Ltac ps1_resolve := repeat apply ps1_assocr; repeat apply ps1_assocl;
     | |- ps1 (?pi1, star ?e epsi) ?L => apply ps1_epseliml; idtac
     | |- ps1 ?L (?pi2, star ?e epsi) => apply ps1_epselimr; idtac
 (*****)
-    | |- ps1 (?pi1, star ?sig1 (singl ?e1 ?e2)) (?pi2, star ?sig2 (singl ?e3 ?e4)) => 
+    | |- ps1 (?pi1, star ?sig1 (singl ?e1 ?e2)) (?pi2, star ?sig2 (singl ?e3 ?e4)) =>
       (apply ps1_star_elim; [ (do 2 intro; omegab) |
         (do 2 intro; omegab) | idtac] || ps1_turnl; idtac)
-      
-    | |- ps1 (?pi1, star ?sig1 (singl ?e1 ?e2)) (?pi2, star ?sig2 (cell ?e3)) => 
+
+    | |- ps1 (?pi1, star ?sig1 (singl ?e1 ?e2)) (?pi2, star ?sig2 (cell ?e3)) =>
       (apply ps1_star_elim'; [ (do 2 intro; omegab) | idtac] || ps1_turnl; idtac)
-      
-    | |- ps1 (?pi1, star ?sig1 (cell ?e1)) (?pi2, star ?sig2 (cell ?e3)) => 
+
+    | |- ps1 (?pi1, star ?sig1 (cell ?e1)) (?pi2, star ?sig2 (cell ?e3)) =>
       (apply ps1_star_elim''; [ (do 2 intro; omegab) | idtac] || ps1_turnl; idtac)
-      
+
     | |- ps1 (?pi2, star ?sig2 (cell ?e3)) (?pi1, star ?sig1 (singl ?e1 ?e2)) => ps1_turnl
    end.
 
@@ -241,20 +242,20 @@ Lemma ps1_ex2: forall startp sizep,
   ps1
   (true_b,
     star
-    (star (cell ((nat_e startp \+ nat_e sizep) \- cst_e 1))
-      (star (singl (nat_e startp) (cst_e 1))
-        (singl (nat_e startp \+ cst_e 1)
+    (star (cell ((nat_e startp \+ nat_e sizep) \- cst_e 1%Z))
+      (star (singl (nat_e startp) (cst_e 1%Z))
+        (singl (nat_e startp \+ cst_e 1%Z)
           ((cst_e (Z_of_nat startp) \+ cst_e (Z_of_nat sizep)) \-
-                 cst_e 2))))
-    (cell ((nat_e startp \+ nat_e sizep) \- cst_e 2)))
+                 cst_e 2%Z))))
+    (cell ((nat_e startp \+ nat_e sizep) \- cst_e 2%Z)))
   (true_b,
     star
     (star
-      (star (cell ((nat_e startp \+ nat_e sizep) \- cst_e 2))
-        (cell ((nat_e startp \+ nat_e sizep) \- cst_e 1)))
+      (star (cell ((nat_e startp \+ nat_e sizep) \- cst_e 2%Z))
+        (cell ((nat_e startp \+ nat_e sizep) \- cst_e 1%Z)))
       (singl (nat_e startp) (cst_e 1%Z)))
     (singl (nat_e startp \+ cst_e 1%Z)
-      ((cst_e (Z_of_nat startp) \+ cst_e (Z_of_nat sizep)) \- cst_e 2))).
+      ((cst_e (Z_of_nat startp) \+ cst_e (Z_of_nat sizep)) \- cst_e 2%Z))).
 Proof.
 intros.
 ps1_Resolve.

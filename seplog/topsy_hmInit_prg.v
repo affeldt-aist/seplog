@@ -2,7 +2,7 @@
 (* seplog (c) AIST 2014-2018. R. Affeldt et al. GNU GPLv3. *)
 Require Import ssreflect.
 From mathcomp Require Import eqtype.
-Require Import bipl.
+Require Import bipl ZArith.
 Require Import expr_b_dp.
 Require Import topsy_hm.
 
@@ -39,5 +39,5 @@ Definition hmInit (adr sz : nat) :=
   hmStart -.> next *<- nat_e adr \+ nat_e sz \- cst_e 2%Z ;
   hmStart -.> status *<- Free ;
   hmEnd <-* hmStart -.> next ;
-  hmEnd -.> next *<- cst_e 0 ;
+  hmEnd -.> next *<- cst_e 0%Z ;
   hmEnd -.> status *<- Allocated.

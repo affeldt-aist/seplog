@@ -1999,7 +1999,7 @@ destruct n.
       rewrite bitZ.sext_true bits.size_cplt2 (bitZ.u2Z_cplt2 (size (rev (bitZ.pos2lst p)))) //.
         move: (bitZ.max_u2Z (size (rev (bitZ.pos2lst p))) (rev (bitZ.pos2lst p)) (leqnn _)) => H5.
         rewrite bitZ.u2Z_rev_poslst mulZBr -ZpowerD.
-        cutrewrite (size (rev (bitZ.pos2lst p)) + (n.+2 - (size (rev (bitZ.pos2lst p))).+1).+1 = n.+2)%nat.
+        rewrite (_ : size (rev (bitZ.pos2lst p)) + (n.+2 - (size (rev (bitZ.pos2lst p))).+1).+1 = n.+2)%nat.
           ring.
         rewrite size_rev subSS -subSn.
           by rewrite subnKC // ltnW // ltnW // ltnS -size_rev.

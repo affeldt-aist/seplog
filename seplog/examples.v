@@ -347,7 +347,7 @@ destruct i.
   subst n.
   by rewrite /string' inE eqxx in H2.
 assert (string (z :: lst)).
-  cutrewrite (z::lst = List.tail (a::z::lst)); [idtac | auto].
+  rewrite (_ : z::lst = List.tail (a::z::lst)); [idtac | auto].
   apply string_sub.
     simpl.
     ssromega.

@@ -830,7 +830,7 @@ Ltac Format_tail A l elt :=
   end.
 
 Ltac Format_HLList l elt :=
-  let A := constr : ((nat * bool)%type) in
+  let A := constr: ((nat * bool)%type) in
   let y := Norm_List A l in
   let hd := Format_head A y elt in
   let tl := Format_tail A y elt in
@@ -853,9 +853,9 @@ Ltac List_eq :=
 
 Ltac Hl_getstatus H elt x :=
   match goal with
-    | H: Heap_List ?l ?start ?s ?h |- _ =>
+    | H : Heap_List ?l ?start ?s ?h |- _ =>
       let l' := Format_HLList l elt in
-        cutrewrite (l = l') in H; [
+        replace l with l' in H; [
           let h1:= fresh h "1" in (* NB: kludge: this is only likely to match the h1 and h2 produced by case_sepcon *)
           let h2:= fresh h "2" in
               generalize (hl_getstatus _ _ _ _ _ _ _ H); intro x; case_sepcon x;
@@ -868,7 +868,7 @@ Ltac Hl_getnext H elt x :=
   match goal with
     | H: Heap_List ?l ?start ?s ?h |- _ =>
       let l' := Format_HLList l elt in
-        cutrewrite (l = l') in H; [
+        replace l with l' in H; [
           let h1:= fresh h "1" in (* NB: kludge: this is only likely to match the h1 and h2 produced by case_sepcon *)
           let h2:= fresh h "2" in
               generalize (hl_getnext _ _ _ _ _ _ _ H); intro x; case_sepcon x;

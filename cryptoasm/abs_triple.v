@@ -1,7 +1,7 @@
 (* seplog (c) AIST 2005-2013. R. Affeldt, N. Marti, et al. GNU GPLv3. *)
 (* seplog (c) AIST 2014-2018. R. Affeldt et al. GNU GPLv3. *)
 From mathcomp Require Import ssreflect ssrbool.
-Require Import uniq_tac machine_int.
+Require Import ZArith uniq_tac machine_int.
 Import MachineInt.
 Require Import mips_seplog mips_contrib mips_tactics.
 Import expr_m.
@@ -14,6 +14,7 @@ Local Open Scope mips_assert_scope.
 Local Open Scope mips_hoare_scope.
 Local Open Scope uniq_scope.
 Local Open Scope machine_int_scope.
+Local Open Scope Z_scope.
 
 Lemma abs_triple_bang rx a : uniq(rx, a, r0) ->
   forall vx, s2Z vx <> - 2 ^31 ->

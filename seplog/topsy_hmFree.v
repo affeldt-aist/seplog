@@ -1,7 +1,7 @@
 (* seplog (c) AIST 2005-2013. R. Affeldt, N. Marti, et al. GNU GPLv3. *)
 (* seplog (c) AIST 2014-2018. R. Affeldt et al. GNU GPLv3. *)
 From mathcomp Require Import ssreflect ssrfun ssrbool eqtype ssrnat seq.
-Require Import ZArith_ext.
+Require Import ZArith_ext ZArith.
 Require Import bipl seplog integral_type.
 Require Import topsy_hm topsy_hmFree_prg.
 

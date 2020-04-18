@@ -530,12 +530,9 @@ induction k; intros.
                  lSum (k - j) (nth (Z2u n 0) l (S j) :: l2) + u2Z (nth (Z2u n 0) l1 j)) //.
       have ->// : nth (Z2u n 0) l1 j = nth (Z2u n 0) l j.
       rewrite H6 H1.
-      cutrewrite (l1' ++ [:: nth (Z2u n 0) l1 j, nth (Z2u n 0) l (S j) & l2] =
-        (l1' ++ nth (Z2u n 0) l1 j :: nil) ++ nth (Z2u n 0) l (S j):: l2).
-        symmetry.
-        rewrite !(cat0s,cats0) in H7 H6 *.
-        by rewrite nth_cat H7 ltnn subnn /= -H6.
-      by rewrite -catA.
+      symmetry.
+      rewrite !(cat0s,cats0) in H7 H6 *.
+      by rewrite nth_cat H7 ltnn subnn /= -H6.
     apply lSum_head_swap => //.
     by rewrite ltn_subRL addn0.
   + rewrite H6 size_cat /= H7 addnS in H2.
