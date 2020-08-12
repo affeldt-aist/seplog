@@ -292,7 +292,7 @@ case: (Z_lt_le_dec (u2Z (A `32_ nj)) (u2Z [btmp']_s)).
   move: {Hm1 Hm2}(Hm2 X) => Hm.
   have Hacx0 : store.acx s = Z2u store.acx_size 0.
     apply store.utoZ_acx_beta2.
-    rewrite Hm; omega.
+    rewrite Hm; lia.
   rewrite store.utoZ_def Hacx0{Hacx0} Z2uK // mul0Z addZ0 in Hm.
   rewrite (_ : \B^2 = \B^1 * (\B^1 - 1) + \B^1) // addZC (mulZC (\B^1)) in Hm.
   rewrite (_ : forall a b c d, a + b + c - d = a + (b + c - d)) in Hm; last by move=> *; ring.
@@ -302,7 +302,7 @@ case: (Z_lt_le_dec (u2Z (A `32_ nj)) (u2Z [btmp']_s)).
     split.
     by split; [apply min_u2Z | apply max_u2Z].
     split; first by [].
-    move: (min_u2Z (A `32_ nj)) (max_u2Z [btmp']_s) => ? ?; omega.
+    move: (min_u2Z (A `32_ nj)) (max_u2Z [btmp']_s) => ? ?; lia.
   case: Hm => _ Hm.
   rewrite Hinv Hm (Zbeta_S nj) Hrbtmp'2 Z2uK //; ring.
 - move/leZNgt/ltZP/negbTE => X.
@@ -316,7 +316,7 @@ case: (Z_lt_le_dec (u2Z (A `32_ nj)) (u2Z [btmp']_s)).
   move: {Hm1 Hm2}(Hm1 X) => Hm.
   have H0 : store.utoZ s < \B^1.
     move: (max_u2Z (A `32_ nj)) (min_u2Z [btmp']_s).
-    rewrite Hm -Zbeta1E => ? ?; omega.
+    rewrite Hm -Zbeta1E => ? ?; lia.
   case/store.utoZ_lo_beta1 : H0 => _ [_ <-].
   rewrite Hinv Hm Hrbtmp'2 Z2uK //; ring.
 
@@ -338,7 +338,7 @@ have [X1 X2] : nbor = 1 /\ u2Z (B `32_ nj) = \B^1 - 1.
     by rewrite Hru X in Huzero.
   rewrite Hrbtmp' in H.
   apply u2Z_add_overflow' in H; rewrite -Zbeta1E in H.
-  move: (max_u2Z (B `32_ nj)) => H'; rewrite -Zbeta1E in H'; omega.
+  move: (max_u2Z (B `32_ nj)) => H'; rewrite -Zbeta1E in H'; lia.
 rewrite Hratmp Hinv X1 X2 !mul1Z (Zbeta_S nj); ring.
 
 (** sw ctmp zero16 t; *)
@@ -358,7 +358,7 @@ have Htmp : [ var_e t \+ int_e (sext 16 zero16) ]e_s = [ var_e b \+ int_e (Z2u 3
   apply u2Z_inj.
   rewrite u2Z_add_Z_of_nat.
   rewrite inj_mult Hrt Hrb; ring.
-  rewrite inj_mult -Zbeta1E Hrb; simpl Z_of_nat; move/ltP in Hjk; omega.
+  rewrite inj_mult -Zbeta1E Hrb; simpl Z_of_nat; move/ltP in Hjk; lia.
 
 exists (int_e (B' `32_ nj)).
 
@@ -432,8 +432,8 @@ exists B', nj, nbor; repeat Reg_upd; repeat (split; trivial).
 by Assert_upd.
 exact/ltP.
 rewrite u2Z_add sext_Z2u // Z2uK //.
-- omega.
-- rewrite -Zbeta1E; omega.
+- lia.
+- rewrite -Zbeta1E; lia.
 
 (** addiu j j one16 *)
 
@@ -448,7 +448,7 @@ by Assert_upd.
 rewrite sext_Z2u // u2Z_add_Z2u //.
 by rewrite Hrj.
 move/ltP in Hjk.
-move: (min_u2Z vb) => ?; rewrite -Zbeta1E; omega.
+move: (min_u2Z vb) => ?; rewrite -Zbeta1E; lia.
 Qed.
 
 Lemma multi_sub_u_u_R_triple_B_le_A : uniq(k, a, b, t, j, u, bor, atmp, btmp', r0) ->
@@ -473,7 +473,7 @@ have X : u2Z [bor]_s = 0.
   tauto.
   exact: expZ_ge0.
   move: (min_lSum nk B) (min_lSum nk A') (max_lSum nk A) (max_lSum nk A') => ????.
-  rewrite ZbetaE; omega.
+  rewrite ZbetaE; lia.
 exists A'; repeat (split => //).
 rewrite (_ : 0 = u2Z zero32) in X; last by rewrite Z2uK.
 by move/u2Z_inj : X.

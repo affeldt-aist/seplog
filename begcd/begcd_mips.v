@@ -104,7 +104,7 @@ apply fwd_sim_seq with (fun st s _ => EGCD.C1 vu vv u v g st /\ uv_bound rk s u 
       split; last exact/negP.
       rewrite /EGCD.C2 in HC2.
       case: HC2 => Hu [Hv [Hg [u_g v_g]]].
-      rewrite -Zgcd_mult; last omega.
+      rewrite -Zgcd_mult; last lia.
       by rewrite mulZC u_g mulZC v_g.
     rewrite /uv_bound in Hcond *.
     Rewrite_reg rk s.
@@ -125,9 +125,9 @@ apply fwd_sim_seq with (fun st s _ => EGCD.C1 vu vv u v g st /\ uv_bound rk s u 
         case/andP : while_cond => while_cond _.
         move/eqP : while_cond => /Zmod_2_Zeven.
         case/Zeven_ex => uhalf Huhalf.
-        by rewrite [LHS]/= in Huhalf; omega.
+        by rewrite [LHS]/= in Huhalf; lia.
       - apply (@leZ_ltZ_trans ([u]_s0)%pseudo_expr); last by tauto.
-        apply Zdiv_le_upper_bound => //; omega.
+        apply Zdiv_le_upper_bound => //; lia.
     * have Hv0 : 0 < ([v ]_ st)%pseudo_expr < Zbeta (k - 1) by tauto.
       apply (syntax_m.seplog_m.semop_prop_m.while_preserves _ _ (fun st => 0 < ([v ]_ st)%pseudo_expr < Zbeta (k - 1)) _ _ _ _ Hv0 exec_pseudo) => {Hv0} s0 h0 s'0 h'0 Hv0 while_cond.
       move/syntax_m.seplog_m.semop_prop_m.exec_seq_assoc'.
@@ -146,9 +146,9 @@ apply fwd_sim_seq with (fun st s _ => EGCD.C1 vu vv u v g st /\ uv_bound rk s u 
         case/andP : while_cond => _.
         move/eqP/Zmod_2_Zeven.
         case/Zeven_ex => uhalf Huhalf.
-        rewrite [LHS]/= in Huhalf; omega.
+        rewrite [LHS]/= in Huhalf; lia.
       - apply (@leZ_ltZ_trans ([v]_s0)%pseudo_expr); last tauto.
-        apply Zdiv_le_upper_bound => //; omega.
+        apply Zdiv_le_upper_bound => //; lia.
   + eapply fwd_sim_stren; last first.
       apply sim_begcd_prelude.
       by rewrite [Equality.sort _]/= in Hvars *; Uniq_uniq O.
@@ -158,7 +158,7 @@ apply fwd_sim_seq with (fun st s _ => EGCD.C1 vu vv u v g st /\ uv_bound rk s u 
     rewrite /uv_bound in Hcond.
     decompose [and] Hcond; clear Hcond.
     subst k.
-    split; last omega.
+    split; last lia.
     case: HC2 => Hu [Hv [Hg [u_g v_g]]].
     by rewrite u_g.
   (** EGCD.init u v u1 u2 u3 v1 v2 v3 t1 t2 t3 *)

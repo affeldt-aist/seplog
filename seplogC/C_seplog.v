@@ -996,7 +996,7 @@ rewrite cat_cons mapstos_cons mapstos_cons -conA.
 apply monotony_L => s h H.
 have l1l2_ub' : Z_of_nat (size (t1 ++ l2) * sizeof t) < 2 ^^ 31.
   rewrite size_cat inj_mult inj_plus [size _]/= Z_S 2!Zmult_plus_distr_l mul1Z in l1l2_ub.
-  rewrite size_cat inj_mult inj_plus Zmult_plus_distr_l; omega.
+  rewrite size_cat inj_mult inj_plus Zmult_plus_distr_l; lia.
 move: (IH t1 l2 (e \+ [1]sc) Hn l1l2_ub' s h H); apply monotony_L.
 rewrite eq_pC_const.
 eapply add_pe_n_1; eauto.
@@ -1014,7 +1014,7 @@ inversion Hh1; subst.
 rewrite Z_of_nat_Zabs_nat in H1; last by apply min_u2Z.
 move: H1.
 set tmp := Z<=u _.
-move=> ?; omega.
+move=> ?; lia.
 Qed.
 
 (** mapstos_fit *)
@@ -1081,7 +1081,7 @@ split.
   apply con_c => //.
   by apply hp.disj_sym.
   apply emp_mapstos_fit_nil => //.
-  move: Hh2. set tmp := Z<=u _ => h2; omega.
+  move: Hh2. set tmp := Z<=u _ => h2; lia.
   rewrite /mapstos_fit -(hp.unionhe h1); by apply con_c.
 case=> h1 h2 h1dh2 Hh1 Hh2.
 rewrite /mapstos_fit hp.unionC //; apply con_c => //.
@@ -1119,14 +1119,14 @@ move=> s h; split.
     split=> //.
     case: Hh2 => Hh2 H'.
     rewrite [size _]/= mulnS inj_plus in Hh2.
-    rewrite [size _]/= muln1; omega.
+    rewrite [size _]/= muln1; lia.
   - case: Hh2 => Hh2 H'. rewrite /emp in H'; subst h2.
     rewrite /mapstos_fit.
     apply con_c => //.
       by apply hp.disjhe.
     split=> //.
     rewrite [size _]/= mulnS inj_plus in Hh2.
-    rewrite u2Z_ptyp2ptr_1; omega.
+    rewrite u2Z_ptyp2ptr_1; lia.
 case=> h1 h2 h1dh2 Hh1 Hh2.
 rewrite /mapstos_fit -(hp.unionhe (h1 \U h2)).
 apply con_c => //=.
@@ -1177,7 +1177,7 @@ have Hsize_ty_fit : (0 <= Z_of_nat (sizeof t) < 2 ^^ ptr_len)%Z.
   apply: leZ_ltZ_trans; last by apply Hh1_fit.
   rewrite /= inj_mult Z_S.
   move: (min_u2Z (ptr<=phy [e ]_ s)) => ?.
-  rewrite Zmult_plus_distr_r mulZ1 addZA -inj_mult; omega.
+  rewrite Zmult_plus_distr_r mulZ1 addZA -inj_mult; lia.
 move A2 : ([e ]_ s) => a2.
 destruct a2 as [a2 Ha2] => /=.
 have Ha2' : size a2 = sizeof_ptr by move: (Ha2); rewrite sizeof_ptyp.
@@ -1195,7 +1195,7 @@ apply IH => //.
 - apply: leZ_ltZ_trans; last exact: l1l2_ub.
   rewrite /= 2!inj_mult.
   apply leZ_wpmul2r; first exact: Zle_0_nat.
-  rewrite Z_S; omega.
+  rewrite Z_S; lia.
 - apply con_c => //.
   + rewrite -h11Uh12 in h1dh2.
     by case/hp.disj_sym/hp.disj_union_inv : h1dh2 => _ /hp.disj_sym.
@@ -1235,13 +1235,13 @@ have Htmp3 : s2Z (Z2s 32 (Z_of_nat n)) = Z_of_nat n.
   rewrite Z2sK //; split.
     apply (@leZ_trans Z0) => //; by apply Zle_0_nat.
   apply: ltZ_trans; last by apply Htmp.
-  rewrite Z_S; omega.
+  rewrite Z_S; lia.
 rewrite add_prodA.
 - congr (phy<=ptr _ (add_prod _ _ _)).
   rewrite Htmp2 s2Z_add.
     by rewrite Z2sK // Htmp3 Z_S addZC.
   rewrite Htmp3 Z2sK //; split.
-    apply (@leZ_trans Z0) => //; omega.
+    apply (@leZ_trans Z0) => //; lia.
   apply: (leZ_ltZ_trans _ Htmp).
   rewrite Z_S addZC; exact/leZZ.
 - by apply sizeof_gt0.
@@ -1250,21 +1250,21 @@ rewrite add_prodA.
   apply: leZ_trans; last by apply ltZW, l1l2_ub.
   rewrite inj_mult -[X in (X <= _)%Z]mul1Z.
   apply leZ_wpmul2r; first exact: Zle_0_nat.
-  rewrite size_cat [size _]/= Hn Z_S; omega.
+  rewrite size_cat [size _]/= Hn Z_S; lia.
 - rewrite Htmp3; split.
     rewrite -inj_mult; exact: Zle_0_nat.
   apply (@leZ_ltZ_trans (2 ^^ 30)%Z) => //.
   apply: leZ_trans; last by apply ltZW, l1l2_ub.
   rewrite inj_mult mulZC.
   apply leZ_wpmul2r; first exact: Zle_0_nat.
-  rewrite size_cat [size _]/= inj_plus Z_S Hn; omega.
+  rewrite size_cat [size _]/= inj_plus Z_S Hn; lia.
 - rewrite Z2sK // Htmp3 -Zmult_plus_distr_r mulZC addZC -Z_S; split.
     rewrite -inj_mult; exact: Zle_0_nat.
   apply (@leZ_ltZ_trans (2 ^^ 30)%Z) => //.
   apply: leZ_trans; last by apply ltZW, l1l2_ub.
   rewrite inj_mult size_cat [size _]/= Hn inj_plus.
   apply leZ_wpmul2r; first exact: Zle_0_nat.
-  omega.
+  lia.
 Opaque eval.
 Qed.
 

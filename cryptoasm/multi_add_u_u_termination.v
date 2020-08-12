@@ -40,10 +40,10 @@ elim.
   eapply exist.
   apply while.exec_while_false.
   rewrite /= in Hk *.
-  apply/negPn/eqP; omega.
+  apply/negPn/eqP; lia.
 - move=> k IH s0 Hk h.
   apply exists_while.
-  + rewrite /=; apply/eqP; omegaz. (*rewrite Z_S in Hk; omega *)
+  + rewrite /=; apply/eqP; omegaz. (*rewrite Z_S in Hk; lia *)
   + apply exists_seq_P2 with (fun s => u2Z [rk]_(fst s) - u2Z [a2]_(fst s) = Z_of_nat k).
     * exists_lwxs l_m_ H_l_m_ z_m_ H_z_m_.
       apply exists_maddu_seq_P.
@@ -62,8 +62,8 @@ elim.
       repeat Reg_upd.
       rewrite Z_S in Hk.
       rewrite sext_Z2u // u2Z_add_Z2u //; last first.
-        move: (min_u2Z [a2]_s0) (min_u2Z [rk]_s0) (max_u2Z [a2]_s0) (max_u2Z [rk]_s0) => ? ? ? ?; omega.
-      omega.
+        move: (min_u2Z [a2]_s0) (min_u2Z [rk]_s0) (max_u2Z [a2]_s0) (max_u2Z [rk]_s0) => ? ? ? ?; lia.
+      lia.
     * move=> [si hi] Hi.
       exact: IH.
 Qed.

@@ -199,7 +199,7 @@ apply fwd_sim_seq with (fun st s _ => (EGCD.C2 vu vv u v g st /\ EGCD.C3 vu vv u
               move/syntax_m.seplog_m.semop_prop_m.exec_cmd0_inv : exec_pseudo.
               case/syntax_m.seplog_m.exec0_assign_inv => _ ->.
               repeat syntax_m.seplog_m.assert_m.expr_m.Store_upd.
-              split; first by move=> abs; rewrite abs Z2uK // in Hcond; omega.
+              split; first by move=> abs; rewrite abs Z2uK // in Hcond; lia.
               repeat (split; first by tauto).
               split; first by move: (Zbeta_ge0 k) => /= ?; ssromega.
               ssromega.

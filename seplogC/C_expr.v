@@ -1027,20 +1027,20 @@ case/optr_of_i8_Some => x es''.
 rewrite (optr_of_i8_bij3 _ _ _ es'') phy_of_ptrK /ptr_of_phy /= es'' /=.
 have ty_fit : 0 <= Z_of_nat (n.+1 * sizeof t) < 2 ^^ ptr_len.
   split; first by apply Zle_0_nat.
-  move: (min_u2Z (ptr<=phy [e ]_ s)) => ?; omega.
+  move: (min_u2Z (ptr<=phy [e ]_ s)) => ?; lia.
 rewrite /add_prod Z2sK; last by rewrite Z_S in Hn.
 rewrite (_ : 0 <=? (Z_of_nat n + 1) = true); last by rewrite -Z_S.
 rewrite u2Z_add.
 + rewrite Z2uK.
     rewrite mulSn inj_plus inj_mult; ring.
   rewrite mulSn inj_plus inj_mult in ty_fit.
-  rewrite Zmult_plus_distr_r Zmult_1_r mulZC; omega.
+  rewrite Zmult_plus_distr_r Zmult_1_r mulZC; lia.
 + rewrite Z2uK //.
     rewrite Hes [u2Z _]/= /ptr_of_phy [u2Z _]/= es'' [u2Z _]/= in H.
     rewrite inj_mult Z_S in H.
-    rewrite mulZC; omega.
+    rewrite mulZC; lia.
   rewrite inj_mult Z_S in ty_fit.
-  rewrite mulZC; omega.
+  rewrite mulZC; lia.
 Opaque eval.
 Qed.
 
@@ -1445,7 +1445,7 @@ rewrite -Z.ltb_antisym.
 move/ltZP.
 case/Zlt_mult_0_inv.
   case => abs _.
-  move: (min_u2Z h) => ?; omega.
+  move: (min_u2Z h) => ?; lia.
 by case.
 Opaque eval beval.
 Qed.

@@ -273,7 +273,7 @@ CoInductive wp_lookup_fldp
 
 Notation "P '`{' x '<-' e '.->' f '}''" := (wp_lookup_fldp x _ e _ _ f _ P) (at level 5, x, e at next level, format "'[hv ' P  '/  ' `{  x  <-  e  .->  f }' ']'") : C_assert_scope.
 
-Notation "P '`{' x '<-' e '.->' f '}''" := (wp_lookup_fldp x erefl e _ erefl f erefl P) (at level 5, x, e at next level, format "'[hv ' P  '/  ' `{  x  <-  e  .->  f }' ']'", only parsing) : C_assert_scope.
+Notation "P '`{' x '<-' e '.->' f '}''" := (wp_lookup_fldp x erefl e _ erefl f erefl P) (at level 5, x, e at next level, only parsing) : C_assert_scope.
 
 Section ent_R_lookup_trans_sect.
 
@@ -1594,13 +1594,13 @@ split => //.
 Transparent eval beval.
 move: H1 => /=.
 move Hc : ( [ c ]_s ) => [hc Hhc].
-rewrite 2!i8_of_i32K Z2sK; last omega.
-rewrite Z2sK; last omega.
+rewrite 2!i8_of_i32K Z2sK; last lia.
+rewrite Z2sK; last lia.
 case: ifP => [H1 _ | ]; last by rewrite is_zero_0.
 case: ifP; first by rewrite not_is_zero_1.
 move/leZP/Znot_le_gt => H2.
 exfalso.
-move/leZP in H1; omega.
+move/leZP in H1; lia.
 Opaque eval beval.
 Qed.
 
@@ -1614,13 +1614,13 @@ split => //.
 Transparent eval beval.
 move: H1 => /=.
 move Hc : ( [ c ]_s ) => [hc Hhc].
-rewrite 2!i8_of_i32K Z2sK; last omega.
-rewrite Z2sK; last omega.
+rewrite 2!i8_of_i32K Z2sK; last lia.
+rewrite Z2sK; last lia.
 case: ifP => [H1 _ | ]; last by rewrite is_zero_0.
 case: ifP; first by rewrite not_is_zero_1.
 move/leZP/Znot_le_gt => H2.
 exfalso.
-move/leZP in H1; omega.
+move/leZP in H1; lia.
 Opaque eval beval.
 Qed.
 

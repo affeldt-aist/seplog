@@ -401,7 +401,7 @@ split.
   split; first tauto.
   apply/(ltZ_trans (proj2 y_bounds))/Zbeta_lt; ssromega.
 apply: leZ_ltZ_trans; first exact: Z.abs_triangle.
-rewrite Z.abs_opp (geZ0_norm ([y ]_ s)%pseudo_expr); last omega.
+rewrite Z.abs_opp (geZ0_norm ([y ]_ s)%pseudo_expr); last lia.
 apply: ltZ_trans.
 - apply ltZ_add; [exact: x_max | exact: (proj2 y_bounds)].
 - rewrite /Zbeta Zpower_plus.

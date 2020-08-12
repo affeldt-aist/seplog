@@ -1,7 +1,7 @@
 (* seplog (c) AIST 2005-2013. R. Affeldt, N. Marti, et al. GNU GPLv3. *)
 (* seplog (c) AIST 2014-2018. R. Affeldt et al. GNU GPLv3. *)
 From mathcomp Require Import ssreflect ssrfun ssrbool eqtype ssrnat seq.
-Require Import ZArith_ext ZArith.
+Require Import ZArith_ext ZArith Lia.
 Require Import bipl seplog integral_type.
 Require Import topsy_hm topsy_hmFree_prg.
 
@@ -225,7 +225,7 @@ split.
   - apply In_hl_or_app; by left.
   - rewrite /= in H3.
     case: ifP H3 => //.
-      case/andP => /andP [/eqP ?] _ _; exfalso; omega. 
+      case/andP => /andP [/eqP ?] _ _; exfalso; lia. 
     move=> ? ?.
     apply In_hl_or_app; right => /=.
     by case: ifP.

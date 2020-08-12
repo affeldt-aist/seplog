@@ -180,7 +180,7 @@ repeat Reg_upd; repeat (split; trivial).
   move: (shrl_lt (A' `32_ ni) 31) => /=.
   move X : (u2Z _) => x Hx.
   have [Y|Y] : x = 0 \/ x = 1.
-    move: (min_u2Z (A' `32_ ni `>> 31)) => Hy; omega.
+    move: (min_u2Z (A' `32_ ni `>> 31)) => Hy; lia.
   subst x.
   rewrite (_ : 0 = u2Z (Z2u 32 0)) in Y; last by rewrite Z2uK.
   apply u2Z_inj in Y.

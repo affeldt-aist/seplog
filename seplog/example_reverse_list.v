@@ -124,7 +124,7 @@ inversion_clear Hmem_h1.
 - subst l2.
   exists l1, tl, hd; split; first by [].
   exists x1, x2; repeat (split => //).
-  + apply (list_seplog_hd_neq (hd :: tl) (rev l1) _ _ s h); last by omega.
+  + apply (list_seplog_hd_neq (hd :: tl) (rev l1) _ _ s h); last by lia.
     Compose_sepcon h1 h2 => //.
     by eapply list_next; eauto.
   + Compose_sepcon h1 h2 => //.

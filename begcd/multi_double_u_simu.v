@@ -133,7 +133,7 @@ split.
         case : (ltnP 0 k) => Hk'; last first.
           rewrite leqn0 in Hk'. move/eqP in Hk'.
           rewrite -/k Hk' ZbetaE mul0n /= in X2.
-          have {}X2 : ([x]_s = 0)%pseudo_expr by omega.
+          have {}X2 : ([x]_s = 0)%pseudo_expr by lia.
           rewrite X2 mulZ0; by apply Zbeta_gt0.
         - rewrite -k_k' ZbetaE (_ : k * 32 = S (k * 32 - 1))%nat; last first.
             by rewrite -subSn // ?subn1 // muln_gt0 Hk'.
@@ -185,7 +185,7 @@ split.
           move/assert_m.mapstos_inv_addr : X3.
           by apply Zmod_divide.
         + rewrite /vx in X1.
-          rewrite [eval _ _]/= Hmul2_2; omega.
+          rewrite [eval _ _]/= Hmul2_2; lia.
         + by [].
         + by apply min_u2Z.
 - apply (state_mint_part2_one_variable_unsign _ _ _ _ _ _ _ _ _ s_st_h).

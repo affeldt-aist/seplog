@@ -9,7 +9,7 @@
  * 5. Resolution tactic
  *)
 
-Require Import Omega ZArith.
+Require Import ZArith.
 From mathcomp Require Import ssreflect ssrbool seq eqtype ssrnat.
 Require Import Max_ext ssrnat_ext.
 Require Import bipl seplog integral_type.

@@ -70,7 +70,7 @@ move=> s h [[C [ni [HlenC [Hone [Hra [Hrb [Hrc [Hrk [Hmem [Hri [Hik [Hm [Hrt Hin
 exists C; repeat (split; trivial).
 apply con_Q_con_TT with (var_e a |--> A ** var_e b |--> B).
 by assoc_comm Hmem.
-have ? : ni = nk by omega.
+have ? : ni = nk by lia.
 by subst ni.
 
 (**    addiu z t zero16;*)
@@ -467,7 +467,7 @@ apply hoare_mflhxu with (fun s h => exists C ni,
 move=> s h [[C [ni [nj [HlenC [Hone [Hra [Hrb [Hrc [Hrk [Hmem [Hri [Hrj [Hik [Hjk [Hm [Hrt [Hrz [Hratmp Hinv]]]]]]]]]]]]]]]]]] Hjk'];
   rewrite /= in Hjk'. move/negPn/eqP in Hjk'.
 
-have ? : nj = nk by omega. subst nj.
+have ? : nj = nk by lia. subst nj.
 
 exists C, ni; repeat Reg_upd; repeat (split; trivial).
 by Assert_upd.
@@ -475,7 +475,7 @@ by Assert_upd.
 apply store.utoZ_multi_null.
 rewrite store.mflhxu_upd store.utoZ_upd.
 have H : store.utoZ (store.mflhxu_op s) < 1 by apply store.mflhxu_kbeta1_utoZ.
-move: (store.utoZ_pos (store.mflhxu_op s)) => ?; omega.
+move: (store.utoZ_pos (store.mflhxu_op s)) => ?; lia.
 
 (**    sw ctmp zero16 z; *)
 

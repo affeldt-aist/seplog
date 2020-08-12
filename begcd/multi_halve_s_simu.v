@@ -88,7 +88,7 @@ split.
         rewrite Zdiv_small //; last first.
           move: (shrl_lt ([a3 ]_ s')%asm_expr 31) => /= ?.
           move: (min_u2Z (([a3 ]_ s')%asm_expr `>> 31)) => ?.
-          omega.
+          lia.
         by rewrite addZ0.
       - rewrite /ZIT.div.
         move/syntax_m.seplog_m.semop_prop_m.exec_cmd0_inv : exec_pseudo.
@@ -99,7 +99,7 @@ split.
         rewrite Zdiv_small //; last first.
           move: (shrl_lt ([a3 ]_ s')%asm_expr 31) => /= ?.
           move: (min_u2Z (([a3 ]_ s')%asm_expr `>> 31)) => ?.
-          omega.
+          lia.
         by rewrite addZ0.
       - apply con_heap_mint_signed_cons with h1 => //.
         rewrite h1Uh2.

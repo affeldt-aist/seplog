@@ -137,7 +137,7 @@ split.
         syntax_m.seplog_m.assert_m.expr_m.Store_upd.
         rewrite /ZIT.div.
         apply (@leZ_ltZ_trans ([ x ]_s)%pseudo_expr) => //.
-        apply Zdiv_le_upper_bound => //; omega.
+        apply Zdiv_le_upper_bound => //; lia.
         rewrite -Hnknk'; tauto.
     - move: (Hdiv2_4) => Hdiv2_4_save.
       apply mapstos_inv_list2heap in Hdiv2_4 => //; last first.

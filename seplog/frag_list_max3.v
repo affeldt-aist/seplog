@@ -1,6 +1,6 @@
 (* seplog (c) AIST 2005-2013. R. Affeldt, N. Marti, et al. GNU GPLv3. *)
 (* seplog (c) AIST 2014-2018. R. Affeldt et al. GNU GPLv3. *)
-Require Import Max Omega List ZArith EqNat.
+Require Import Max List ZArith EqNat.
 Require Import seplog.
 Require Import expr_b_dp.
 Require Import frag_list_triple.

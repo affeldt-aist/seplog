@@ -1,6 +1,6 @@
 (* seplog (c) AIST 2005-2013. R. Affeldt, N. Marti, et al. GNU GPLv3. *)
 (* seplog (c) AIST 2014-2018. R. Affeldt et al. GNU GPLv3. *)
-Require Import Omega.
+Require Import Lia.
 From mathcomp Require Import ssreflect ssrbool.
 Require while.
 Require Import goto sgoto.
@@ -223,7 +223,7 @@ elim .
     pc = l /\ (wp0 c (Q (S l))) s h \/
     pc <> l /\ Q pc s h) (Q' := Q); last by apply hoare_cmd.
   + move=> l0 s0 h0 Hwlp.
-    have [l0_l | l_l0] : l0 = l \/ l <> l0 by unfold label; omega.
+    have [l0_l | l_l0] : l0 = l \/ l <> l0 by unfold label; lia.
     * left; subst; split => //.
       rewrite /wlp_semantics in Hwlp.
       case: (cmd0_terminate c (s0, h0)) => s' Hs'.
@@ -245,10 +245,10 @@ elim .
         pc = l /\ (Q j s h \/ j = l) \/
         pc <> l /\ Q pc s h) (Q' := Q); last by apply hoare_jmp.
     * move=> l0 s0 h0 Hwlp.
-      have [l0_l | l_l0] : l0 = l \/ l <> l0 by unfold label; omega.
+      have [l0_l | l_l0] : l0 = l \/ l <> l0 by unfold label; lia.
       - subst; left; split => //.
         rewrite /wlp_semantics in Hwlp.
-        have [j_l | j_l] : j = l \/ j <> l by unfold label; omega.
+        have [j_l | j_l] : j = l \/ j <> l by unfold label; lia.
         + by subst; auto.
         + left; apply (proj2 Hwlp).
           by eapply exec_sgoto_jmp; eauto.
@@ -262,15 +262,15 @@ elim .
           eval_b t (s, h) /\ ( Q j s h \/ j = l)) \/
         pc <> l /\ Q pc s h) (Q' := Q); last by apply hoare_branch.
     + move=> l0 s0 h0 Hwlp.
-      have [l0_l | l_l0] : l0 = l \/ l <> l0 by unfold label; omega.
+      have [l0_l | l_l0] : l0 = l \/ l <> l0 by unfold label; lia.
       * subst; left; split => //.
         case/boolP : (eval_b t (s0, h0)) => Heval.
         - right; split => //.
-          have [j_l | j_l] : j = l \/ j <> l by unfold label; omega.
+          have [j_l | j_l] : j = l \/ j <> l by unfold label; lia.
           - subst; by right.
           - left; apply (proj2 Hwlp).
             by eapply exec_sgoto_cjmp_true; eauto.
-        - left; split; first by done.
+        - left; split; first by [].
           rewrite /wlp_semantics in Hwlp.
           apply (proj2 Hwlp).
           by eapply exec_sgoto_cjmp_false; eauto.

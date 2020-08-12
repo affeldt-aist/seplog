@@ -1,6 +1,6 @@
 (* seplog (c) AIST 2005-2013. R. Affeldt, N. Marti, et al. GNU GPLv3. *)
 (* seplog (c) AIST 2014-2018. R. Affeldt et al. GNU GPLv3. *)
-Require Import ZArith.
+Require Import ZArith Lia.
 From mathcomp Require Import ssreflect ssrfun ssrbool eqtype ssrnat seq.
 Require Import seq_ext.
 Require Import machine_int.
@@ -353,7 +353,7 @@ elim=> //; clear P c Q.
     rewrite heap.get_proj //.
     rewrite /mips_seplog.wp_lw in Hpre.
     case: Hpre => p' [] Hp' [] z' [] Hz' HQ.
-    have ? : p = p' by rewrite [u2Z _]/= in Hp'; omega.
+    have ? : p = p' by rewrite [u2Z _]/= in Hp'; lia.
     subst p'.
     apply/seq_ext.inP.
     move/heap.get_Some_in_dom : Hz'; move/seq_ext.inP.
@@ -368,7 +368,7 @@ elim=> //; clear P c Q.
     rewrite heap.get_proj //.
     rewrite /mips_seplog.wp_lwxs in Hpre.
     case: Hpre => p' [] Hp' [] z' [] Hz' HQ.
-    have ? : p = p' by rewrite [u2Z _]/= in Hp'; omega.
+    have ? : p = p' by rewrite [u2Z _]/= in Hp'; lia.
     subst p'.
     apply/seq_ext.inP.
     move/heap.get_Some_in_dom : Hz'; move/seq_ext.inP.
@@ -427,7 +427,7 @@ elim=> //; clear P c Q.
     rewrite heap.get_proj //.
     rewrite /mips_seplog.wp_sw in Hpre.
     case: Hpre => p' [] Hp' [] [] z' Hz' HQ.
-    have ? : p = p' by rewrite [u2Z _]/= in Hp'; omega.
+    have ? : p = p' by rewrite [u2Z _]/= in Hp'; lia.
     subst p'.
     apply/seq_ext.inP.
     move/heap.get_Some_in_dom : Hz'; move/seq_ext.inP.
@@ -540,7 +540,7 @@ case=> //; clear s c s'.
   case/exec0_lw_inv.
   + case=> p_ [Hp_ [z_ [Hz_ []] ]] Heq.
     split=> //.
-    have {Hp_}X : p = p_ by omega. subst p_.
+    have {Hp_}X : p = p_ by lia. subst p_.
     move/heap.get_Some_in_dom : (Hz_); move/seq_ext.inP.
     move/seq_ext.incP : (heap.inc_dom_proj d h) => X; move/X => p_d.
     rewrite heap.get_proj // in Hz_; last by apply/seq_ext.inP.
@@ -554,13 +554,13 @@ case=> //; clear s c s'.
   case/exec0_lwxs_inv.
   + case=> p_ [] Hp_ [] z_ [] Hz_ [] -> ->.
     split=> //.
-    have Hpp_ : p = p_ by omega.
+    have Hpp_ : p = p_ by lia.
     subst p_.
     move/heap.get_Some_in_dom : (Hz_); move/seq_ext.inP.
     move/seq_ext.incP : (heap.inc_dom_proj d h) => X; move/X => Hp_in_d.
     rewrite heap.get_proj // in Hz_; last by apply/seq_ext.inP.
     rewrite Hz in Hz_; by case : Hz_ => ->.
-  + by case.    
+  + by case.
 - move=> st h rs rt st_ h_ st' h' d st'_proj h'_proj [] <- <- [] <- <-.
   by case/exec0_maddu_inv=> -> ->.
 - move=> st h rd st_ h_ st' h' d st'_proj h'_proj [] <- <- [] <- <-.
@@ -618,7 +618,7 @@ case=> //; clear s c s'.
   case/exec0_sw_inv.
   (* no error *)
   + case=> p_ [Hp_ [z_ [Hz_ []]]] Heq.
-    have {Hp_}X : p = p_ by omega. subst p_.
+    have {Hp_}X : p = p_ by lia. subst p_.
     move/heap.get_Some_in_dom : (Hz_); move/seq_ext.inP.
     move/seq_ext.incP : (heap.inc_dom_proj d h) => X; move/X => Hp_in_d.
     rewrite heap.get_proj // in Hz_; last by apply/seq_ext.inP.
@@ -1000,7 +1000,7 @@ case=> //; clear s c s'.
     apply exec0_lw_error.
     move=> [l [Hl [p_ Hp_]]].
     rewrite Hp in Hl.
-    have {Hl}Y : p = l by omega.
+    have {Hl}Y : p = l by lia.
     subst l.
     by rewrite heap.get_proj_None in Hp_.
 - move=> st h rt off base Hcond st_ h_ d [] -> ->.
@@ -1025,7 +1025,7 @@ case=> //; clear s c s'.
     apply exec0_lwxs_error.
     move=> [l [Hl [p_ Hp_]]].
     rewrite Hp in Hl.
-    have {Hl}Y : p = l by omega.
+    have {Hl}Y : p = l by lia.
     subst l.
     by rewrite heap.get_proj_None in Hp_.
 - move=> st h rt off base Hcond st_ h_ d [] -> ->.
@@ -1132,7 +1132,7 @@ case=> //; clear s c s'.
     constructor.
     apply exec0_sw_err.
     move=> [l [Hl [z' Hz']]].
-    have X' : p = l by omega.
+    have X' : p = l by lia.
     subst p.
     by rewrite heap.get_proj_None in Hz'.
 - move=> st h rt off base H st_ h_ d [] -> ->.

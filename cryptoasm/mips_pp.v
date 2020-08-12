@@ -1,7 +1,7 @@
 (* seplog (c) AIST 2005-2013. R. Affeldt, N. Marti, et al. GNU GPLv3. *)
 (* seplog (c) AIST 2014-2018. R. Affeldt et al. GNU GPLv3. *)
 From mathcomp Require Import ssreflect.
-Require Import Coq.Program.Wf String Ascii.
+Require Import Coq.Program.Wf String Ascii Lia.
 Require Import ZArith_ext.
 Require Import machine_int.
 Import MachineInt.
@@ -217,7 +217,7 @@ Proof.
 rewrite /si2s => z H.
 replace (fun s : string => Z_to_string_aux (s2Z (sext 16 (Z2u 16 z))) s) with (Z_to_string_aux (s2Z (sext 16 (Z2u 16 z)))) => //.
 f_equal.
-rewrite sext_s2Z s2Z_u2Z_pos' Z2uK //; simpl in *; omega.
+rewrite sext_s2Z s2Z_u2Z_pos' Z2uK //; simpl in *; lia.
 Qed.
 
 Set Printing Width 99999.

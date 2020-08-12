@@ -1,7 +1,7 @@
 (* seplog (c) AIST 2005-2013. R. Affeldt, N. Marti, et al. GNU GPLv3. *)
 (* seplog (c) AIST 2014-2018. R. Affeldt et al. GNU GPLv3. *)
 From mathcomp Require Import ssreflect eqtype.
-Require Import List Max Omega ZArith EqNat.
+Require Import List Max ZArith EqNat.
 Require Import bipl seplog.
 Require Import expr_b_dp.
 Import seplog_Z_m.

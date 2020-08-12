@@ -47,7 +47,7 @@ induction e; simpl.
 Defined.
 Global Opaque ground_exp.
 
-Notation "'[' e ']ge'" := (@ground_exp _ _ _ e (Logic.eq_refl _)) (at level 9, format "'[' [  e  ]ge ']'", only parsing) : C_expr_scope.
+Notation "'[' e ']ge'" := (@ground_exp _ _ _ e (Logic.eq_refl _)) (at level 9, only parsing) : C_expr_scope.
 Notation "'[' e ']ge'" := (ground_exp e _) (at level 9, format "'[' [  e  ]ge ']'"): C_expr_scope.
 
 Lemma ground_exp_sem {g} {ts : g.-env} (s : store ts) {ty : g.-typ} :

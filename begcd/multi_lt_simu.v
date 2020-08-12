@@ -102,7 +102,7 @@ split => u_z.
   * (* absurd *) case: Hret => u_z' _.
     rewrite /= in u_z.
     move/ZIT.geP : u_z; rewrite /ZIT.ge => u_z.
-    exfalso; omega.
+    exfalso; lia.
   * apply/eqP.
     rewrite store.get_r0.
     f_equal.

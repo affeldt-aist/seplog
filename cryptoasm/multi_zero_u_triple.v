@@ -97,7 +97,7 @@ have Htmp : [ var_e Z_ \+ int_e (sext 16 zero16) ]e_ s = [ var_e z \+ int_e (Z2u
   rewrite u2Z_add_Z_of_nat.
   by rewrite inj_mult.
   rewrite -Zbeta1E inj_mult inj_minus1 //; last exact/leP.
-  rewrite mulZDr [Zmult]lock /= -lock r_z; move: (min_u2Z vz) => ?; omega.
+  rewrite mulZDr [Zmult]lock /= -lock r_z; move: (min_u2Z vz) => ?; lia.
 
 exists (int_e hd).
 
@@ -129,7 +129,7 @@ rewrite sext_Z2u // u2Z_add_Z2u //.
 - rewrite -Zbeta1E r_Z inj_minus1; last by case: Hnext => _ /leP.
   rewrite r_z.
   have ? : 0 < Z<=nat next by apply Z_of_nat_lt0; case: Hnext.
-  omega.
+  lia.
 by Assert_upd.
 
 (**    addiu ext ext mone16). *)
@@ -144,7 +144,7 @@ repeat (split; trivial).
 rewrite sext_Z2s // u2Z_add_Z2s //.
   rewrite inj_minus1; last exact/leP.
   by rewrite r_ext.
-suff ? : 0 < Z<=u [ext]_s by omega.
+suff ? : 0 < Z<=u [ext]_s by lia.
 rewrite r_ext.
 exact/Z_of_nat_lt0.
 by rewrite subn1 (leq_trans _ Hnext2) // leq_pred.

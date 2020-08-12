@@ -256,7 +256,7 @@ set TAIL := S74.client_hello :: _.
 rewrite (_ : decode _ _ = (true, TAIL)); last first.
   rewrite /decode /= ifT //.
   apply/leZP.
-  rewrite 2!Z_S; omega.
+  rewrite 2!Z_S; lia.
 rewrite (_ : S621.proverp _ = true); last first.
   rewrite /= /S621.proverp /= /S621.is_maj /= /S621.is_min /=.
   by rewrite !inE Hminver /= !eqxx !(orbT, orTb).
@@ -268,7 +268,7 @@ set TAIL := S621.SSLv30_maj :: _.
 rewrite (_ : decode _ _ = (true, TAIL)); last first.
   rewrite /decode /= ifT //.
   apply/leZP.
-  rewrite 3!Z_S; omega.
+  rewrite 3!Z_S; lia.
 rewrite (_ : decodep _ _ = true) //= {}/TAIL.
 set TAIL := l `_ sid :: _.
 rewrite (_ : S621.proverp _ = true); last first.
@@ -413,8 +413,8 @@ apply hoare_seq with error.
   Bbang2sbang.
   apply ent_R_sbang_con; last by [].
   Rewrite_ground_bexp @sequiv_bop_re_sc => //=.
-    simpl expZ in Herr_msg; omega.
-  rewrite (_ : err_msg == 0 = false); last by apply/negbTE/eqP; omega.
+    simpl expZ in Herr_msg; lia.
+  rewrite (_ : err_msg == 0 = false); last by apply/negbTE/eqP; lia.
   by apply: bneg_0uc.
 + by apply skip_hoare, ent_R_or_1.
 Qed.

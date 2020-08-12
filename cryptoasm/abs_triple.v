@@ -1,5 +1,6 @@
 (* seplog (c) AIST 2005-2013. R. Affeldt, N. Marti, et al. GNU GPLv3. *)
 (* seplog (c) AIST 2014-2018. R. Affeldt et al. GNU GPLv3. *)
+Require Import Lia.
 From mathcomp Require Import ssreflect ssrbool.
 Require Import ZArith uniq_tac machine_int.
 Import MachineInt.
@@ -78,7 +79,7 @@ move=> s h [] H ?; subst h.
 case: H => [ [H1 [a0 rxvx]] | [H1 [H2 H3]]]; rewrite /wp_subu; split => //; Reg_upd.
 - by rewrite a0 cplt2_zero addi0 rxvx Z.abs_eq.
 - rewrite H3 H2 cplt2_1s not_add_1_cplt2 // s2Z_cplt2 //.
-  rewrite Zabs_non_eq //; omega.
+  rewrite Zabs_non_eq //; lia.
   by rewrite weirdE2.
 Qed.
 
@@ -139,6 +140,6 @@ apply mips_contrib.hoare_subu'.
 move=> s h [] [H1 [H2 H3]]; rewrite /wp_subu; Reg_upd.
 - by rewrite H2 cplt2_zero addi0 H3 Z.abs_eq.
 - rewrite H3 H2 cplt2_1s not_add_1_cplt2 // s2Z_cplt2 //.
-  rewrite Zabs_non_eq //; omega.
+  rewrite Zabs_non_eq //; lia.
   by rewrite weirdE2.
 Qed.

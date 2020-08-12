@@ -161,11 +161,11 @@ apply currying => h'' Hh''.
 exists B, (Z2s 32 (Z_of_nat nk)).
 repeat (split => //).
 
-rewrite Z2sK //; last omega.
-rewrite (proj2 (Zsgn_pos (Z_of_nat nk))); omega.
+rewrite Z2sK //; last lia.
+rewrite (proj2 (Zsgn_pos (Z_of_nat nk))); lia.
 
-rewrite Z2sK //; last omega.
-rewrite Hslen /= (proj2 (Zsgn_pos (Z_of_nat nk))); last omega.
+rewrite Z2sK //; last lia.
+rewrite Hslen /= (proj2 (Zsgn_pos (Z_of_nat nk))); last lia.
 by rewrite (proj2 (Zsgn_pos (\S_{ nk } B))).
 
 rewrite conCE in Hh''.
@@ -175,10 +175,10 @@ apply mapsto_ext => /=.
 by rewrite sext_Z2u // addi0.
 apply u2Z_inj.
 rewrite Hk u2Z_Z2s_pos //.
-split; by [omega | apply: @ltZ_leZ_trans; [exact: Hnk' | ]].
+split; by [lia | apply: @ltZ_leZ_trans; [exact: Hnk' | ]].
 by rewrite Ha3 Z2uK.
-rewrite Z2sK //; last omega.
-rewrite (proj2 (Zsgn_pos (Z_of_nat nk))); last omega.
+rewrite Z2sK //; last lia.
+rewrite (proj2 (Zsgn_pos (Z_of_nat nk))); last lia.
 by rewrite mul1Z Hslen /= Ha3 Z2uK // mul0Z addZ0.
 
 (** addiu a3 r0 one16; *)
@@ -199,7 +199,7 @@ case: Ha1'' => [Ha1'' | [ // | Ha1'']].
 rewrite (_ : 0 = s2Z zero32) in Ha1''; last by rewrite s2Z_u2Z_pos' Z2uK.
 move/s2Z_inj in Ha1''.
 by rewrite Ha1'' Z2uK in Ha1'.
-omega.
+lia.
 by rewrite add0i sext_Z2u.
 by Assert_upd.
 
@@ -246,7 +246,7 @@ split; first by heap_tac_m.Equal.
 repeat (split => //).
 move: Hh2; apply monotony => h' //; exact: mapstos_ext.
 rewrite -Hsgn; by rewrite Hsgn'.
-rewrite /=; apply/leZP; omega.
+rewrite /=; apply/leZP; lia.
 by rewrite -Hsgn Hsgn'.
 
 rewrite /while.entails => s h [h1 [h2 [h1_d_h2 [h1_U_h2 [[A' [A'_nk [r_b [HX [Hh1 [Hlo Hsum]]]]]] [Hsgn [r_a Hh2]]]]]]].
@@ -260,7 +260,7 @@ split; first by [].
 rewrite conCE.
 move: Hh1; apply monotony => h' //; exact: mapstos_ext.
 rewrite Hsgn mul1Z (proj2 (Zsgn_pos (\S_{ nk } A + \S_{ nk } B))) //.
-move: (min_lSum nk A) => ?; omega.
+move: (min_lSum nk A) => ?; lia.
 by rewrite Hsgn 2!mul1Z.
 
 (** mflo a3 *)
@@ -308,8 +308,8 @@ move: Hh2; apply monotony => // h'; exact: mapstos_ext.
 repeat (split => //).
 rewrite /= in Ha1.
 move/leZP in Ha1.
-case: Hsgn' => Hsgn'; first omega.
-case: Hsgn' => Hsgn'; first omega.
+case: Hsgn' => Hsgn'; first lia.
+case: Hsgn' => Hsgn'; first lia.
 by rewrite -HZgn Hsgn'.
 
 rewrite /while.entails => s h [h1 [h2 [h1_d_h2 [h1_U_h2 [Hh1 Hh2]]]]].
@@ -426,7 +426,7 @@ apply frame_rule_R; last 2 first.
 
 apply multi_sub_u_u_R_triple_B_le_A => //.
 by Uniq_uniq r0.
-omega.
+lia.
 
 rewrite /while.entails => s h [Ha [Hb [Hk [HX [Hsgn Hmem]]]]].
 rewrite conAE in Hmem.
@@ -471,7 +471,7 @@ case: Hmem => h1 [h2 [h1_d_h2 [h1_U_h2 [Hh1 Hh2]]]].
 case: Hh2 => A'_nk [slen_nk_ [r_a [r_b [Hh2 [Ha3 [HZsgn HSum]]]]]].
 exists (cplt2 slen).
 rewrite s2Z_cplt2; last first.
-  rewrite weirdE2 slen_no_weird HZsgn; omega.
+  rewrite weirdE2 slen_no_weird HZsgn; lia.
 rewrite Ha3 Z2uK // mul0Z subZ0 in HSum.
 rewrite Ha3 Z2uK // mul0Z addZ0 Zsgn_Zopp.
 repeat (split => //).
@@ -485,7 +485,7 @@ rewrite !Htmp HZsgn in HSum *.
 rewrite mul1Z in HSum.
 rewrite -HSum (proj2 (Zsgn_pos (\S_{ nk } A'))) //.
 move: (min_lSum nk A) => ?.
-rewrite HSum mulN1Z; omega.
+rewrite HSum mulN1Z; lia.
 by Compose_sepcon h1 h2.
 
 (** multi_sub_u_u k rX b rX a0 a1 a5 a3 a2 a4 *)
@@ -537,7 +537,7 @@ case: Hh1 => A' [len_A' [HX [Hb [Hk [Ha3 [Hh1 Hsum]]]]]].
 case: Hh2 => Ha [Hsgn Hh2].
 exists A', slen.
 repeat (split => //).
-rewrite Hsgn (proj2 (Zsgn_neg (-1 * \S_{ nk } A + \S_{ nk } B))) // addZC mulN1Z addZNE; omega.
+rewrite Hsgn (proj2 (Zsgn_neg (-1 * \S_{ nk } A + \S_{ nk } B))) // addZC mulN1Z addZNE; lia.
 rewrite conAE.
 Compose_sepcon h2 h1; first by [].
 move: Hh1; apply monotony => // h'.
@@ -727,7 +727,7 @@ apply while.hoare_conseq with
   repeat (split; first by []).
   by exists h1, h2.
 - apply multi_add_s_u_triple_gen => //.
-  omega.
+  lia.
   by case: nk_0_max.
   by rewrite size_Z2ints.
   by rewrite -A_A0.

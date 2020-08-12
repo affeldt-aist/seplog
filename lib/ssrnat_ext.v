@@ -1,6 +1,6 @@
 (* seplog (c) AIST 2005-2013. R. Affeldt, N. Marti, et al. GNU GPLv3. *)
 (* seplog (c) AIST 2014-2018. R. Affeldt et al. GNU GPLv3. *)
-Require Import Omega.
+Require Import Lia.
 From mathcomp Require Import ssreflect ssrfun ssrbool eqtype ssrnat div.
 
 Declare Scope cmp_scope.
@@ -48,7 +48,7 @@ Qed.
 Ltac ssromega :=
   (repeat ssrnat2coqnat_hypo ;
    ssrnat2coqnat_goal ;
-   omega)
+   lia)
 with ssrnat2coqnat_hypo :=
   match goal with
     | H : context [?L < ?R] |- _ 	=> move/ltP: H => H

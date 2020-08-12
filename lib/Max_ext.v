@@ -1,6 +1,6 @@
 (* seplog (c) AIST 2005-2013. R. Affeldt, N. Marti, et al. GNU GPLv3. *)
 (* seplog (c) AIST 2014-2018. R. Affeldt et al. GNU GPLv3. *)
-Require Import Max Omega.
+Require Import Max Lia.
 From mathcomp Require Import ssreflect ssrbool ssrnat seq.
 Require Import ssrnat_ext.
 Export Max.
@@ -26,7 +26,7 @@ Qed.
 Lemma max_max a b c d : a <= c -> b <= d -> max a b <= max c d.
 Proof.
 move=> a_c b_d; case: (max_dec a b) => ->.
-- apply (@leq_trans c) => //; by apply/leP/Nat.le_max_l.
+- apply (@leq_trans c) => //; by apply/leP/le_max_l.
 - apply (@leq_trans d) => //; by apply/leP/le_max_r.
 Qed.
 
@@ -43,7 +43,7 @@ Proof. move=> [H0 H1]. case: (max_dec x2 x3) => H; ssromega. Qed.
 Lemma le_max x1 x2 x3 : x2 <= x1 /\ x3 <= x1 -> max x2 x3 <= x1.
 Proof.
 move=> [H0 H1].
-have [H2 | H2] : (x2 >= x3 \/ x3 >= x2)%coq_nat by omega.
+have [H2 | H2] : (x2 >= x3 \/ x3 >= x2)%coq_nat by lia.
 - rewrite max_l; ssromega.
 - rewrite max_r; ssromega.
 Qed.

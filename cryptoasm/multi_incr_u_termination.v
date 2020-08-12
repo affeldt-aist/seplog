@@ -41,12 +41,12 @@ have : {s' | (Some (st, h) -- multi_incr_u a0 a1 a2 a3 a4 a5 ---> s') /\
     apply while.exec_while_false.
     rewrite /= in Hj *.
     repeat Reg_upd.
-    apply/negPn/eqP; omega.
+    apply/negPn/eqP; lia.
   - move=> j IH s0 Hj h.
     apply exists_while_P.
     + rewrite /=.
       repeat Reg_upd.
-      apply/eqP; omegaz. (* rewrite Z_S in Hj; omega. *)
+      apply/eqP; omegaz. (* rewrite Z_S in Hj; lia. *)
     + apply exists_seq_P with (fun s => forall s', s = Some s' ->
         u2Z ([ a0 ]_(fst s')) - u2Z ([a4]_(fst s')) = Z_of_nat j)%mips_expr.
         exists_lwxs l_idx H_l_idx z_idx H_z_idx.
@@ -78,13 +78,13 @@ have : {s' | (Some (st, h) -- multi_incr_u a0 a1 a2 a3 a4 a5 ---> s') /\
       rewrite sext_Z2u // u2Z_add_Z2u //.
       move: (Hsi _ refl_equal).
       rewrite Z_S /= => H.
-      omega.
+      lia.
       move: (Hsi _ refl_equal).
       rewrite Z_S => H.
       move: (min_u2Z ([a0]_si)%mips_expr) (min_u2Z ([a4]_si)%mips_expr) => ? ?.
       move: (max_u2Z ([a0]_si)%mips_expr) (max_u2Z ([a4]_si)%mips_expr) => ? ?.
       simpl fst in H.
-      omega.
+      lia.
       move=> [[si hi]|] Hsi; last first.
         exists None; split => //.
         exact/while.exec_none.

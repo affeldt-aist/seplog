@@ -2242,7 +2242,7 @@ have -> : cast_subnK (leq_trans Hn (leqnSSn _))
     apply (@leZ_ltZ_trans (2 ^^ 30.+1 - 1)%Z) => //.
     apply/leZ_sub2r/leZP; by rewrite Zpower_2_le.
   rewrite -lock ZpowerS in H2.
-  rewrite [2 ^^ 1]/=; omega.
+  rewrite [2 ^^ 1]/=; lia.
   rewrite shrl_shl //.
   apply u2Z_inj.
   rewrite H.
@@ -2306,10 +2306,10 @@ rewrite /= !phy_of_si32K Z2sK // in H2; last first.
   split.
     apply (@leZ_trans Z0) => //.
     rewrite -lock ZpowerS.
-    move: (expZ_gt0 n) => ?; omega.
+    move: (expZ_gt0 n) => ?; lia.
   rewrite -lock.
   move: (Hn).
-  rewrite -ltnS -Zpower_2_le => /leZP ?; omega.
+  rewrite -ltnS -Zpower_2_le => /leZP ?; lia.
 rewrite -(ground_bexp_sem (store0 sigma)) in H1.
 apply bop_re_le_Zle in H1.
 rewrite /= !phy_of_si32K Z2sK // in H1.
@@ -2319,7 +2319,7 @@ apply con_c.
   rewrite -K -lock /=.
   apply: leZ_ltZ_trans.
     rewrite s2Z_cast in H2; by apply H2.
-  rewrite -lock; omega.
+  rewrite -lock; lia.
 - split => //.
   rewrite -K -(ground_bexp_sem (store0 sigma)) beval_eq_e_eq /=.
   apply/eqP.

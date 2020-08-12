@@ -1,6 +1,6 @@
 (* seplog (c) AIST 2005-2013. R. Affeldt, N. Marti, et al. GNU GPLv3. *)
 (* seplog (c) AIST 2014-2018. R. Affeldt et al. GNU GPLv3. *)
-Require Import Bool Omega List ZArith EqNat.
+Require Import Bool List ZArith EqNat.
 From mathcomp Require Import ssreflect ssrbool eqtype.
 Require Import bipl seplog.
 Require Import frag_list_entail frag_list_triple.

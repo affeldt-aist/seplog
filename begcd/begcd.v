@@ -142,7 +142,7 @@ apply hoare_prop_m.hoare_while_invariant with (fun s _ => 0 <= [x]_s /\ 0 <= [y]
     move: Hx.
     rewrite /hoare_m.eval_b /= -ZIT.gebNgt.
     move/ZIT.geP.
-    rewrite /ZIT.ge => ?; omega.
+    rewrite /ZIT.ge => ?; lia.
   rewrite /= => Hx.
   rewrite Hx /= Z.abs_eq // in Hgcd.
   rewrite -Hgcd; exact: Zgcd_is_gcd.
@@ -201,7 +201,7 @@ apply while.hoare_seq with (fun s _ => 0 <= [x ]_ s /\ 0 <= [y ]_ s /\ 0 <= [g ]
       split; first by right.
       rewrite /= Ht Z.abs_eq; last first.
         rewrite /ZIT.geb in Hcond.
-        move/geZP : Hcond => ?; omega.
+        move/geZP : Hcond => ?; lia.
       rewrite -Zgcd_even_odd //; last first.
         apply Zodd_plus_Zodd => //; exact: Zodd_opp.
       by rewrite (Zgcd_for_euclid _ _ (-1)).
@@ -213,7 +213,7 @@ apply while.hoare_seq with (fun s _ => 0 <= [x ]_ s /\ 0 <= [y ]_ s /\ 0 <= [g ]
       apply Z_div_pos => //; exact/normZ_ge0.
     * split; first by [].
       split; first by left.
-      rewrite /= Ht Zabs_non_eq; last by move/negbTE : Hcond => /geZP ?; omega.
+      rewrite /= Ht Zabs_non_eq; last by move/negbTE : Hcond => /geZP ?; lia.
       rewrite Zopp_plus_distr oppZK addZC (Zgcd_sym [x]_s) -Zgcd_even_odd //; last first.
         apply Zodd_plus_Zodd => //; exact: Zodd_opp.
       by rewrite (Zgcd_for_euclid _ _ (-1)) (Zgcd_sym [y]_s).
@@ -674,7 +674,7 @@ eapply while.hoare_conseq; last exact: (outer_loop_triple g x y u v A B C D vx v
   have {}Heq : [u]_s = 0.
     move: Heq.
     rewrite -ZIT.gebNgt => /ZIT.geP.
-    rewrite /ZIT.ge => ?; omega.
+    rewrite /ZIT.ge => ?; lia.
   rewrite Heq /= Z.abs_eq // in Hgcd.
   split; [rewrite -Hxg -Hyg -HCD; ring | rewrite -Hgcd; exact: Zgcd_is_gcd].
 - move=> s h /= [Hx [Hy [Hg [Hxg [Hyg [Hgcd [Hcond [Hu [Hv [HA [HB [HC HD]]]]]]]]]]]].
@@ -861,16 +861,16 @@ case: (Zeven_odd_dec [u]_s) => u_parity.
   + have abs : [v3 ]_ s = 0.
       move: (expZ_gt0 k) => X.
       case: H10 => H10 H10'.
-      rewrite H1 mul0Z in H10; omega.
-    rewrite abs Zgcd_0 geZ0_norm in H14; last omega.
-    rewrite -H14 -Zgcd_mult; last omega.
+      rewrite H1 mul0Z in H10; lia.
+    rewrite abs Zgcd_0 geZ0_norm in H14; last lia.
+    rewrite -H14 -Zgcd_mult; last lia.
     by rewrite mulZC u_g mulZC v_g.
-  + have abs : [u ]_ s = 0 by rewrite H1 mul0Z in H10; omega.
+  + have abs : [u ]_ s = 0 by rewrite H1 mul0Z in H10; lia.
     rewrite abs in Hu; by apply ltZZ in Hu.
   + have abs : [u3 ]_ s = [v3 ]_ s.
-      rewrite H1 mul0Z in H10; omega.
-    rewrite -abs Zgcd_same in H14; last omega.
-    rewrite -H14 -u_g -v_g -Zgcd_mult; last omega.
+      rewrite H1 mul0Z in H10; lia.
+    rewrite -abs Zgcd_same in H14; last lia.
+    rewrite -H14 -u_g -v_g -Zgcd_mult; last lia.
     by rewrite (mulZC [u ]_ s) (mulZC [v ]_ s).
 
 apply while.hoare_seq with (fun s h =>
@@ -901,7 +901,7 @@ move=> s h /=.
 case => [[[Hu [Hv [Hg [u_g v_g]]]] [H6 [[Hti [Hui Hvi]] [H10 [[Hu3 Hv3] [H14 H15]]]]]] H1].
 repeat (split; first by []).
 split.
-  rewrite /C2 -u_g -v_g -H14 -Zgcd_mult; last omega.
+  rewrite /C2 -u_g -v_g -H14 -Zgcd_mult; last lia.
   f_equal; by rewrite mulZC.
 rewrite /hoare_m.eval_b /= /ZIT.eqb /ZIT.rem in H1.
 by move/eqP/not_Zmod_2_Zodd : H1.
@@ -975,7 +975,7 @@ split.
     * right; by rewrite ZpowerS mulZA -(mulZC 2) -H17.
 repeat (split; first by []).
 case/Zeven_ex : H17 => m H17.
-rewrite /= H17 (mulZC 2) /ZIT.div Z_div_mult_full //; omega.
+rewrite /= H17 (mulZC 2) /ZIT.div Z_div_mult_full //; lia.
 
 apply hoare_assign with (fun s h => C2 vu vv u v g s /\
   (Zodd [u ]_ s \/ Zodd [v ]_ s) /\
@@ -1126,7 +1126,7 @@ split.
     + right; by rewrite ZpowerS mulZA -(mulZC 2) -H15.
 repeat (split; first by []).
 case/Zeven_ex : H15 => m H15 /=.
-rewrite H15 mulZC /ZIT.div Z_div_mult_full //; omega.
+rewrite H15 mulZC /ZIT.div Z_div_mult_full //; lia.
 
 apply while.hoare_seq with (fun s _ => C2 vu vv u v g s /\
   (Zodd [u ]_ s \/ Zodd [v ]_ s) /\
@@ -1184,14 +1184,14 @@ split.
   move=> Ht3.
   case: H9 => k [ [H9 H9'] | [ [H9 H9'] | [H9 H9']]].
   - exfalso.
-    have abs : -[v3]_s < 0 by omega.
+    have abs : -[v3]_s < 0 by lia.
     rewrite -H9 in abs.
     move/Zlt_not_le : abs.
     apply.
     apply mulZ_ge0 => //; exact: expZ_ge0.
   - rewrite -H9 in H10.
     by rewrite Zgcd_Zpower_odd // in H10.
-  - have Htmp : [u3 ]_ s = [t3 ]_ s * 2 ^^ k + [v3 ]_ s by omega.
+  - have Htmp : [u3 ]_ s = [t3 ]_ s * 2 ^^ k + [v3 ]_ s by lia.
     rewrite Htmp in H10.
     move: (Zgcd_for_euclid ([t3 ]_ s * 2 ^^ k) [v3 ]_ s 1) => X.
     rewrite mul1Z in X.
@@ -1201,13 +1201,13 @@ split.
     - case: H9' => // H9'.
       by rewrite Zgcd_Zpower_odd // in H10.
       rewrite Zgcd_Zpower_odd // in H10.
-      have -> : [v3 ]_ s = [u3 ]_ s - [t3 ]_ s * 2 ^^ S k by omega.
+      have -> : [v3 ]_ s = [u3 ]_ s - [t3 ]_ s * 2 ^^ S k by lia.
       apply Zodd_plus_Zeven => //.
       exact/Zeven_opp/Zeven_mult_Zeven_r/Zeven_power.
 split; last by [].
 move=> Ht3.
 exfalso.
-omega.
+lia.
 
 apply hoare_assign with (fun s h => C2 vu vv u v g s /\
   (Zodd [u ]_ s \/ Zodd [v ]_ s) /\
@@ -1229,7 +1229,7 @@ split.
   split; by [ | rewrite -Hti /= /ZIT.sub; ring].
 repeat (split; first by []).
 rewrite /hoare_m.eval_b /= /ZIT.geb in H1.
-move/geZP : H1 => ?; omega.
+move/geZP : H1 => ?; lia.
 
 apply hoare_assign with (fun s _ => C2 vu vv u v g s /\
   (Zodd [u ]_ s \/ Zodd [v ]_ s) /\
@@ -1255,11 +1255,11 @@ split; first by [].
 repeat (split; first by []).
 rewrite /=.
 split; first by move/Zle_not_lt.
-split; last omega.
+split; last lia.
 move=> _.
   rewrite /=.
   case: H10 => k [ [H10 H10'] | [ [H10 H10'] | [H10 H10'] ] ].
-  - have X : [v3 ]_ s = - ([t3 ]_ s * 2 ^^ k) by omega.
+  - have X : [v3 ]_ s = - ([t3 ]_ s * 2 ^^ k) by lia.
     rewrite {}X Zgcd_opp in H13.
     symmetry in H13.
     rewrite Zgcd_sym Zgcd_Zpower_odd // in H13.
@@ -1267,8 +1267,8 @@ move=> _.
     split; by [ apply Zodd_opp | ].
   - rewrite -H10 in Hu3.
     move: (Zmult_lt_0_reg_r _ _ (expZ_gt0 k) Hu3) => abs.
-    exfalso. omega.
-  - have Htmp : [v3]_s = [u3 ]_ s - [t3 ]_ s * 2 ^^ k by omega.
+    exfalso. lia.
+  - have Htmp : [v3]_s = [u3 ]_ s - [t3 ]_ s * 2 ^^ k by lia.
     rewrite Htmp in H13.
     move: (Zgcd_for_euclid (-[t3]_s * 2 ^^ k) ([u3]_s) 1).
     rewrite mul1Z addZC mulNZ addZNE Zgcd_sym.
@@ -1279,7 +1279,7 @@ move=> _.
       split; first by rewrite (Zgcd_sym [u3]_s).
       split; by [apply Zodd_opp | ].
     + rewrite Zgcd_Zpower_odd // in H13; last first.
-        have -> : [u3 ]_ s = [v3 ]_ s + [t3 ]_ s * 2 ^^ S k by omega.
+        have -> : [u3 ]_ s = [v3 ]_ s + [t3 ]_ s * 2 ^^ S k by lia.
         apply Zodd_plus_Zeven; last exact/Zeven_mult_Zeven_r/Zeven_power.
         case: H10' => H10'; first by [].
         rewrite Htmp.
@@ -1385,8 +1385,8 @@ repeat (split; first by []).
 split; first by exists O; right; right; rewrite /= mulZ1.
 repeat (split; first by []).
 rewrite -(Zgcd_for_euclid [u3]_s [v3]_s (-1)) mulN1Z addZNE.
-rewrite H9 -u_g -v_g -2!(mulZC [g]_s) Zgcd_mult in H10; last omega.
-apply eqZ_mul2l in H10 => //; omega.
+rewrite H9 -u_g -v_g -2!(mulZC [g]_s) Zgcd_mult in H10; last lia.
+apply eqZ_mul2l in H10 => //; lia.
 
 apply hoare_skip' => s h.
 case => [[[Hu [Hv [Hg [u_g v_g]]]] [H6 [[Hti [Hui Hvi]] [H10 [H11 [H12 [Hu3 Hv3]]]]]]] H1].
@@ -1396,8 +1396,8 @@ repeat (split; first by []).
 split; first by exists O; right; right; rewrite /= mulZ1.
 repeat (split; first by []).
 rewrite -(Zgcd_for_euclid [u3]_s [v3]_s (-1)) mulN1Z addZNE.
-rewrite H10 -v_g -u_g -2!(mulZC [g]_s) Zgcd_mult in H11; last omega.
-apply eqZ_mul2l in H11 => //; omega.
+rewrite H10 -v_g -u_g -2!(mulZC [g]_s) Zgcd_mult in H11; last lia.
+apply eqZ_mul2l in H11 => //; lia.
 Qed.
 
 (* NB: compared with prelude_triple, we have strict inequalities *)
@@ -1423,7 +1423,7 @@ split.
   rewrite /=.
   apply Zlt_0_Zdiv => //.
   rewrite -> Zmod_divides in even_u; last by auto.
-  case: even_u => k Hk; omega.
+  case: even_u => k Hk; lia.
 repeat (split; first by []).
 split; last by [].
 rewrite div_e_exact_full_2 //; by rewrite /hoare_m.eval_b in H6; omegab.
@@ -1436,7 +1436,7 @@ split; first by [].
 split.
   rewrite /=; apply Zlt_0_Zdiv => //.
   rewrite -> Zmod_divides in H6; last by auto.
-  case: H6 => k Hk; omega.
+  case: H6 => k Hk; lia.
 repeat (split; first by []).
 by rewrite div_e_exact_full_2.
 (** g <- nat_e 2 *e var_e g *)
@@ -1601,7 +1601,7 @@ apply while.hoare_ifte.
       move/eqP in Htest.
       apply/eqP.
       lapply (Z_mod_lt [u]_s 2) => //.
-      move=> ?; omega.
+      move=> ?; lia.
     + exfalso.
       move/negP : Htest; apply.
       rewrite /ZIT.eqb /ZIT.rem.
@@ -1654,13 +1654,13 @@ have Hset' : uniq(u, v, g) by rewrite [Equality.sort _]/= in Hset *; Uniq_uniq O
 eapply while.hoare_conseq; last exact: (prelude_triple_strict Hset' Hvu Hvv).
 - move=> s h /= [[H1 [H2 [H3 [H4 H5]]]] H6].
   rewrite /C2 /C3.
-  repeat (split; first omega).
+  repeat (split; first lia).
   split; last by move/negP: H6.
   rewrite -H4 -H5.
   apply Zis_gcd_gcd; last first.
     rewrite (mulZC [u]_s) (mulZC [v]_s).
     exact/Zis_gcd_mult/Zgcd_is_gcd.
-  apply mulZ_ge0 => //; [omega | exact: Zgcd_is_pos].
+  apply mulZ_ge0 => //; [lia | exact: Zgcd_is_pos].
 - rewrite /C1 /uv_init /C2 => s h /= [[-> ->] ->]; by rewrite 2!mulZ1.
 exact: triple_init.
 Qed.
@@ -1707,11 +1707,11 @@ rewrite /uivi_init in Huivi_init.
 case : Huivi_init => [Hu1 [Hu2 [Hu3 [Hv1 [Hv2 Hv3]]]]].
 split.
   rewrite /uivi_bounds Hu1 Hu2 Hu3 Hv1 Hv2 Hv3.
-  omega.
+  lia.
 rewrite /ti_bounds.
 case: (Zeven_odd_dec [u]_s).
-case/(proj2 Hti_init) => -> [-> ->]; omega.
-case/(proj1 Hti_init)=> -> [-> ->]; omega.
+case/(proj2 Hti_init) => -> [-> ->]; lia.
+case/(proj1 Hti_init)=> -> [-> ->]; lia.
 Qed.
 
 Module BEGCD_TAOCP_COR.
@@ -1879,14 +1879,14 @@ split.
     case: (Z_lt_le_dec [t3]_s 0) => Ht3.
       apply (@leZ_trans [t3]_s); first tauto.
       apply Zdiv_le_neg => //; exact: ltZW.
-    apply (@leZ_trans 0); first omega.
+    apply (@leZ_trans 0); first lia.
     exact: Z_div_pos.
   case: (Z_lt_le_dec [t3]_s 0) => Ht3.
-   apply (@leZ_trans 0); last omega.
+   apply (@leZ_trans 0); last lia.
     apply Z_div_neg => //; exact: ltZW.
   apply (@leZ_trans [t3]_s); [exact: Zdiv_le_pos | tauto].
 case/Zeven_ex : H15 => m H15.
-rewrite /= H15 (mulZC 2) /ZIT.div Z_div_mult_full //; omega.
+rewrite /= H15 (mulZC 2) /ZIT.div Z_div_mult_full //; lia.
 
 apply hoare_assign with (fun s h => C2 vu vv u v g s /\
   (Zodd [u ]_ s \/ Zodd [v ]_ s) /\
@@ -1955,9 +1955,9 @@ split.
   rewrite /= /ZIT.div /ZIT.add.
   split; last tauto.
   split.
-  + apply Z_div_pos => //; omega.
+  + apply Z_div_pos => //; lia.
   + apply (@leZ_trans (([v]_s + [v]_s) / 2)).
-    apply Z_div_le => //; omega.
+    apply Z_div_le => //; lia.
     rewrite addZZ Z_div_mult_full //; exact: leZZ.
 split; first by [].
 split.
@@ -2034,9 +2034,9 @@ split; last tauto.
 rewrite /= /ZIT.div /ZIT.sub.
 split.
 - apply (@leZ_trans ((- [u]_s - [u]_s) /2)).
-  apply Zdiv_le_lower_bound => //; omega.
-  apply Z_div_le => //; omega.
-- apply Z_div_neg => //; omega.
+  apply Zdiv_le_lower_bound => //; lia.
+  apply Z_div_le => //; lia.
+- apply Z_div_neg => //; lia.
 
 apply hoare_assign' => s h H.
 rewrite !(mulZC 2) in H.
@@ -2072,14 +2072,14 @@ split.
   case: (Z_lt_le_dec [t3]_s 0) => Ht3.
     split.
       apply (@leZ_trans [t3]_s); first tauto.
-      apply Zdiv_le_neg => //; omega.
+      apply Zdiv_le_neg => //; lia.
     apply (@leZ_trans 0); last exact: ltZW.
     apply Z_div_neg => //. exact: ltZW.
   split.
-    apply (@leZ_trans 0); [omega | exact: Z_div_pos].
+    apply (@leZ_trans 0); [lia | exact: Z_div_pos].
   apply (@leZ_trans [t3]_s); [exact: Zdiv_le_pos | tauto].
 case/Zeven_ex : H15 => m H15.
-rewrite /= H15 mulZC /ZIT.div Z_div_mult_full //; omega.
+rewrite /= H15 mulZC /ZIT.div Z_div_mult_full //; lia.
 Qed.
 
 Lemma while_halve_invariant_stren :
@@ -2134,7 +2134,7 @@ move=> Hset Hvu Hvv => s h /=.
 case => [[[Hu [Hv [Hg [u_g v_g]]]] [H6 [[Hti [Hui Hvi]] [H10 [[Hu3 Hv3] [H13 [Hinvar1 [Hinvar2 H15]]]]]]]] H1].
 repeat (split; first by []).
 split.
-  rewrite -u_g -v_g -H13 -Zgcd_mult; last omega.
+  rewrite -u_g -v_g -H13 -Zgcd_mult; last lia.
   f_equal; by rewrite mulZC.
 rewrite /hoare_m.eval_b /= /ZIT.eqb /ZIT.rem in H1.
 move/eqP : H1; by move/not_Zmod_2_Zodd.
@@ -2268,13 +2268,13 @@ split.
   move=> Ht3.
   case: H9 => k [ [H9 H9'] | [ [H9 H9'] | [H9 H9'] ]].
   - exfalso.
-    have : -[v3]_s < 0 by omega.
+    have : -[v3]_s < 0 by lia.
     rewrite -H9.
     move/Zlt_not_le.
     apply.
     apply mulZ_ge0 => //; exact: expZ_ge0.
   - by rewrite -H9 Zgcd_Zpower_odd // in H10.
-  - have Htmp : [u3 ]_ s = [t3 ]_ s * 2 ^^ k + [v3 ]_ s by omega.
+  - have Htmp : [u3 ]_ s = [t3 ]_ s * 2 ^^ k + [v3 ]_ s by lia.
     rewrite{} Htmp in H10.
     move: (Zgcd_for_euclid ([t3 ]_ s * 2 ^^ k) [v3 ]_ s 1) => X.
     rewrite mul1Z in X.
@@ -2284,20 +2284,20 @@ split.
     - case: H9' => // H9'.
       by rewrite Zgcd_Zpower_odd // in H10.
       rewrite Zgcd_Zpower_odd // in H10.
-      have -> : [v3 ]_ s = [u3 ]_ s - [t3 ]_ s * 2 ^^ S k by omega.
+      have -> : [v3 ]_ s = [u3 ]_ s - [t3 ]_ s * 2 ^^ S k by lia.
       apply Zodd_plus_Zeven => //.
       exact/Zeven_opp/Zeven_mult_Zeven_r/Zeven_power.
 split.
   move=> Ht3.
   exfalso.
-  omega.
+  lia.
 split.
   rewrite /uivi_bounds in Hinvar1 *.
   repeat Store_upd.
   repeat (split; first tauto).
   split; last tauto.
   rewrite /ti_bounds in Hinvar2.
-  rewrite /=; omega.
+  rewrite /=; lia.
 split.
   rewrite /ti_bounds.
   by repeat Store_upd.
@@ -2332,14 +2332,14 @@ split.
   split; last tauto.
   rewrite /= /ZIT.sub.
   rewrite /ti_bounds in Hinvar2.
-  omega.
+  lia.
 split.
   rewrite /ti_bounds in Hinvar2 *.
   repeat Store_upd.
   tauto.
 split; first by [].
 rewrite /hoare_m.eval_b /= /ZIT.geb in H1.
-move/geZP : H1 => ?; omega.
+move/geZP : H1 => ?; lia.
 
 apply hoare_assign with (fun s _ => C2 vu vv u v g s /\
   (Zodd [u ]_ s \/ Zodd [v ]_ s) /\
@@ -2367,7 +2367,7 @@ split.
   repeat (split; first tauto).
   split; last tauto.
   rewrite /= /ZIT.add.
-  rewrite /ti_bounds in Hinvar2; omega.
+  rewrite /ti_bounds in Hinvar2; lia.
 split; last by [].
 rewrite /ti_bounds.
 by repeat Store_upd.
@@ -2383,7 +2383,7 @@ split.
 move=> _.
   rewrite /=.
   case: H9 => k [ [H9 H9'] | [ [H9 H9'] | [H9 H9'] ] ].
-  - have X : [v3 ]_ s = - ([t3 ]_ s * 2 ^^ k) by omega.
+  - have X : [v3 ]_ s = - ([t3 ]_ s * 2 ^^ k) by lia.
     rewrite {}X Zgcd_opp in H12.
     symmetry in H12.
     rewrite Zgcd_sym Zgcd_Zpower_odd // in H12.
@@ -2391,8 +2391,8 @@ move=> _.
     split; by [ apply Zodd_opp | ].
   - rewrite -H9 in Hu3.
     move: (Zmult_lt_0_reg_r _ _ (expZ_gt0 k) Hu3) => abs.
-    exfalso. omega.
-  - have Htmp : [v3]_s = [u3 ]_ s - [t3 ]_ s * 2 ^^ k by omega.
+    exfalso. lia.
+  - have Htmp : [v3]_s = [u3 ]_ s - [t3 ]_ s * 2 ^^ k by lia.
     rewrite Htmp in H12.
     move: (Zgcd_for_euclid (-[t3]_s * 2 ^^ k) ([u3]_s) 1).
     rewrite mul1Z addZC mulNZ addZNE Zgcd_sym.
@@ -2403,7 +2403,7 @@ move=> _.
       split; first by rewrite (Zgcd_sym [u3]_s).
       split; by [ apply Zodd_opp | ].
     + rewrite Zgcd_Zpower_odd // in H12; last first.
-        have -> : [u3 ]_ s = [v3 ]_ s + [t3 ]_ s * 2 ^^ S k by omega.
+        have -> : [u3 ]_ s = [v3 ]_ s + [t3 ]_ s * 2 ^^ S k by lia.
         apply Zodd_plus_Zeven; last exact/Zeven_mult_Zeven_r/Zeven_power.
         case: H9' => H9' //.
         rewrite Htmp.
@@ -2416,11 +2416,11 @@ split.
   repeat Store_upd.
   repeat (split; first tauto).
   rewrite /ti_bounds in Hinvar2.
-  omega.
+  lia.
 split.
   rewrite /ti_bounds.
   by repeat Store_upd.
-omega.
+lia.
 Qed.
 
 Lemma subtract_part1 : uniq(g, u, v, u1, u2, u3, v1, v2, v3, t1, t2, t3) ->  0 < vu -> 0 < vv ->
@@ -2489,13 +2489,13 @@ split.
     split; last tauto.
     rewrite /= /ZIT.sub.
     rewrite /uivi_bounds in Hinvar1.
-    omega.
+    lia.
   rewrite /ti_bounds in Hinvar2 *.
   repeat Store_upd.
   split; last tauto.
   rewrite /= /ZIT.sub.
   rewrite /uivi_bounds in Hinvar1.
-  omega.
+  lia.
 rewrite /C5; by repeat Store_upd.
 
 (** t2 <- svar u2 .-e svar v2; *)
@@ -2536,20 +2536,20 @@ split.
     move: {Hinvar2}(proj1 Hinvar2 u1_v1) => Hinvar2.
     rewrite /uivi_bounds in Hinvar1.
     split.
-    omega.
+    lia.
     have Htmp : [v3]_s + [v]_s * ([u2]_s - [v2]_s) <= 0.
       have -> : [v3]_s + [v]_s * ([u2]_s - [v2]_s) = [u3 ]_ s - [u ]_ s * ([u1 ]_ s - [v1 ]_ s).
         rewrite !mulZBr in Hti *.
-        omega.
+        lia.
       have Htmp : 0 < [u1 ]_ s - [v1 ]_ s.
-        omega.
+        lia.
       apply (@leZ_trans ([u ]_ s - [u ]_ s * ([u1 ]_ s - [v1 ]_ s))).
-        apply leZ_sub => //; omega.
+        apply leZ_sub => //; lia.
         have Htmp2 : [u ]_ s <= [u ]_ s * ([u1 ]_ s - [v1 ]_ s).
-        apply Zle_scale => //; omega.
-      omega.
-      apply Zle_plus_0_inv in Htmp; last omega.
-      apply Zle_mult_0_inv in Htmp; last omega.
+        apply Zle_scale => //; lia.
+      lia.
+      apply Zle_plus_0_inv in Htmp; last lia.
+      apply Zle_mult_0_inv in Htmp; last lia.
       by [].
   rewrite /ti_bounds in Hinvar2 *.
   repeat Store_upd.
@@ -2557,28 +2557,28 @@ split.
   split; last tauto.
   rewrite /= /ZIT.sub.
   rewrite /uivi_bounds in Hinvar1.
-  split; last omega.
+  split; last lia.
   move: {Hinvar2}(proj2 Hinvar2 u1_v1) => Hinvar2.
-  suff : 0 <= [u2 ]_ s - [v2 ]_ s by move=> ?; omega.
+  suff : 0 <= [u2 ]_ s - [v2 ]_ s by move=> ?; lia.
   have Htmp : - [v]_s * ([u2]_s - [v2]_s) - [v3]_s < 0.
     have -> : - [v ]_ s * ([u2 ]_ s - [v2 ]_ s) - [v3 ]_ s =
       [u]_s * ([u1]_s - [v1]_s) - [u3]_s.
       have Htmp : [u3 ]_ s = [u ]_ s * [t1 ]_ s + [v ]_ s * ([u2 ]_ s - [v2 ]_ s) + [v3 ]_ s.
-        omega.
+        lia.
       rewrite Htmp tuv1; ring.
-    have Htmp : [u1 ]_ s - [v1 ]_ s <= 0 by omega.
+    have Htmp : [u1 ]_ s - [v1 ]_ s <= 0 by lia.
     have {}Htmp : [u ]_ s * ([u1 ]_ s - [v1 ]_ s) <= 0.
-      apply mulZ_ge0_le0 => //; omega.
-    omega.
-  have {}Htmp : - [v ]_ s * ([u2 ]_ s - [v2 ]_ s) < [v3 ]_ s by omega.
+      apply mulZ_ge0_le0 => //; lia.
+    lia.
+  have {}Htmp : - [v ]_ s * ([u2 ]_ s - [v2 ]_ s) < [v3 ]_ s by lia.
   apply/leZP/negPn/negP; rewrite -ltZNge' => /ltZP abs.
-  have {}Htmp : - [v ]_ s * ([u2 ]_ s - [v2 ]_ s) < [v]_s by omega.
+  have {}Htmp : - [v ]_ s * ([u2 ]_ s - [v2 ]_ s) < [v]_s by lia.
   rewrite mulNZ -mulZN in Htmp.
   apply Zlt_Zmult_inv' in Htmp; last 2 first.
-    omega.
-    omega.
+    lia.
+    lia.
     by apply ltZZ in Htmp.
-    omega.
+    lia.
 rewrite /C5; by repeat Store_upd.
 
 (** t3 <- var_e u3 .-e var_e v3 *)
@@ -2608,12 +2608,12 @@ split.
     repeat (split; first tauto).
     rewrite /= /ZIT.sub.
     rewrite /uivi_bounds in Hinvar1.
-    omega.
+    lia.
   rewrite /ti_bounds in Hinvar2 *.
   repeat Store_upd.
   repeat (split; first tauto).
   rewrite /= /ZIT.sub.
-  rewrite /uivi_bounds in Hinvar1; omega.
+  rewrite /uivi_bounds in Hinvar1; lia.
 split; last by rewrite /C5; repeat Store_upd.
 case: (Z_lt_le_dec [t3]_s 0) => [/H10 | /H9]; tauto.
 Qed.
@@ -2686,7 +2686,7 @@ split.
 repeat (split; first by []).
 split.
   rewrite /= /hoare_m.eval_b /ZIT.geb /= in H1.
-  move/geZP : H1 => ?; omega.
+  move/geZP : H1 => ?; lia.
 split.
   rewrite /uivi_bounds; by repeat Store_upd.
 split.
@@ -2694,12 +2694,12 @@ split.
   repeat Store_upd.
   have u1_v1 : [u1 ]_ s <= [v1 ]_ s.
     rewrite /= /hoare_m.eval_b /ZIT.geb /= in H1.
-    move/geZP : H1 => ?; omega.
+    move/geZP : H1 => ?; lia.
   move/geZP in H1.
-  split; last omega.
+  split; last lia.
   rewrite /= /ZIT.add.
   rewrite /ti_bounds in Hinvar1.
-  omega.
+  lia.
 rewrite /C5; by repeat Store_upd.
 
 apply hoare_assign' => s h.
@@ -2711,8 +2711,8 @@ split; first by exists O; right; right; rewrite /= mulZ1.
 repeat (split; first by []).
 split.
   rewrite -(Zgcd_for_euclid [u3]_s [v3]_s (-1)) mulN1Z addZNE.
-  rewrite H9 -u_g -v_g -2!(mulZC [g]_s) Zgcd_mult in H10; last omega.
-  apply eqZ_mul2l in H10 => //; omega.
+  rewrite H9 -u_g -v_g -2!(mulZC [g]_s) Zgcd_mult in H10; last lia.
+  apply eqZ_mul2l in H10 => //; lia.
 split.
   rewrite /uivi_bounds.
   by repeat Store_upd.
@@ -2722,7 +2722,7 @@ split; first tauto.
 split; last tauto.
 rewrite /= /ZIT.sub.
 rewrite /uivi_bounds in Hinvar1.
-omega.
+lia.
 
 apply hoare_skip' => s h.
 case => [[[Hu [Hv [Hg [u_g v_g]]]] [H6 [[Hti [Hui Hvi]] [H10 [H11 [tuv1 [Hinvar1 [Hinvar2 [H12 [Hu3 Hv3]]]]]]]]]] H1].
@@ -2734,12 +2734,12 @@ split.
 repeat (split; first by []).
 split.
   rewrite -(Zgcd_for_euclid [u3]_s [v3]_s (-1)) mulN1Z addZNE.
-  rewrite H10 -v_g -u_g -2!(mulZC [g]_s) Zgcd_mult in H11; last omega.
-  apply eqZ_mul2l in H11 => //; omega.
+  rewrite H10 -v_g -u_g -2!(mulZC [g]_s) Zgcd_mult in H11; last lia.
+  apply eqZ_mul2l in H11 => //; lia.
 split; first by [].
 rewrite /= /hoare_m.eval_b /ZIT.geb /= in H1.
 move/geZP in H1.
-apply (proj1 Hinvar2); omega.
+apply (proj1 Hinvar2); lia.
 Qed.
 
 Lemma triple_intermediate_invariant :
@@ -2877,18 +2877,18 @@ move=> Hset Hvv Hvu.
   + have abs : [v3 ]_ s = 0.
       move: (expZ_gt0 k) => ?.
       case: H10 => H10 H10'.
-      rewrite H1 mul0Z in H10; omega.
-    rewrite abs Zgcd_0 Z.abs_eq in H12; last omega.
-    rewrite -H12 -Zgcd_mult; last omega.
+      rewrite H1 mul0Z in H10; lia.
+    rewrite abs Zgcd_0 Z.abs_eq in H12; last lia.
+    rewrite -H12 -Zgcd_mult; last lia.
     by rewrite mulZC u_g mulZC v_g.
   + case => H10.
     * have abs : [u ]_ s = 0.
-        rewrite H1 mul0Z in H10; omega.
+        rewrite H1 mul0Z in H10; lia.
       rewrite abs in Hu; by apply ltZZ in Hu.
     * have abs : [u3 ]_ s = [v3 ]_ s.
-        rewrite H1 mul0Z in H10; omega.
-      rewrite -abs Zgcd_same in H12; last omega.
-      rewrite -H12 -u_g -v_g -Zgcd_mult; last omega.
+        rewrite H1 mul0Z in H10; lia.
+      rewrite -abs Zgcd_same in H12; last lia.
+      rewrite -H12 -u_g -v_g -Zgcd_mult; last lia.
       by rewrite (mulZC [u ]_ s) (mulZC [v ]_ s).
 Qed.
 

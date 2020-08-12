@@ -161,13 +161,13 @@ move=> H; eapply hoare_sgoto_conseq; eauto => l s h.
   eapply eqmod_trans.
   + eapply eqmod_compat_plus_R; by apply Hr.
   + apply lt_n2Zlt in x_lt_n.
-    have X : u2Z [x]_s < 2 ^^ 32 - 1 by move: (max_u2Z [n]_s) => ?; omega.
+    have X : u2Z [x]_s < 2 ^^ 32 - 1 by move: (max_u2Z [n]_s) => ?; lia.
     case: (Z_lt_le_dec (u2Z [x]_s + u2Z one32) (2 ^^ 32)) => Y.
     * rewrite u2Z_add // Z2uK // Zisum_prop.
       by apply eqmod_refl.
       by apply min_u2Z.
     * rewrite Z2uK // in Y.
-      have : ~ (2 ^^ 32 <= u2Z [x]_s + 1) by omega.
+      have : ~ (2 ^^ 32 <= u2Z [x]_s + 1) by lia.
       tauto.
 - by apply hoare_prop_m.entails_id.
 Qed.

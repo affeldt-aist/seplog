@@ -50,7 +50,7 @@ exists (Z2u 32 (Z_of_nat nk)); split.
   apply assert_m.mapstos_ext => //.
   rewrite Z2uK // -Zbeta1E.
   split; first exact: Zle_0_nat.
-  move: (min_u2Z ptr) => ?; omega.
+  move: (min_u2Z ptr) => ?; lia.
 
 (** lw a1 four16 rx *)
 
@@ -98,7 +98,7 @@ apply (before_frame
     apply u2Z_inj.
     rewrite Ha0 Z2uK //.
     split; first by apply Zle_0_nat.
-    rewrite -Zbeta1E; move: (min_u2Z ptr) => ?; omega.
+    rewrite -Zbeta1E; move: (min_u2Z ptr) => ?; lia.
   Compose_sepcon h2 h1; first by [].
   move: Hh1; by apply assert_m.mapstos_ext.
 Qed.

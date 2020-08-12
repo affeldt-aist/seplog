@@ -280,7 +280,7 @@ case: (Z_lt_le_dec (u2Z (A `32_ nj)) (u2Z [btmp]_s)).
   by rewrite Hrbor.
   by rewrite Z2uK.
   move: {Hm1 Hm2}(Hm2 X) => Hm.
-  have Hacx0 : store.acx s = Z2u store.acx_size 0 by apply store.utoZ_acx_beta2; rewrite Hm; omega.
+  have Hacx0 : store.acx s = Z2u store.acx_size 0 by apply store.utoZ_acx_beta2; rewrite Hm; lia.
   rewrite store.utoZ_def Hacx0{Hacx0} Z2uK // in Hm.
   rewrite mul0Z addZ0 in Hm.
   rewrite (_ : \B^2 = \B^1 * (\B^1 - 1) + \B^1) // addZC (mulZC (\B^1)) in Hm.
@@ -290,7 +290,7 @@ case: (Z_lt_le_dec (u2Z (A `32_ nj)) (u2Z [btmp]_s)).
     split; first exact: min_u2Z.
     split; first by split; [apply min_u2Z | apply max_u2Z].
     split; first by [].
-    move: (min_u2Z (A `32_ nj)) (max_u2Z [btmp]_s) => ? ?; omega.
+    move: (min_u2Z (A `32_ nj)) (max_u2Z [btmp]_s) => ? ?; lia.
   case: Hm => _ ->.
   rewrite Hinv (Zbeta_S nj) Hrbtmp2 Z2uK //; ring.
 - move/leZNgt/ltZP/negbTE => X.
@@ -303,7 +303,7 @@ case: (Z_lt_le_dec (u2Z (A `32_ nj)) (u2Z [btmp]_s)).
   move: {Hm1 Hm2}(Hm1 X) => Hm.
   have Hm_Zbeta1 : store.utoZ s < \B^1.
     move: (max_u2Z (A `32_ nj)) (min_u2Z [btmp]_s).
-    rewrite Hm -Zbeta1E => ? ?; omega.
+    rewrite Hm -Zbeta1E => ? ?; lia.
   case/store.utoZ_lo_beta1 : Hm_Zbeta1 => _ [_ <-].
   rewrite Hinv Hm Hrbtmp2 Z2uK //; ring.
 
@@ -322,7 +322,7 @@ have [X1 X2] : nbor = 1 /\ u2Z (B `32_ nj) = \B^1 - 1.
     apply: Bool.not_false_is_true => X; by rewrite Hru X in Huzero.
   rewrite Hrbtmp in H.
   apply u2Z_add_overflow' in H; rewrite -Zbeta1E in H.
-  move: (max_u2Z (B `32_ nj)) => H'; rewrite -Zbeta1E in H'; omega.
+  move: (max_u2Z (B `32_ nj)) => H'; rewrite -Zbeta1E in H'; lia.
 rewrite Hratmp Hinv X1 X2 !mul1Z (Zbeta_S nj); ring.
 
 (** sw atmp zero16 t; *)
@@ -407,7 +407,7 @@ move=> s h [A' [nj [nbor [HlenA' [Hra [Hrb [Hrk [Hmem [Hrj [Hjk [Hrt [Hbor [Hnbo
 exists A', nj, nbor; repeat Reg_upd; repeat (split; trivial).
 - by Assert_upd.
 - rewrite u2Z_add sext_Z2u // Z2uK //.
-  omega.
+  lia.
   rewrite -Zbeta1E; ssromega.
 
 (** addiu j j one16 *)
@@ -420,7 +420,7 @@ rewrite Z_S.
 repeat Reg_upd; repeat (split; trivial).
 by Assert_upd.
 rewrite u2Z_add sext_Z2u // Z2uK //.
-- omega.
+- lia.
 - move: (min_u2Z va) => ?; rewrite -Zbeta1E; ssromega.
 Qed.
 

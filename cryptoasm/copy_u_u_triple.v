@@ -117,7 +117,7 @@ have Htmp : u2Z ([i ]_ s) < 2 ^^ 30.
   apply (@ltZ_pmul2l 4) => //.
   rewrite (_ : 4 = 2 ^^ 2) // -ZpowerD //.
   rewrite -Zbeta1E [_ ^^ _]/=.
-  move: (min_u2Z ([ry]_s)); rewrite r_y => ?; omega.
+  move: (min_u2Z ([ry]_s)); rewrite r_y => ?; lia.
 rewrite Z2uK; last first.
   split; first exact: Zle_0_nat.
   rewrite inj_mult. simpl Z_of_nat.
@@ -132,7 +132,7 @@ rewrite (@u2Z_shl _ 32 _ 30) //; last first.
 
 rewrite /mips_contrib.update_store_lwxs.
 repeat Reg_upd; repeat (split => //).
-- omega.
+- lia.
 - by Assert_upd.
 
 (** sw tmp zero16 ytmp ; *)
@@ -153,10 +153,10 @@ exists (int_e ((drop ni Y) `32_ 0)).
 Decompose_32 (take ni X ++ drop ni Y) '|u2Z ([i ]_ s)| XY1 XY2 HlenXY1 HXY'; last first.
   rewrite size_cat size_takel //; last first.
     apply/leP/Nat2Z.inj_le.
-    rewrite Z_of_nat_Zabs_nat; [omega | exact/min_u2Z].
+    rewrite Z_of_nat_Zabs_nat; [lia | exact/min_u2Z].
   rewrite size_drop len_Y addnBA; last first.
     apply/leP/Nat2Z.inj_le.
-    rewrite Z_of_nat_Zabs_nat; [omega | exact/min_u2Z].
+    rewrite Z_of_nat_Zabs_nat; [lia | exact/min_u2Z].
   rewrite addnC addnK.
   apply/ltP/Nat2Z.inj_lt.
   rewrite Z_of_nat_Zabs_nat //; exact/min_u2Z.
@@ -168,7 +168,7 @@ have Htmp : [var_e ry \+ int_e (Z2u 32 (Z_of_nat (4 * ni))) ]e_ s =
   rewrite addi0 r_ytmp u2Z_add_Z2u //; last 2 first.
     exact: Zle_0_nat.
     rewrite inj_mult [Z_of_nat _]/= Z_of_nat_Zabs_nat //; last exact/min_u2Z.
-    rewrite r_y -Zbeta1E; omega.
+    rewrite r_y -Zbeta1E; lia.
   rewrite inj_mult [Z_of_nat _]/= Z_of_nat_Zabs_nat //; [ring | exact/min_u2Z].
 
 rewrite HXY' /= in mem.
@@ -181,7 +181,7 @@ by rewrite sext_Z2u //.
 
 rewrite nth_cat size_takel; last first.
   apply/leP/Nat2Z.inj_le.
-  rewrite /ni Z_of_nat_Zabs_nat; by [omega | apply min_u2Z].
+  rewrite /ni Z_of_nat_Zabs_nat; by [lia | apply min_u2Z].
 by rewrite ltnn subnn.
 
 apply assert_m.currying => h'' Hh''.
@@ -200,12 +200,12 @@ rewrite -cats1.
 rewrite -catA (mapstos.decompose_equiv _ ni); last first.
   rewrite size_takel //.
   apply/leP/Nat2Z.inj_le.
-  rewrite /ni Z_of_nat_Zabs_nat; [omega | exact: min_u2Z].
+  rewrite /ni Z_of_nat_Zabs_nat; [lia | exact: min_u2Z].
 move/eqP : HXY'.
 rewrite eqseq_cat; last first.
   rewrite size_takel // len_X.
   apply/leP/Nat2Z.inj_le.
-  rewrite /ni Z_of_nat_Zabs_nat; [omega | exact: min_u2Z].
+  rewrite /ni Z_of_nat_Zabs_nat; [lia | exact: min_u2Z].
 case/andP => /eqP H1 /eqP H2.
 apply assert_m.monotony => h4 //.
   by rewrite -H1.
@@ -234,14 +234,14 @@ f_equal.
 rewrite sext_Z2u // u2Z_add_Z2u //.
 ring.
 rewrite -Zbeta1E.
-  move: (min_u2Z ([ry]_s)); rewrite r_y => ?; omega.
+  move: (min_u2Z ([ry]_s)); rewrite r_y => ?; lia.
 rewrite sext_Z2u // u2Z_add_Z2u //.
-omega.
+lia.
 rewrite -Zbeta1E.
-  move: (min_u2Z ([ry]_s)); rewrite r_y => ?; omega.
+  move: (min_u2Z ([ry]_s)); rewrite r_y => ?; lia.
 rewrite sext_Z2u // u2Z_add_Z2u //; last first.
 rewrite -Zbeta1E.
-  move: (min_u2Z ([ry]_s)); rewrite r_y => ?; omega.
+  move: (min_u2Z ([ry]_s)); rewrite r_y => ?; lia.
 by Assert_upd.
 
 (** addiu ytmp ytmp four16 *)
@@ -252,7 +252,7 @@ move=> s h [r_y [r_k [r_ytmp [i_k mem]]]].
 rewrite /mips_seplog.wp_addiu.
 repeat Reg_upd; repeat (split; trivial).
 rewrite sext_Z2u // u2Z_add_Z2u //; last first.
-  rewrite r_ytmp r_y -Zbeta1E -{2}(mul1Z 4) -addZA -mulZDl mulZC; omega.
+  rewrite r_ytmp r_y -Zbeta1E -{2}(mul1Z 4) -addZA -mulZDl mulZC; lia.
 rewrite r_ytmp; ring.
 by Assert_upd.
 Qed.

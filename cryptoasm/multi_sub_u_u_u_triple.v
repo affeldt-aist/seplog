@@ -338,7 +338,7 @@ have [X1 X2] : nbor = 1 /\ u2Z (B `32_ nj) = \B^1 - 1.
     by rewrite Hru X in Huzero.
   rewrite Hrbtmp in H.
   apply u2Z_add_overflow' in H; rewrite -Zbeta1E in H.
-  move: (max_u2Z (B `32_ nj)) => H'; rewrite -Zbeta1E in H'; omega.
+  move: (max_u2Z (B `32_ nj)) => H'; rewrite -Zbeta1E in H'; lia.
 rewrite Hratmp Hinv X1 X2 !mul1Z (Zbeta_S nj); ring.
 
 (** sw ctmp zero16 t; *)
@@ -424,7 +424,7 @@ move=> s h [C' [nj [nbor [HlenC [Hra [Hrb [Hrc [Hrk [Hmem [Hrj [Hjk [Hrt [Hbor [
 exists C', nj, nbor; repeat Reg_upd; repeat (split; trivial).
 by Assert_upd.
 rewrite u2Z_add sext_Z2u // Z2uK //.
-- omega.
+- lia.
 - rewrite -Zbeta1E; ssromega.
 
 (** addiu j j one16 *)

@@ -86,7 +86,7 @@ apply fwd_sim_while ; first by done.
     case : Hyp => _ [] _ /= /andP []. by move/eqP.
   split.
     rewrite mulZC -mulZA -Zdivide_Zdiv_eq // mulZC; tauto.
-  split; first omega.
+  split; first lia.
   split; last tauto.
   apply: (proj1 (Zdivide_Zdiv_lt_pos _ _ _ _ _)) => //; tauto.
 - apply fwd_sim_b_stren with (state_mint

@@ -238,7 +238,7 @@ rewrite mulZBr; exact/eqmod_minmod.
 
 rewrite lSum_cut_last in Sum_Z2; last by rewrite size_cat addn1 len_Z.
 rewrite subn1 [_.+1.-1]/= /zero32 Z2uK // mulZ0 // addZ0 in Sum_Z2.
-rewrite HSumSub; omega.
+rewrite HSumSub; lia.
 
 apply frame_rule_R.
 - eapply multi_sub_u_u_L_triple_B_le_A; eauto.
@@ -310,7 +310,7 @@ have Htmp : [t]_s `+ sext 16 zero16 = [z]_s `+ Z2u 32 (Z_of_nat (4 * nk)).
   - rewrite r_z inj_mult; ring.
   - exact: Zle_0_nat.
   rewrite Z_S in Hnz.
-  rewrite inj_mult r_z -Zbeta1E [Z_of_nat 4]/=; move: (min_u2Z vz) => ?; omega.
+  rewrite inj_mult r_z -Zbeta1E [Z_of_nat 4]/=; move: (min_u2Z vz) => ?; lia.
 
 exists (int_e zero32).
 rewrite assert_m.conCE !assert_m.conAE in mem.
@@ -371,10 +371,10 @@ move: (max_lSum nk M).
 rewrite -ZbetaE => ?.
 move: (min_lSum nk Z) (min_lSum nk M) => ? ?.
 have ? : 0 < u2Z [C]_s.
-  rewrite /zero32 Z2uK // in r_C; move: (min_u2Z [C]_s) => ?; omega.
+  rewrite /zero32 Z2uK // in r_C; move: (min_u2Z [C]_s) => ?; lia.
 apply Z.le_ge.
-apply (@leZ_trans (\S_{ nk } Z + \B^nk * 1)); first omega.
-apply/leZ_add2l/leZ_wpmul2l => //; omega.
+apply (@leZ_trans (\S_{ nk } Z + \B^nk * 1)); first lia.
+apply/leZ_add2l/leZ_wpmul2l => //; lia.
 
 apply pull_out_exists_con => Cint32.
 
@@ -434,11 +434,11 @@ have [Z'' [HlenZ'' HZ'Z'']] :
     rewrite subn1 /= /zero32 Z2uK // mulZ0 addZ0.
     rewrite (lSum_cut_last _ M) in HZM; last by rewrite size_cat /= HlenM addnC.
     rewrite subn1 /= /zero32 Z2uK // mulZ0 addZ0 in HZM.
-    apply (@ltZ_leZ_trans (2 * \S_{ nk } M - \S_{ nk } M)); [exact/ltZ_sub2r | omega].
+    apply (@ltZ_leZ_trans (2 * \S_{ nk } M - \S_{ nk } M)); [exact/ltZ_sub2r | lia].
   have Htmp' : \S_{nk.+1} Z' < \B^nk.
     rewrite lSum_cut_last in Htmp; last by rewrite size_cat /= HlenM addnC.
     rewrite subn1 [_.+1.-1]/= /zero32 Z2uK // mulZ0 addZ0 in Htmp.
-    move: (max_lSum nk M); rewrite -ZbetaE => ?; omega.
+    move: (max_lSum nk M); rewrite -ZbetaE => ?; lia.
   rewrite (lSum_beyond_inv 32 nk.+1 _ nk len_Z').
   exists (take nk Z'); split => //.
   by rewrite size_takel // len_Z'.
@@ -464,7 +464,7 @@ rewrite lSum_cut_last in Sum_Z'; last by rewrite size_cat /= HlenZ'' addnC.
 rewrite subn1 [_.+1.-1]/= (lSum_cut_last _ M) // in Sum_Z'; last by rewrite size_cat /= HlenM addnC.
 rewrite subn1 [_.+1.-1]/= /zero32 Z2uK // mulZ0 2!addZ0 in Sum_Z'.
 rewrite Sum_Z'.
-apply (@ltZ_leZ_trans (2 * \S_{ nk } M - \S_{ nk } M)); [exact/ltZ_sub2r | omega].
+apply (@ltZ_leZ_trans (2 * \S_{ nk } M - \S_{ nk } M)); [exact/ltZ_sub2r | lia].
 
 apply frame_rule_R.
 - eapply multi_sub_u_u_L_triple_B_le_A; eauto.

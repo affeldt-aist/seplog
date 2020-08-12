@@ -377,7 +377,7 @@ apply hoare_seq with (
   pose Hnexp := `! \b [5 ]sc \+ __n \= [ Z<=nat ('| the_n_plus5 |) ]sc.
   pose Hpre := !!(Z<=nat ('| the_n_plus5 |) < POLAR_library_functions_triple.SSL_BUFFER_LEN)%Z.
   Hoare_L_stren_by (Hnexp ** Hpre) (Hn :: nil).
-    rewrite /Hnexp /Hpre /Hn /Hn_45 /Hn_512 Z_of_nat_Zabs_nat; last by unfold the_n_plus5; omega.
+    rewrite /Hnexp /Hpre /Hn /Hn_45 /Hn_512 Z_of_nat_Zabs_nat; last by unfold the_n_plus5; lia.
     Ent_R_rewrite_eq_e 0 (* n *).
     Ent_R_subst_con_distr.
     do 2 Ent_R_subst_apply.
@@ -396,18 +396,18 @@ apply hoare_seq with (
       Rewrite_ground_bexp @sequiv_add_e_sc_pos; last 4 first.
         by vm_compute.
         by apply: leZ_trans HN1.
-        simpl expZ; omega.
+        simpl expZ; lia.
         Rewrite_ground_bexp @beq_exx.
         by apply: oneuc.
     Ent_R_sbang 0; last by done.
-    rewrite /the_n_plus5 /POLAR_library_functions_triple.SSL_BUFFER_LEN; omega.
+    rewrite /the_n_plus5 /POLAR_library_functions_triple.SSL_BUFFER_LEN; lia.
 
   Hoare_frame_remove (Hn :: Hbuf4 :: Hbuf3 :: Hbuf0 :: Hbuf :: init_ssl_var :: init_rb :: init_id :: init_ses :: init_ciphers :: Hbuf0_128 :: Hbuf0_handshake :: Hn_45 :: Hn_512 :: nil); first by rewrite ssl_fetch_input_inde.
   eapply hoare_conseq; last by apply (ssl_fetch_input_triple ('| the_n_plus5 |)
     in_left SI BU1 majv0 minv0 mmaj0 mmin0 bu rb ses ciphers md5s sha1s).
-  - rewrite -/success -/min_SI -/error Z_of_nat_Zabs_nat; last by rewrite /the_n_plus5; omega.
+  - rewrite -/success -/min_SI -/error Z_of_nat_Zabs_nat; last by rewrite /the_n_plus5; lia.
     rewrite -/Hin_left_success (_: '| the_n_plus5 | - '| (u2Z in_left) | = '| the_n |); last first.
-      rewrite in_left_5 Z2uK // Zabs_nat_Z_of_nat // /the_n_plus5 Zabs_nat_Zplus //; last by omega.
+      rewrite in_left_5 Z2uK // Zabs_nat_Z_of_nat // /the_n_plus5 Zabs_nat_Zplus //; last by lia.
       by rewrite (_ : '| 5 | = 5) // plusE addnC -addnBA ?addn0.
     by rewrite -/Hbu_new in_left_5 Z2uK.
   - rewrite -/Hssl_in_left -/Hbu -/Hpre -/Hnexp; by Ent_permut.
@@ -845,7 +845,7 @@ Hoare_seq_replace1 init_rb final_rb.
     apply leq_trans with ('| the_n_plus5 |); last by assumption.
     rewrite (_: rand + 32 = Z.abs_nat 43) //.
     apply/leP/Zabs_nat_le.
-    unfold the_n_plus5; omega.
+    unfold the_n_plus5; lia.
   set final_rb1 := [ rb ]c |---> _.
   set final_rb2 := [ rb ]c \+ [ 32 ]sc |---> _.
   Hoare_frame (Hbuf :: Hit :: Hbu2 :: init_rb1 :: nil)
@@ -856,7 +856,7 @@ Hoare_seq_replace1 init_rb final_rb.
     rewrite (_: rand = 11) // (_: take 32 (drop 19 BU2) = BU2 |{ 19, 32)) //.
     rewrite {1}(_: 11 = 5 + 6) // {2}(_: 19 = 13 + 6) //.
     apply slice_shift with (sz := '| the_n |); first by done.
-    have Hthe_n2 : '| 45 | <= '| the_n | by apply/leP/Zabs_nat_le; omega.
+    have Hthe_n2 : '| 45 | <= '| the_n | by apply/leP/Zabs_nat_le; lia.
     rewrite (_: Z.abs_nat 45 = 45) in Hthe_n2; last by done.
     by apply ltn_trans with 44.
   apply hoare_stren with (`! \b __buf \= [ bu ]c \+ [ 13 ]sc ** `! \b __it \= [ rb ]c **

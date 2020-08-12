@@ -40,7 +40,7 @@ apply hoare_while_invariant with (fun s h => exists l1 l2, l = (l1 ++ l2)%SEQ /\
     rewrite -(hp.unioneh h).
     apply con_c => //.
     + by Disj.
-    + rewrite Hret; by constructor. 
+    + rewrite Hret; by constructor.
   - move=> s h [] [l1 [l2 [Hl Hmem]]].
     rewrite /C_definition.eval_b /C_StateBipl.eval_b /= beval_neg_not negbK beval_eq_p_eq.
     move/eqP => H.
@@ -53,7 +53,7 @@ apply hoare_while_invariant with (fun s h => exists l1 l2, l = (l1 ++ l2)%SEQ /\
 (** << _rem <-* __i &-> _next; >> *)
 
 apply hoare_seq with (fun s h => exists l1 hd l2, l = cat l1 (hd :: l2) /\
-    [ __i ]_ s <> pv0 /\ (seplogClst (rev l1) ([ __ret ]_s) ** 
+    [ __i ]_ s <> pv0 /\ (seplogClst (rev l1) ([ __ret ]_s) **
       ([ __i ]_s |lV~> mk_cell hd (ptr<=phy [ __rem ]_s)) **
       seplogClst l2 [ __rem ]_s) s h).
   apply hoare_lookup_fldp_stren => s h [] [] l1 [] l2 [] Hl Hh.

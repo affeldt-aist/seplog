@@ -113,9 +113,9 @@ have {Hhoare_triple}hoare_triple_post_cond : (postcond ** assert_m.TT)%asm_asser
 have s2Z_Z2u_k : s2Z (Z2u 32 (Z_of_nat k)) = Z_of_nat k.
   rewrite HP1 Z_of_nat_Zabs_nat; last by apply min_u2Z.
   rewrite s2Z_u2Z_pos' //.
-  rewrite Z2uK //; last by rewrite /= in HP0 *; omega.
-  rewrite Z2uK //; last by rewrite /= in HP0 *; omega.
-  rewrite /= in HP0 *; omega.
+  rewrite Z2uK //; last by rewrite /= in HP0 *; lia.
+  rewrite Z2uK //; last by rewrite /= in HP0 *; lia.
+  rewrite /= in HP0 *; lia.
 
 have rx_st_st' : ([rx ]_ st = [rx]_st')%asm_expr.
   Reg_unchanged. rewrite [modified_regs _]/=. by Uniq_not_In.
@@ -183,7 +183,7 @@ rewrite /state_mint; split.
         case: Hh1 => ry_st_st' [rk_k Hh1].
         case: Hh1 => h11 [h12 [h11dh12 [h11Uh12 [Hh11 Hh12]]]].
         rewrite geZ0_norm in Hh11; last exact: ltZW.
-        have HP2'' : ([y ]_ s)%pseudo_expr == 0 = false by apply/eqP; omega.
+        have HP2'' : ([y ]_ s)%pseudo_expr == 0 = false by apply/eqP; lia.
         rewrite HP2'' in Hh11.
         apply con_heap_mint_signed_cons with h11 => //.
         - rewrite h1Uh2 h11Uh12.
@@ -221,7 +221,7 @@ rewrite /state_mint; split.
       exec_triple_proj) => Hst'_st'' [Hh'' H_h_h'].
     have <- : heap_mint mz st h = heap_mint mz st' h'.
       have [zy | zy] : z = y \/ z <> y.
-        omega.
+        lia.
       - subst z.
         rewrite assoc.get_union_sing_eq in z_in_y_or_d.
         case: z_in_y_or_d => ?; subst mz.
@@ -265,7 +265,7 @@ rewrite /state_mint; split.
     move=> rx0 Hrx0; mips_syntax.Reg_unchanged.
     apply (@disj_not_In _ (mint_regs mz)); last by [].
     have [zy | zy] : z = y \/ z <> y.
-      omega.
+      lia.
     - subst z.
       rewrite assoc.get_union_sing_eq in z_in_y_or_d.
       case: z_in_y_or_d => ?; subst mz.

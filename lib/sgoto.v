@@ -1,6 +1,6 @@
 (* seplog (c) AIST 2005-2013. R. Affeldt, N. Marti, et al. GNU GPLv3. *)
 (* seplog (c) AIST 2014-2018. R. Affeldt et al. GNU GPLv3. *)
-Require Import Wf_nat Omega.
+Require Import Wf_nat Lia.
 From mathcomp Require Import ssreflect ssrfun ssrbool eqtype ssrnat seq.
 Require Import seq_ext goto.
 
@@ -349,7 +349,7 @@ induction 1; intros => //.
   rewrite /=; tauto.
 - case: Hs' => X Y /=; subst; tauto.
 - case: Hs' => X Y /=; subst; tauto.
-- case: Hs' => X Y /=; subst; omega.
+- case: Hs' => X Y /=; subst; lia.
 - subst.
   destruct s' as [[l'_ s'] |].
   move: (IHexec_sgoto1 _ _ (refl_equal _)).

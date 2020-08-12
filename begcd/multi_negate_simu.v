@@ -76,7 +76,7 @@ rewrite /state_mint; split.
         case: (Zsgn_spec (s2Z slen)).
           case=> _ abs'.
           rewrite abs' in abs.
-          omega.
+          lia.
         case.
           case=> abs'.
           by rewrite -abs' /= in abs.

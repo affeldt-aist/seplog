@@ -63,12 +63,12 @@ elim=> [n e s e_mod e_fit | hd tl IH v n0 s Hv Hn /=].
       - rewrite u2Z_add_Z2u //; last first.
           rewrite (_ : Z_of_nat _ - 1 = 1 + Z_of_nat (size tl)) in Hn; last first.
             rewrite [size _]/=; omegaz.
-          rewrite -Zbeta1E; omega.
+          rewrite -Zbeta1E; lia.
         rewrite Z_S Hv; ring.
       - rewrite u2Z_add_Z2u //; last first.
-          rewrite !Z_S in Hn; rewrite -Zbeta1E; omega.
+          rewrite !Z_S in Hn; rewrite -Zbeta1E; lia.
         rewrite (_ : Z_of_nat _ - 1 = Z_of_nat (size (i :: tl))) in Hn; last by rewrite [size _]/=; omegaz.
-        omega.
+        lia.
 Qed.
 
 Lemma mapstos_inv_list2heap : forall l e s h, (e |--> l) s h ->
@@ -88,25 +88,25 @@ elim=> [e s h Hmem Hfit /= | hd tl IH e s h].
     split; first by apply Zle_0_nat.
     move: (max_u2Z ( [ e ]e_ s)).
     rewrite H1 (_ : 2 ^^ 32 = 2 ^^ 30 * 4) // mulZC => X.
-    apply Zmult_gt_0_lt_reg_r in X => //; omega.
+    apply Zmult_gt_0_lt_reg_r in X => //; lia.
   rewrite /list2heap /=.
   have <- : '|u2Z ([ e ]e_ s `+ four32 `>> 2)| = S loc.
     move: (@u2Z_shrl _ ([ e ]e_ s `+ four32) 2 refl_equal) => // X.
     rewrite [_ ^^ _]/= (@u2Z_rem'' _ _ _ (1 + Z_of_nat loc)) in X; last first.
       rewrite u2Z_add_Z2u // H1.
       + rewrite [_ ^^ _]/=; ring.
-      + rewrite Z_S in Hinmem; rewrite -Zbeta1E; omega.
+      + rewrite Z_S in Hinmem; rewrite -Zbeta1E; lia.
     rewrite addZ0 u2Z_add_Z2u // in X; last first.
-      rewrite Z_S in Hinmem; rewrite -Zbeta1E; omega.
-    have -> : u2Z (eval e s `+ four32 `>> 2) = 1 + Z_of_nat loc by omega.
+      rewrite Z_S in Hinmem; rewrite -Zbeta1E; lia.
+    have -> : u2Z (eval e s `+ four32 `>> 2) = 1 + Z_of_nat loc by lia.
     rewrite Zabs_nat_Zplus //; last exact/Zle_0_nat.
     by rewrite Zabs_nat_Z_of_nat.
   move: {IH}(IH _ _ _ Hmem2).
   rewrite /list2heap.
   move=> <- //; last first.
     rewrite [eval _ _]/= u2Z_add_Z2u //.
-    + rewrite [size _]/= Z_S in Hinmem; omega.
-    + rewrite Z_S in Hinmem; rewrite -Zbeta1E; omega.
+    + rewrite [size _]/= Z_S in Hinmem; lia.
+    + rewrite Z_S in Hinmem; rewrite -Zbeta1E; lia.
   by rewrite -H2.
 Qed.
 

@@ -270,7 +270,7 @@ exists nj, C; repeat Reg_upd; repeat (split; trivial).
   + ring.
   + rewrite -Zbeta1E; apply: (leZ_ltZ_trans _ Hnc).
     rewrite -addZA; apply leZ_add2l.
-      move/ltP : Hjk => /inj_lt ?; omega.
+      move/ltP : Hjk => /inj_lt ?; lia.
     rewrite store.acxhi_zero // in Hinv.
     exact: (@ltZ_trans 2).
 
@@ -286,6 +286,6 @@ repeat (split; trivial).
 - rewrite u2Z_add // sext_Z2u // Hrj Z2uK // -Zbeta1E.
   apply: (leZ_ltZ_trans _ Hnc).
   move/ltP : Hjk => /inj_lt ?.
-  move: (min_u2Z vc) => ?; omega.
+  move: (min_u2Z vc) => ?; lia.
 - move/leZsub1 : Hm; exact.
 Qed.

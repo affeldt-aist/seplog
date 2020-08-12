@@ -432,7 +432,7 @@ Fixpoint Expr_B_size (e : expr_b) : nat :=
   end.
 
 Lemma expr_b_min_size: forall b, (Expr_B_size b >= 1)%nat.
-Proof. elim=> //= *; omega. Qed.
+Proof. elim=> //= *; lia. Qed.
 
 Notation "a '\=' b" := (bop_b eq_b a b) (at level 64, left associativity) : seplog_expr_scope.
 Notation "a '\!=' b" := (bop_b neq_b a b) (at level 64, left associativity) : seplog_expr_scope.

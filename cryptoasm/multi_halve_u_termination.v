@@ -38,7 +38,7 @@ have Htmp : {x0 | Some (st, h) -- multi_halve_u rk rx a0 a1 a2 a3 ---> x0 /\ (fo
     + move=> na0 IH s0 st h Hset Ha0.
       apply exists_while_P.
       * rewrite /= store.get_r0 Z2uK // Ha0 Z_S.
-        apply/eqP; omega.
+        apply/eqP; lia.
       * apply exists_seq_P with (fun s => forall s', s = Some s' ->
         u2Z ([ a0 ]_(fst s')) = Z_of_nat na0)%mips_expr.
         - apply exists_addiu_seq_P.
@@ -60,7 +60,7 @@ have Htmp : {x0 | Some (st, h) -- multi_halve_u rk rx a0 a1 a2 a3 ---> x0 /\ (fo
           exists_sw1 l_idx H_l_idx z_idx H_z_idx.
           rewrite /=.
           repeat Reg_upd.
-          rewrite sext_Z2s // u2Z_add_Z2s // Ha0; omegaz (*Z_S; omega*).
+          rewrite sext_Z2s // u2Z_add_Z2s // Ha0; omegaz (*Z_S; lia*).
         - move=> si Hsi.
           destruct si as [[sti hi]|].
           + apply IH => //.

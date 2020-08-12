@@ -151,7 +151,7 @@ rewrite /state_mint; split.
       (heap.dom (heap_mint (signed k ry) s h \U heap_mint (signed k rx) s h)) _ _
       exec_asm_proj) => Hst'_st'' [Hh'' H_h_h'].
     have <- : heap_mint mz s h = heap_mint mz s' h'.
-      have [zy | zy] : z = y \/ z <> y. omega.
+      have [zy | zy] : z = y \/ z <> y. lia.
       - subst z.
         case/assoc.get_union_Some_inv : z_mz => z_mz; last first.
           apply assoc.get_Some_in_dom in z_mz.
@@ -219,7 +219,7 @@ rewrite /state_mint; split.
       move: st_s_h1; apply var_mint_invariant; last exact z_unchanged.
       move=> rx0 Hrx0; mips_syntax.Reg_unchanged.
       apply (@disj_not_In _ (mint_regs mz)); last by [].
-      have [zy | zy] : z = y \/ z <> y. omega.
+      have [zy | zy] : z = y \/ z <> y. lia.
       - subst z.
         rewrite assoc.get_union_sing_eq in z_mz.
         case: z_mz => ?; subst mz.

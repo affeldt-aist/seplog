@@ -112,8 +112,8 @@ Transparent eval.
 move=> Hx Hy s /=.
 rewrite 2!i8_of_i32K.
 congr ([ _ ]p).
-rewrite Z2sK; last by simpl in *; omega.
-rewrite Z2sK; last by simpl in *; omega.
+rewrite Z2sK; last by simpl in *; lia.
+rewrite Z2sK; last by simpl in *; lia.
 by case: ifP.
 Opaque eval.
 Qed.
@@ -191,13 +191,13 @@ case/optr_of_i8_Some => la''' Hla'''.
 rewrite i8_of_i32K /add_prod Z2sK; last first.
   move: (sizeof_gt0 g t) => ty_gt0.
   case: (Z_lt_le_dec k 0) => hk.
-    split; last by omega.
+    split; last by lia.
     apply (leZ_trans (proj1 Hk)).
     rewrite mulZC. apply Zle_scale_neg.
     exact: ltZW.
     rewrite (_ : 0%Z = Z.of_nat 0) //.
     apply inj_lt; exact/ltP.
-  split; first by omega.
+  split; first by lia.
   apply : (leZ_ltZ_trans _ (proj2 Hk)).
   rewrite -{1}[X in (X <= _)%Z]mul1Z.
   apply leZ_wpmul2r => //.
@@ -280,24 +280,24 @@ apply s2Z_inj.
 rewrite Z2sK; last by done.
 rewrite s2Z_add; last first.
   rewrite Z2sK; last by done.
-  rewrite Z2sK; last by simpl in *; omega.
-  simpl in *; omega.
-rewrite Z2sK; last by simpl in *; omega.
-rewrite Z2sK //; by simpl in *; omega.
+  rewrite Z2sK; last by simpl in *; lia.
+  simpl in *; lia.
+rewrite Z2sK; last by simpl in *; lia.
+rewrite Z2sK //; by simpl in *; lia.
 Opaque eval.
 Qed.
 
 Lemma sequiv_add_e_sc_pos x y : 0 <= x -> 0 <= y -> x + y < 2 ^^ 31 ->
   ([ x ]sc \+ [ y ]sc : exp sigma (ityp: sint) ) =s [ x + y ]sc.
-Proof. move=> Hx Hy xy; rewrite sequiv_add_e_sc //; omega. Qed.
+Proof. move=> Hx Hy xy; rewrite sequiv_add_e_sc //; lia. Qed.
 
 Lemma sequiv_add_e_sc_pos3 x y z :
   0 <= x -> 0 <= y -> 0 <= z -> x + y + z < 2 ^^ 31 ->
   ([ x ]sc \+ [ y ]sc \+ [ z ]sc : exp sigma (ityp: sint)) =s [ x + y + z ]sc.
 Proof.
 move=> Hx Hy Hz xyz.
-rewrite (sequiv_add_e_sc x y) //; [ | omega | omega | omega].
-rewrite sequiv_add_e_sc_pos //; omega.
+rewrite (sequiv_add_e_sc x y) //; [ | lia | lia | lia].
+rewrite sequiv_add_e_sc_pos //; lia.
 Qed.
 
 Lemma sequiv_add_e_sc_pos4 x y z u :
@@ -305,8 +305,8 @@ Lemma sequiv_add_e_sc_pos4 x y z u :
   ([ x ]sc \+ [ y ]sc \+ [ z ]sc \+ [ u ]sc : exp sigma (ityp: sint)) =s [ x + y + z + u ]sc.
 Proof.
 move=> Hx Hy Hz Hu xyzu.
-rewrite sequiv_add_e_sc_pos3 //; last by omega.
-rewrite sequiv_add_e_sc_pos //; omega.
+rewrite sequiv_add_e_sc_pos3 //; last by lia.
+rewrite sequiv_add_e_sc_pos //; lia.
 Qed.
 
 (* might need a bit more hypotheses *)
@@ -321,7 +321,7 @@ rewrite /=.
 move: (optr_of_i8_Some _ Hl') => [] x0 Hx0.
 rewrite i8_of_i32K.
 congr (phy<=ptr).
-rewrite Z2sK; last by simpl in *; omega.
+rewrite Z2sK; last by simpl in *; lia.
 rewrite sizeof_ityp /add_prod.
 have ->: (Z_of_nat 1%nat) * x = x by case x.
 case: (Hx) => /leZP -> _.
@@ -460,10 +460,10 @@ apply s2Z_inj.
 rewrite Z2sK; last by [].
 rewrite s2Z_sub; last first.
   rewrite Z2sK; last by [].
-  rewrite Z2sK; last by simpl in *; omega.
-  simpl in *; omega.
-rewrite Z2sK; last by simpl in *; omega.
-rewrite Z2sK //; by simpl in *; omega.
+  rewrite Z2sK; last by simpl in *; lia.
+  simpl in *; lia.
+rewrite Z2sK; last by simpl in *; lia.
+rewrite Z2sK //; by simpl in *; lia.
 Opaque eval.
 Qed.
 
@@ -636,6 +636,6 @@ Lemma Cltn_add2r_pos (a b c : Z) : 0 <= a -> 0 <= b -> 0 <= c ->
   a + c < 2 ^^ 31 -> b + c < 2 ^^ 31 ->
   (\b ([ a ]sc \+ [ c ]sc : exp sigma (ityp: sint)) \< [ b ]sc \+ [ c ]sc) =b
   \b [ a ]sc \< ([ b ]sc : exp sigma (ityp: sint)).
-Proof. move=> ? ? ? ? ?; rewrite Cltn_add2r //; omega. Qed.
+Proof. move=> ? ? ? ? ?; rewrite Cltn_add2r //; lia. Qed.
 
 End bequiv_prop.

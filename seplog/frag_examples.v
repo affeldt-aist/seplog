@@ -1,7 +1,7 @@
 (* seplog (c) AIST 2005-2013. R. Affeldt, N. Marti, et al. GNU GPLv3. *)
 (* seplog (c) AIST 2014-2018. R. Affeldt et al. GNU GPLv3. *)
 From mathcomp Require Import ssreflect ssrbool eqtype.
-Require Import EqNat ZArith List.
+Require Import EqNat ZArith List Lia.
 
 Require Import bipl seplog frag expr_b_dp.
 
@@ -105,10 +105,10 @@ match goal with
       (apply LWP_mutation'; [idtac | LWP_resolve] )
 end.
 (intros || idtac); eval_b2Prop_hyps(*Eval_b_hyp_clean*); eval_b2Prop_goal (*Eval_b_goal*);
-(try tauto || omega || ((repeat open_integral_type_hyp);open_integral_type_goal);
+(try tauto || lia || ((repeat open_integral_type_hyp);open_integral_type_goal);
   unfold integral_type.ZIT.t in |- * ;
     idtac).
-omega.
+lia.
 
 LWP_Resolve.
 

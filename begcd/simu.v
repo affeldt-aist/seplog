@@ -1411,7 +1411,7 @@ have H'ptr: heap.get (Z.abs_nat (u2Z ([rx ]_ st `+ four32 )%asm_expr / 4)) h = S
     by apply Z_div_pos => //; exact: min_u2Z.
   rewrite (_ : Z.abs_nat 1 = 1%nat) //.
   rewrite Hunion; exact: heap.get_union_L.
-  rewrite -Zbeta1E; omega.
+  rewrite -Zbeta1E; lia.
 move: Hunion => /=.
 rewrite H'slen Hslen' H'ptr.
 move=> Hunion.
@@ -1446,12 +1446,12 @@ have H'ptr : heap.get (Z.abs_nat (u2Z ([rx ]_ st)%asm_expr / 4)).+1 h = Some ptr
   rewrite addnC in H'ptr.
   rewrite Hunion; by apply heap.get_union_L.
 move: Hunion => /=.
-rewrite -Hslen H'slen u2Z_add_Z2u //; last by rewrite -Zbeta1E; omega.
+rewrite -Hslen H'slen u2Z_add_Z2u //; last by rewrite -Zbeta1E; lia.
 rewrite -{1}(Zmult_1_l 4) Z_div_plus_full // Zabs_nat_Zplus //; last first.
   apply Z_div_pos => //; apply min_u2Z.
 rewrite plus_comm (_ : Z.abs_nat 1 = 1%nat) //= H'ptr.
 move=> Hunion.
-rewrite u2Z_add_Z2u //; last by rewrite -Zbeta1E -Hrx; omega.
+rewrite u2Z_add_Z2u //; last by rewrite -Zbeta1E -Hrx; lia.
 rewrite -{3}(Zmult_1_l 4) Z_div_plus_full // Zabs_nat_Zplus //; last first.
   apply Z_div_pos => //; apply min_u2Z.
 rewrite plus_comm (_ : Z.abs_nat 1 = 1%nat) //= -Hptr H'ptr /heap_cut.
@@ -1532,7 +1532,7 @@ have H3 : heap.get (Z.abs_nat (u2Z (([rx ]_ st)%asm_expr `+ four32) / 4)) h' =
     apply heap.in_dom_union_L, heap.in_dom_proj; last first.
       eapply heap.get_Some_in_dom; by apply H1.
     rewrite mem_iota.
-    rewrite /adr u2Z_add_Z2u //; last by rewrite -Zbeta1E; omega.
+    rewrite /adr u2Z_add_Z2u //; last by rewrite -Zbeta1E; lia.
     rewrite {2}(_ : 4 = 1 * 4) // Z_div_plus_full // Zabs_nat_Zplus //; last first.
       apply Z_div_pos => //; by apply min_u2Z.
     by rewrite plusE addn1 addn2 ltnS leqnn andbT.

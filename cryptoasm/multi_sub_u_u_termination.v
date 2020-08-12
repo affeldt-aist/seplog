@@ -39,10 +39,10 @@ elim.
   eapply exist.
   apply while.exec_while_false.
   rewrite /= in Hkint_ *.
-  apply/negPn/eqP; omega.
+  apply/negPn/eqP; lia.
 - move=> kint_ IH s0 Hkint_ h.
   apply exists_while.
-  + rewrite /=; apply/eqP; omegaz. (*rewrite Z_S in Hkint_; omega.*)
+  + rewrite /=; apply/eqP; omegaz. (*rewrite Z_S in Hkint_; lia.*)
   + apply exists_seq_P2 with (fun st => u2Z [k]_(fst st) - u2Z [int_]_(fst st) = Z_of_nat kint_).
     * exists_lwxs l_m_ H_l_m_ z_m_ H_z_m_.
       apply exists_addu_seq_P.
@@ -84,8 +84,8 @@ elim.
       rewrite /=.
       repeat Reg_upd.
       rewrite sext_Z2u // u2Z_add_Z2u //.
-      rewrite /= in H1; omega.
-      move: (max_u2Z ([k]_si)) => ?; omega.
+      rewrite /= in H1; lia.
+      move: (max_u2Z ([k]_si)) => ?; lia.
     * exists None; split; by [apply while.exec_none | ].
   + move=> [ si hi ] Hsi; exact: IH.
 Qed.

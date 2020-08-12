@@ -1,6 +1,6 @@
 (* seplog (c) AIST 2005-2013. R. Affeldt, N. Marti, et al. GNU GPLv3. *)
 (* seplog (c) AIST 2014-2018. R. Affeldt et al. GNU GPLv3. *)
-Require Import Epsilon.
+Require Import Epsilon Lia.
 From mathcomp Require Import ssreflect ssrfun ssrbool eqtype ssrnat seq.
 Require Import ssrZ ZArith_ext ssrnat_ext seq_ext.
 Require Import machine_int multi_int uniq_tac.
@@ -147,10 +147,10 @@ case: (Zis_gcd_uniqueness_apart_sign _ _ _ _ Hgcd Hgcd') => Hd.
   move: (Z_mod_lt u _ (Z.lt_gt _ _ (Zbeta_gt0 1))) => W.
   case: ifPn => Hu0.
   - split; [exact: leZZ | exact: expZ_gt0].
-  - suff Humod : u mod \B^1 <> 0 by omega.
+  - suff Humod : u mod \B^1 <> 0 by lia.
     move=> Humod.
     move: (Humod) => Humod'.
-    apply Zmod_divide in Humod'; last omega.
+    apply Zmod_divide in Humod'; last lia.
     case: Humod' => q Hq.
     rewrite Humod Hq Z_div_mult // addZ0 in Heq.
     subst d.
@@ -189,7 +189,7 @@ rewrite Z2uK // -Zbeta1E.
 move: Hcond => ?.
 omegaz.
 (*move: Hcond. rewrite !inj_plus !mulZDr.
-simpl Z_of_nat => ?; omega.*)
+simpl Z_of_nat => ?; lia.*)
 Qed.
 
 Lemma Hnl : u2Z (Z2u 32 (4 * Z_of_nat (2 * nk + 2))) + 4 * Z_of_nat nn < \B^1.
@@ -197,7 +197,7 @@ Proof.
 move: Hcond. rewrite Hvl => ?.
 omegaz.
 (*move: Hcond. rewrite Hvl 2!inj_plus !inj_mult !mulZDr inj_plus inj_mult.
-simpl Z_of_nat => ?; omega.*)
+simpl Z_of_nat => ?; lia.*)
 Qed.
 
 Lemma Hnx : u2Z zero32 + 4 * Z_of_nat nk.+1 < \B^1.
@@ -207,7 +207,7 @@ rewrite Hvl Z2uK // => ?.
 omegaz.
 (*move: Hnl.
 rewrite Hvl Z2uK // Z_S 2!inj_plus !mulZDr.
-simpl Z_of_nat => ?; omega.*)
+simpl Z_of_nat => ?; lia.*)
 Qed.
 
 Lemma HSumX0SumM : \S_{ nk } (Z2ints 32 nk seed) < \S_{ nk } (Z2ints 32 nk modu).
@@ -235,13 +235,13 @@ Lemma HSumB2K : \S_{ nk } (Z2ints 32 nk (\B^nk ^^ 2 mod (\S_{ nk } (Z2ints 32 nk
 Proof.
 rewrite lSum_Z2ints_pos.
 - apply eqmod_sym, eqmod_mod.
-  rewrite lSum_Z2ints_pos // -ZbetaE; omega.
+  rewrite lSum_Z2ints_pos // -ZbetaE; lia.
   exact: eqmod_refl.
 - split; first exact/Zmod_le/min_lSum.
   rewrite -ZbetaE lSum_Z2ints_pos //.
   + apply (@ltZ_trans modu); last by [].
     exact: (proj2 (Z_mod_lt (\B^nk ^^ 2) modu (Z.lt_gt _ _ Hmodu))).
-  + rewrite -ZbetaE; omega.
+  + rewrite -ZbetaE; lia.
 Qed.
 
 Lemma HoddM' : Zodd (\S_{ nk } (Z2ints 32 nk modu)).
@@ -252,7 +252,7 @@ Proof.
 rewrite Z2uK // -Zbeta1E.
 move: Hcond. rewrite !inj_plus !mulZDr.
 move=> ?; omegaz.
-(*simpl Z_of_nat=> ?; omega.*)
+(*simpl Z_of_nat=> ?; lia.*)
 Qed.
 
 Lemma Hny : u2Z (Z2u 32 (4 * Z_of_nat (2 * nk + nn + 2))) + 4 * Z_of_nat nk.+1 < \B^1.
@@ -263,7 +263,7 @@ destruct nk as [|nk'].
 - move: Hmodu'.
   rewrite (_ : \B^0 = 1) // => Hmodu''.
   exfalso.
-  omega.
+  lia.
 - rewrite ?Z_S in H *; by ssromega.
 Qed.
 
@@ -367,8 +367,8 @@ Proof.
 move=> Hset.
 apply: (while.hoare_conseq _ _ _ expr_b (fun eb s => eval_b eb (fst s)) hoare0 _ _ _ _ _ _ _ (bbs_triple_spec Hset)).
 - move=> s h [L [X [Y0 [HlenL [HlenX [HlenY0 [Hrk [Hrn [Hrx [Hry [Hrm [Hrb2k [Hralpha [Hrl [Hr32 [Hmem Hbbs]]]]]]]]]]]]]]]].
-  rewrite lSum_Z2ints_pos // in Hbbs; last by rewrite -ZbetaE; omega.
-  rewrite lSum_Z2ints_pos // in Hbbs; last by rewrite -ZbetaE; omega.
+  rewrite lSum_Z2ints_pos // in Hbbs; last by rewrite -ZbetaE; lia.
+  rewrite lSum_Z2ints_pos // in Hbbs; last by rewrite -ZbetaE; lia.
   rewrite /bbs_fun Zpower_b_square -Hbbs.
   apply decode_heap.
   + by assoc_comm Hmem.
@@ -513,13 +513,13 @@ apply (mapstos_ext (int_e (Z2u 32 (4 * Z_of_nat (3 * nk + nn + 3)))) s).
     (*; omegaz TODO: used to work*)
     destruct nk => //.
     move: Hmodu'. rewrite (_ : \B^0 = 1) // => Hmodu''.
-    exfalso. omega.
-    rewrite ?inj_plus ?Z_S in Hcond' *; omega.
+    exfalso. lia.
+    rewrite ?inj_plus ?Z_S in Hcond' *; lia.
     rewrite Z2uK //.
     * rewrite size_Z2ints; by omegaz.
     * destruct nk => //.
       move: Hmodu'. rewrite (_ : \B^0 = 1) // => Hmodu''.
-      exfalso. omega.
+      exfalso. lia.
       rewrite ?inj_plus ?Z_S in Hcond' *.
       rewrite -Zbeta1E; by omegaz.
 Qed.
@@ -660,13 +660,13 @@ apply mapstos_list2heap.
 - rewrite Z2uK //.
   destruct nk => //.
   + move: Hmodu'. rewrite (_ : \B^0 = 1) // => Hmodu''.
-    exfalso. omega.
+    exfalso. lia.
   + rewrite ?inj_plus ?Z_S in Hcond' *. rewrite -Zbeta1E; by omegaz.
 - rewrite Z2uK //.
   rewrite size_Z2ints; omegaz. (* TODO: rewrite -Zbeta1_Zpower2; omegaz. used to work *)
   destruct nk => //.
   + move: Hmodu'. rewrite (_ : \B^0 = 1) // => Hmodu''.
-    exfalso. omega.
+    exfalso. lia.
   + rewrite ?inj_plus ?Z_S in Hcond' *. rewrite -Zbeta1E; by omegaz.
 Qed.
 
@@ -849,14 +849,14 @@ apply mapstos_list2heap.
 rewrite Z2uK //. (* TODO: rewrite -Zbeta1E; omegaz. used to work *)
 - destruct nk.
   + move: Hmodu'. rewrite (_ : \B^0 = 1) // => Hmodu''.
-    exfalso. omega.
+    exfalso. lia.
   + rewrite ?inj_plus ?Z_S in Hcond' *.
     rewrite -Zbeta1E; by omegaz.
     rewrite Z2uK //.
     rewrite size_Z2ints; by omegaz. (* TODO: rewrite -Zbeta1E; omegaz. used to work *)
 - destruct nk.
   + move: Hmodu'. rewrite (_ : \B^0 = 1) // => Hmodu''.
-    exfalso. omega.
+    exfalso. lia.
   + rewrite ?inj_plus ?Z_S in Hcond' *.
     rewrite -Zbeta1E; by omegaz.
 

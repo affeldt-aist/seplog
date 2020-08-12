@@ -75,8 +75,8 @@ Lemma mapstos_compose_generic n lst nj : forall lst1 (w : int 32) lst2 e e' e'' 
   lst = lst1 ++ (w :: nil) ++ lst2 ->
   [ e' ]e_ s = [ e \+ int_e (Z2u 32 (Z_of_nat (4 * nj))) ]e_ s ->
   [ e'' ]e_ s = [ e \+ int_e (Z2u 32 (Z_of_nat (4 * nj + 4))) ]e_ s ->
-  (e |--> lst1 ** 
-    (e' |~> int_e w) ** 
+  (e |--> lst1 **
+    (e' |~> int_e w) **
     (e'' |--> lst2)) s h ->
   (e |--> lst) s h.
 Proof.
@@ -116,11 +116,11 @@ elim => //.
     repeat f_equal.
     rewrite inj_plus inj_mult inj_plus inj_mult.
     omegaz.
-Qed.    
+Qed.
 
 Lemma decompose_equiv : forall l1 nj e w l2, size l1 = nj ->
   (e |--> l1 ++ (w :: nil) ++ l2) =
-    (e |--> l1 ** 
+    (e |--> l1 **
       e \+ int_e (Z2u 32 (Z_of_nat (4 * nj))) |~> int_e w **
       e \+ int_e (Z2u 32 (Z_of_nat (4 * nj + 4))) |--> l2).
 Proof.
@@ -135,8 +135,8 @@ Qed.
   length lst1 = nj ->
   lst = lst1 ++ (w::nil) ++ lst2 ->
   (e |--> lst ** P) s h ->
-  ((e |--> lst1) ** 
-    (add_e e (int_e (Z2u 32 (Z_of_nat (4 * nj)))) |~> int_e w) ** 
+  ((e |--> lst1) **
+    (add_e e (int_e (Z2u 32 (Z_of_nat (4 * nj)))) |~> int_e w) **
     (add_e e (int_e (Z2u 32 (Z_of_nat (4 * nj + 4)))) |--> lst2) ** P) s h.
 Proof.
   move=> n lst nj lst1 w lst2 e s h P Hlst Hlst1 Hw HP.
@@ -189,7 +189,7 @@ apply eqmod_trans with (u2Z ([ e \+ int_e (Z2u 32 (Z_of_nat (4 * nj))) ]e_ s)); 
   case: e'_4 => p e'_4.
   rewrite /eqmod.
   exists p.
-  omega.
+  lia.
 apply eqmod_trans with (u2Z (([ e ]e_ s)) + u2Z (Z2u 32 (Z_of_nat (4 * nj + 4)))).
 (* TODO: clean with lemmas *)
 - apply eqmod_div with (2 ^^ 30).

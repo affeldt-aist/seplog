@@ -382,7 +382,7 @@ apply hoare_seq with inv_inner.
     Bbang2sbang.
     apply ent_R_sbang, (Zle_gb_inv _ _ [ 0 ]sc ciph_len_exp erefl erefl).
     rewrite ge_cst_e (@i32_ge_s_cst_e _ sigma) // Z2sK // -/ciph_len_value -/ciph_len_value_Z.
-    clear -Hciph_len_bound_Z; omega.
+    clear -Hciph_len_bound_Z; lia.
   + idtac "56)b forloop exit".
     by Ent_L_contract_bbang 0.
   + idtac "56)c) forloop body".
@@ -413,7 +413,7 @@ apply hoare_seq with inv_inner.
       + have Htmp2 : (- 2 ^^ 31 <= 54 + Z<=u (BU2 `_ 51) + Z<=nat k * 2 < 2 ^^ 31)%Z.
           split.
             apply (@leZ_trans Z0) => //.
-            apply addZ_ge0; last omega.
+            apply addZ_ge0; last lia.
             apply addZ_ge0 => //; by apply min_u2Z.
           apply (@ltZ_trans (54 + 2 ^^ 8 + Z<=nat 128 * 2)%Z) => //.
           apply/ltZP.
@@ -464,38 +464,38 @@ apply hoare_seq with inv_inner.
               split; first by apply mulZ_ge0 => //; exact: Zle_0_nat.
               move/leP/inj_le in Hk.
               rewrite (_: Z<=nat 128 = 128%Z) // in Hk.
-              apply (@leZ_ltZ_trans 256%Z); [ omega | done].
+              apply (@leZ_ltZ_trans 256%Z); [ lia | done].
             + rewrite sizeof_ityp [Z<=nat _]/= 2!mul1Z.
-              split; [assumption | omega].
+              split; [assumption | lia].
           rewrite sequiv_add_e_sc_pos; last 3 first.
             + by apply min_u2Z.
-            + omega.
+            + lia.
             + apply (@ltZ_trans (2 ^^ 8 + 256)%Z) => //.
               apply ltZ_le_add.
               * by apply max_u2Z.
               * move/leP/inj_le in Hk.
-                rewrite (_: Z<=nat 128 = 128%Z) // in Hk; omega.
+                rewrite (_: Z<=nat 128 = 128%Z) // in Hk; lia.
           rewrite CaddnpA; last 3 first.
             + by rewrite sizeof_ityp.
             + rewrite sizeof_ityp [sizeof_integral _]/= mul1Z.
               split; first by assumption.
               apply (@ltZ_trans (2 ^^ 8 + Z_of_nat 128 * 2)%Z) => //.
               apply ltZ_le_add; first exact: max_u2Z.
-              move/leP/inj_le in Hk; omega.
+              move/leP/inj_le in Hk; lia.
             + rewrite sizeof_ityp [Z<=nat _]/= 2!mul1Z.
-              split; first by omega.
+              split; first by lia.
               apply (@ltZ_trans (41 + 2 ^^ 8 + Z_of_nat 128 * 2)%Z) => //.
               apply/ltZP. rewrite -addZA ltZ_add2l'. apply/ltZP.
               apply ltZ_le_add; first exact: max_u2Z.
               by apply/leZP; rewrite leZ_pmul2r' // -Z_of_nat_le.
-          rewrite sequiv_add_e_sc_pos => //; last by omega.
+          rewrite sequiv_add_e_sc_pos => //; last by lia.
           rewrite CaddnpA; last 3 first.
             + by rewrite sizeof_ityp.
-            + rewrite sizeof_ityp [sizeof_integral _]/= mul1Z; omega.
-            + rewrite sizeof_ityp [sizeof_integral _]/= 2!mul1Z; omega.
+            + rewrite sizeof_ityp [sizeof_integral _]/= mul1Z; lia.
+            + rewrite sizeof_ityp [sizeof_integral _]/= 2!mul1Z; lia.
           rewrite sequiv_add_e_sc_pos => //; last 2 first.
-            + omega.
-            + omega.
+            + lia.
+            + lia.
           rewrite (_ : 13 + (41 + (Z<=u (BU2 `_ 51) + Z<=nat k * 2)) =
                        Z<=nat (54 + nat<=u (BU2 `_ 51) + 2 * k) )%Z; last first.
             rewrite -(mulnC k) !inj_plus !inj_mult /u2nat Z_of_nat_Zabs_nat; [ring | by apply min_u2Z].
@@ -515,7 +515,7 @@ apply hoare_seq with inv_inner.
             rewrite inj_mult mulZC.
             move/leP/Nat2Z.inj_le in Hk.
             rewrite (_: Z<=nat 128 = 128%Z) // in Hk.
-            rewrite (_: Z<=nat 256 = 256%Z) // (_: Z<=nat 2 = 2%Z) //; omega.
+            rewrite (_: Z<=nat 256 = 256%Z) // (_: Z<=nat 2 = 2%Z) //; lia.
           apply ltnW.
           apply/ltP/Zabs_nat_lt.
           split; by [apply min_u2Z | apply max_u2Z].
@@ -544,7 +544,7 @@ apply hoare_seq with inv_inner.
             rewrite (_: Z<=nat 2 = 2%Z) // (_: Z<=nat 1 = 1%Z) // (_: Z<=nat 54 = 54%Z) //.
             move=> BU1_51 /leP /inj_le Hk.
             rewrite (_: Z<=nat 128 = 128%Z) // in Hk.
-            suff: (Z<=nat (nat<=u (BU2 `_ 51)) <= 32)%Z by move=> ?; omega.
+            suff: (Z<=nat (nat<=u (BU2 `_ 51)) <= 32)%Z by move=> ?; lia.
             rewrite (_: 32%Z = Z<=nat 32) //; by apply inj_le; apply/leP.
           - unfold Hbu.
             Ent_decompose (0 :: nil) (1 :: nil); first by apply ent_id.
@@ -567,49 +567,49 @@ apply hoare_seq with inv_inner.
               apply/leZ_add2r/leZ_add2l/leZ_wpmul2r => //.
               by move/leP/inj_le in Hk.
             rewrite CaddnpA; last 3 first.
-              + rewrite sizeof_ityp mul1Z; omega.
+              + rewrite sizeof_ityp mul1Z; lia.
               + by rewrite sizeof_ityp mul1Z.
-              + rewrite !sizeof_ityp 2!mul1Z; omega.
+              + rewrite !sizeof_ityp 2!mul1Z; lia.
             rewrite eq_pC_const sequiv_intsa_uchar_sc eq_pC_const sequiv_add_e_sc_pos => //; last 2 first.
-              + omega.
-              + omega.
+              + lia.
+              + lia.
             rewrite CaddnpA; last 3 first.
               + rewrite sizeof_ityp mul1Z.
                 split; by [apply min_u2Z | apply (leZ_ltZ_trans BU_51)].
-              + rewrite sizeof_ityp mul1Z; omega.
+              + rewrite sizeof_ityp mul1Z; lia.
               + rewrite sizeof_ityp 2!mul1Z.
-                move: (min_u2Z (BU2 `_ 51)) => ?; omega.
+                move: (min_u2Z (BU2 `_ 51)) => ?; lia.
             rewrite sequiv_add_e_sc_pos; last 3 first.
               + by apply min_u2Z.
-              + omega.
-              + omega.
+              + lia.
+              + lia.
             rewrite CaddnpA; last 3 first.
               + by rewrite sizeof_ityp.
               + rewrite sizeof_ityp mul1Z.
-                move: (min_u2Z (BU2 `_ 51)) => ?; omega.
+                move: (min_u2Z (BU2 `_ 51)) => ?; lia.
               + rewrite sizeof_ityp 2!mul1Z.
-                move: (min_u2Z (BU2 `_ 51)) => ?; omega.
+                move: (min_u2Z (BU2 `_ 51)) => ?; lia.
             rewrite sequiv_add_e_sc_pos => //; last 2 first.
-              + move: (min_u2Z (BU2 `_ 51)) => ?; omega.
-              + omega.
+              + move: (min_u2Z (BU2 `_ 51)) => ?; lia.
+              + lia.
             rewrite CaddnpA; last 3 first.
               + by rewrite sizeof_ityp.
               + rewrite sizeof_ityp mul1Z.
-                move: (min_u2Z (BU2 `_ 51)) => ?; omega.
+                move: (min_u2Z (BU2 `_ 51)) => ?; lia.
               + rewrite sizeof_ityp 2!mul1Z.
-                move: (min_u2Z (BU2 `_ 51)) => ?; omega.
+                move: (min_u2Z (BU2 `_ 51)) => ?; lia.
             rewrite sequiv_add_e_sc_pos => //; last 2 first.
-              + move: (min_u2Z (BU2 `_ 51)) => ?; omega.
-              + omega.
+              + move: (min_u2Z (BU2 `_ 51)) => ?; lia.
+              + lia.
             rewrite Ceqpn_add2l_sc_equiv; last 3 first.
               + congr Z.sgn.
                 rewrite 3!inj_plus inj_mult /u2nat Z_of_nat_Zabs_nat; last by apply min_u2Z.
                 rewrite (_ : Z<=nat 54 = 54%Z) // (_ : Z<=nat 1 = 1%Z) //; ring.
               + rewrite sizeof_ityp mul1Z.
-                move: (min_u2Z (BU2 `_ 51)) => ?; omega.
+                move: (min_u2Z (BU2 `_ 51)) => ?; lia.
               + rewrite sizeof_ityp mul1Z 3!inj_plus inj_mult /u2nat Z_of_nat_Zabs_nat; last by apply min_u2Z.
                 rewrite (_ : Z<=nat 54 = 54%Z) // (_ : Z<=nat 1 = 1%Z) // (_ : Z<=nat 2 = 2%Z) //.
-                move: (min_u2Z (BU2 `_ 51)) => ?; omega.
+                move: (min_u2Z (BU2 `_ 51)) => ?; lia.
             set lhs := (_ + _)%Z.
             set rhs := Z<=nat _.
             suff -> : lhs = rhs by rewrite beq_exx bbang1 coneP.
@@ -689,7 +689,7 @@ apply hoare_seq with inv_inner.
           rewrite s2Z_ge_s_cst_e in abs'; last by done.
           have {}abs' : (256 < ciph_len_value_Z)%Z by exact abs'.
           clear -Hciph_len_bound_Z abs'.
-          omega.
+          lia.
         rewrite [in X in _ ===> X (*i < size CI*)** _]leq_eqVlt Hi orbC.
         have Htmp : (true || (succn i == size CI)) by done. Ent_R_remove_sbang O Htmp. clear Htmp.
         Ent_L_contract_bbang 4. (*__ssl_ciphers_i *)
@@ -755,16 +755,16 @@ apply hoare_seq with inv_inner.
         do 3 Ent_LR_subst_apply.
         Ent_L_contract_bbang 0.
         have Htmp : (0 <= Z<=nat k * 2 + 2 < 2 ^^ 31)%Z.
-          split; first by omega.
+          split; first by lia.
           apply (@leZ_ltZ_trans (128 * 2 + 2)%Z) => //.
           apply/leZ_add2r/leZ_wpmul2r => //.
           rewrite (_ : 128%Z = Z_of_nat 128) //; by move/leP/Nat2Z.inj_le in Hk.
         rewrite CaddnpA; last 3 first.
-          rewrite sizeof_ityp mul1Z; omega.
+          rewrite sizeof_ityp mul1Z; lia.
           by rewrite sizeof_ityp.
           by rewrite sizeof_ityp 2!mul1Z.
         rewrite beq_pxx bbang1 conPe [in X in _ ===> X ** _](@sequiv_add_e_sc_pos _ _ (Z<=nat k * 2)%Z 2%Z) // ; last 2 first.
-          omega.
+          lia.
           move/leP/Nat2Z.inj_le in Hk.
           apply (@leZ_ltZ_trans (Z<=nat 128 * 2 + 2)%Z) => //.
           exact/leZ_add2r/leZ_wpmul2r.
@@ -774,7 +774,7 @@ apply hoare_seq with inv_inner.
         have -> : ciph_len_exp =s [ ciph_len_value_Z ]sc.
           by rewrite /ciph_len_value_Z /ciph_len_value sequiv_s2Z_si32_of_phy.
         rewrite (@Cltn_add2r_pos g sigma) //.
-        omega.
+        lia.
         apply (@leZ_trans 2%Z) => //.
         by case: Hciph_len_bound_Z.
         by case: Htmp.
@@ -850,7 +850,7 @@ apply hoare_seq with inv_inner.
       apply ent_sbang_sbang.
       case=> H1 H2.
       have Hk' : (- 2 ^ 31 <= Z<=nat (k + 1) * 2 < 2 ^ 31 )%Z.
-        split; first by apply (@leZ_trans Z0) => //; omega.
+        split; first by apply (@leZ_trans Z0) => //; lia.
         apply (@leZ_ltZ_trans (128 * 2)%Z) => //.
         apply/leZP.
         by rewrite leZ_pmul2r' // (_ : 128 = Z<=nat 128)%Z // -Z_of_nat_le addn1.
@@ -858,7 +858,7 @@ apply hoare_seq with inv_inner.
         apply: Zle_gb_inv; by rewrite s2Z_ge_s_cst_e.
       have Htmp' : (- 2 ^ 30 <= Z<=nat tmp * 2 < 2 ^ 30 )%Z.
         split; last by exact Htmp.
-        apply (@leZ_trans Z0) => //; omega.
+        apply (@leZ_trans Z0) => //; lia.
       rewrite gb_eq_e in H1.
       move/eqP in H1.
       suff H : (Z<=nat (k + 1) * 2 < ciph_len_value_Z + 2)%Z.
@@ -869,24 +869,24 @@ apply hoare_seq with inv_inner.
           set lhs := [_]ge in H1.
           have -> : goal = lhs by done.
           rewrite H1 s2Z_ge_s_cst_e; last first.
-            split; first by apply (@leZ_trans Z0) => //;omega.
+            split; first by apply (@leZ_trans Z0) => //;lia.
             exact: (ltZ_trans Htmp).
           exact: mulZC.
         case: H1 => k1 H1.
-        rewrite H1. rewrite H1 in H. clear -H. omega.
+        rewrite H1. rewrite H1 in H. clear -H. lia.
       set lhs := [ _ * _ ]sc in H2.
       set rhs := _ \+ _ in H2.
       apply (Zlt_gb _ _ lhs rhs erefl erefl) in H2; last 2 first.
         rewrite /lhs s2Z_ge_s_cst_e; last by exact Hk'.
-        split; first by apply (@leZ_trans Z0) => //; omega.
+        split; first by apply (@leZ_trans Z0) => //; lia.
         by case: Hk'.
         rewrite /rhs si32_of_phy_gb_add_e s2Z_add;
           (rewrite -/ciph_len_value -/ciph_len_value_Z s2Z_ge_s_cst_e // ;
-           clear -Hciph_len_bound_Z ; simpl expZ; omega).
+           clear -Hciph_len_bound_Z ; simpl expZ; lia).
       rewrite /lhs /rhs s2Z_ge_s_cst_e in H2; last by exact Hk'.
       rewrite si32_of_phy_gb_add_e s2Z_add in H2; last first.
         rewrite -/ciph_len_value -/ciph_len_value_Z s2Z_ge_s_cst_e //.
-        clear -Hciph_len_bound_Z; simpl expZ; omega.
+        clear -Hciph_len_bound_Z; simpl expZ; lia.
       by rewrite [in X in (_ < _ + X)%Z] s2Z_ge_s_cst_e in H2.
     Ent_L_contract_bbang 0.
     rewrite [in X in X ===> _]Hk.
@@ -902,9 +902,9 @@ apply hoare_seq with inv_inner.
     apply (Zle_gb_inv _ _ lhs rhs erefl erefl).
     rewrite -(ground_exp_sem (store0 sigma)) // -/ciph_len_exp si32_of_phy_binop_ne s2Z_add; last first.
       rewrite (ground_exp_sem (store0 sigma)) // -/ciph_len_value_Z si32_of_phy_sc Z2sK //.
-      simpl expZ; omega.
+      simpl expZ; lia.
     rewrite (ground_exp_sem (store0 sigma)) // -/ciph_len_value -/ciph_len_value_Z.
-    rewrite (@s2Z_ge_s_cst_e g sigma) // (@s2Z_ge_s_cst_e g sigma) //=; omega.
+    rewrite (@s2Z_ge_s_cst_e g sigma) // (@s2Z_ge_s_cst_e g sigma) //=; lia.
 
   idtac "65) assign (=63)".
   (** _j \+<- [ 2 ]sc; *)
@@ -963,11 +963,11 @@ apply hoare_seq with inv_inner.
       apply/leZP.
       rewrite leZ_add2r' leZ_pmul2r' // (_ : 128%Z = Z<=nat 128) //.
       exact/leZP/Nat2Z.inj_le/leP.
-    rewrite {2}(@sequiv_add_e_sc_pos g sigma (Z<=nat k * 2)%Z 2%Z) => //; last by omega.
+    rewrite {2}(@sequiv_add_e_sc_pos g sigma (Z<=nat k * 2)%Z 2%Z) => //; last by lia.
     rewrite inj_plus mulZDl mul1Z bbang_eq_exx coneP CaddnpA; last 3 first.
-      rewrite sizeof_ityp mul1Z; omega.
-      rewrite sizeof_ityp mul1Z; omega.
-      rewrite sizeof_ityp 2!mul1Z; omega.
+      rewrite sizeof_ityp mul1Z; lia.
+      rewrite sizeof_ityp mul1Z; lia.
+      rewrite sizeof_ityp 2!mul1Z; lia.
     rewrite bbang_eqpxx coneP -2! bbang_and -/Slow -/Shigh -/ciph_len_exp.
     Ent_L_sbang 0 => Hk'.
     Ent_L_contract_bbang 0.
@@ -976,7 +976,7 @@ apply hoare_seq with inv_inner.
     apply (ent_trans (`! \b[ Z<=nat k * 2 ]sc \< ([ Z<=nat k' * 2 ]sc : exp _ (ityp: sint)) **
        `! \b [Z<=nat k' * 2 ]sc \<= ([ 256 ]sc : exp _ (ityp: sint)))).
       apply monotony_L.
-      rewrite -> bbang_sc_le_e_sbang=> //; last by rewrite /=; omega.
+      rewrite -> bbang_sc_le_e_sbang=> //; last by rewrite /=; lia.
       set B := \b _.
       rewrite (@ground_bbang_sbang B erefl) /B {B} gb_eq_e.
       apply ent_sbang_sbang.
@@ -985,27 +985,27 @@ apply hoare_seq with inv_inner.
       set rhs := [ _ ]ge.
       move=> lhs_rhs.
       have {}lhs_rhs: Z<=s (si32<=phy lhs) = Z<=s (si32<=phy rhs) by rewrite lhs_rhs.
-      rewrite s2Z_ge_s_cst_e in lhs_rhs; last by rewrite /=; omega.
-      rewrite /rhs -/ciph_len_value_Z in lhs_rhs; omega.
+      rewrite s2Z_ge_s_cst_e in lhs_rhs; last by rewrite /=; lia.
+      rewrite /rhs -/ciph_len_value_Z in lhs_rhs; lia.
     rewrite -> bbang_sc_lt_e_sbang; last 2 first.
-      omega.
-      simpl; omega.
-    rewrite -> bbang_sc_le_e_sbang => //; last by simpl; omega.
+      lia.
+      simpl; lia.
+    rewrite -> bbang_sc_le_e_sbang => //; last by simpl; lia.
     rewrite sbang_con.
     apply ent_sbang_L => {}Hk'.
     rewrite Cltn_add2r_pos //; last 3 first.
-      omega.
-      omega.
-      simpl; omega.
-    rewrite -> (@sequiv_add_e_sc_pos g sigma (Z<=nat k * 2)%Z 2%Z) => //; last by omega.
+      lia.
+      lia.
+      simpl; lia.
+    rewrite -> (@sequiv_add_e_sc_pos g sigma (Z<=nat k * 2)%Z 2%Z) => //; last by lia.
     rewrite bbang_sc_lt_e_sbang; last 2 first.
-      omega.
-      simpl; omega.
+      lia.
+      simpl; lia.
     rewrite -> bbang_sc_le_e_sbang; last 2 first.
-      omega.
-      simpl; omega.
+      lia.
+      simpl; lia.
     rewrite sbang_con.
-    apply ent_R_sbang; omega.
+    apply ent_R_sbang; lia.
   idtac "66) assign (=64)".
   (** _p \+p<- [ 2 ]sc *)
   apply hoare_assign_stren.
@@ -1064,7 +1064,7 @@ apply hoare_seq with inv_inner.
     set tmp := [ _ ]sc. have H2 : vars tmp = nil by done.
     apply Zlt_gb_inv with (H1 := H1) (H2 := H2).
     rewrite /tmp Hk s2Z_ge_s_cst_e // (_ : (_ * _ = 258)%Z) // /tmp0 -/ciph_len_value_Z.
-    clear -Hciph_len_bound_Z; omega.
+    clear -Hciph_len_bound_Z; lia.
   Ent_L_contract_bbang 0.
   Ent_L_contract_bbang 0.
   Ent_L_ex k'.
@@ -1080,8 +1080,8 @@ apply hoare_seq with inv_inner.
   Ent_LR_rewrite_eq_e 0 (* j *).
   do 2 Ent_LR_subst_apply.
   rewrite (@sequiv_add_e_sc_pos g sigma (Z<=nat k' * 2) 2) => //; last 2 first.
-    omega.
-    simpl; omega.
+    lia.
+    simpl; lia.
   rewrite (_ : (Z<=nat k' * 2 + 2 = Z<=nat (k' + 1) * 2)%Z); last by rewrite inj_plus mulZDl.
   clear -Hk Hk'.
   Bbang2sbang.
@@ -1091,13 +1091,13 @@ apply hoare_seq with inv_inner.
   apply (Zle_gb_inv _ _ lhs rhs erefl erefl).
   rewrite 2!ge_cst_e.
   have Kk : (- 2 ^^ 31 <= Z<=nat (k + 1) * 2 < 2 ^^ 31)%Z.
-    split; first by apply (@leZ_trans Z0) => //; omega.
+    split; first by apply (@leZ_trans Z0) => //; lia.
     apply (@ltZ_trans ((Z<=nat 129) * 2)%Z) => //.
     apply/ltZP.
     by rewrite ltZ_pmul2r' // -Z_of_nat_lt ltnS addn1.
   rewrite phy_of_si32_of_Z2s; last by exact Kk.
   rewrite phy_of_si32_of_Z2s; last first.
-    split; by [apply (@leZ_trans Z0) => //; omega | apply (ltZ_trans Hk')].
+    split; by [apply (@leZ_trans Z0) => //; lia | apply (ltZ_trans Hk')].
   apply/leZP.
   rewrite leZ_pmul2r' //.
   apply/leZP.
@@ -1105,7 +1105,7 @@ apply hoare_seq with inv_inner.
   set tmp2 := [ Z<=nat (k' + 1) * 2 ]sc in H.
   move: (Zlt_gb g sigma tmp1 tmp2 erefl erefl _ H).
   set k1 := (_ <= _ < _)%Z.
-  have K1 : k1 by rewrite /k1 {k1} phy_of_si32_of_Z2s; [omega | exact Kk].
+  have K1 : k1 by rewrite /k1 {k1} phy_of_si32_of_Z2s; [lia | exact Kk].
   move/(_ K1) => {K1 k1}.
   set k2 := (_ <= _ < _)%Z.
   have Kk' : (Z<=nat (k' + 1) * 2 < 2 ^^ 31)%Z.
@@ -1114,14 +1114,14 @@ apply hoare_seq with inv_inner.
     rewrite inj_plus mulZDl ltZ_add2r' //; exact/ltZP.
   have K2 : k2.
     rewrite /k2 {k2} phy_of_si32_of_Z2s; last first.
-      split => //; apply (@leZ_trans Z0) => //; omega.
-    split; [omega | exact Kk'].
+      split => //; apply (@leZ_trans Z0) => //; lia.
+    split; [lia | exact Kk'].
   move/(_ K2) => {K2 k2}.
   rewrite phy_of_si32_of_Z2s; last by exact Kk.
-  rewrite phy_of_si32_of_Z2s; last by split => //; apply (@leZ_trans Z0) => //; omega.
+  rewrite phy_of_si32_of_Z2s; last by split => //; apply (@leZ_trans Z0) => //; lia.
   move/ltZP.
   rewrite ltZ_pmul2r' // (addn1 k') Z_S.
-  move/ltZP => ?; omega.
+  move/ltZP => ?; lia.
 
 idtac "67) inner loop increment".
 (** _i \++; *)

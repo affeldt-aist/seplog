@@ -83,7 +83,7 @@ apply while.hoare_seq with
 apply frame_rule_R.
 - eapply multi_zero_u_triple; eauto.
   + by Uniq_uniq r0.
-  + rewrite Z_S in Hnz; omega.
+  + rewrite Z_S in Hnz; lia.
 - by Inde_frame.
 - move=> ?; by Inde_mult.
 

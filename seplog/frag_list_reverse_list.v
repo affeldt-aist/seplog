@@ -1,7 +1,7 @@
 (* seplog (c) AIST 2005-2013. R. Affeldt, N. Marti, et al. GNU GPLv3. *)
 (* seplog (c) AIST 2014-2018. R. Affeldt et al. GNU GPLv3. *)
 From mathcomp Require Import ssreflect ssrbool eqtype.
-Require Import Omega List ZArith EqNat.
+Require Import List ZArith EqNat.
 Require Import bipl.
 Require Import seplog.
 Require Import frag_list_entail.

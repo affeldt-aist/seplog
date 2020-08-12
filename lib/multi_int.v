@@ -119,7 +119,7 @@ rewrite lSum_S mulSn ZpowerD.
 apply (@ltZ_leZ_trans (2 ^^ n * (1 + lSum k t))).
 - rewrite mulZDr mulZ1; exact/ltZ_add2r/max_u2Z.
 - apply leZ_wpmul2l; first exact: expZ_ge0.
-  move: (IH t) => ?; omega.
+  move: (IH t) => ?; lia.
 Qed.
 
 Lemma lSum_inj : forall k (l1 l2 : list (int n)), size l1 = k -> size l2 = k ->
@@ -157,7 +157,7 @@ Lemma lSum_head_swap0 k lst z :
   lSum (S k) (Z2u n 0 :: lst) + u2Z z = lSum (S k) (z :: lst).
 Proof.
 rewrite lSum_head_swap //.
-rewrite Z2uK; first by omega.
+rewrite Z2uK; first by lia.
 split => //; exact: expZ_gt0.
 Qed.
 
@@ -190,12 +190,12 @@ elim => [| k IH [|h t]].
   rewrite lSum_S => H /=.
   move: (min_u2Z h) (expZ_gt0 n) (min_lSum k t) => ? ? ?.
   have ? : 0 <= 2 ^^ n * lSum k t by apply mulZ_ge0 => //; exact/ltZW.
-  have HH : 0 = 2 ^^ n * lSum k t by omega.
+  have HH : 0 = 2 ^^ n * lSum k t by lia.
   rewrite IH //.
   + congr cons.
     apply u2Z_inj.
-    rewrite Z2uK //; omega.
-  + move/esym/eqP : HH; rewrite mulZ_eq0 => /orP[|] /eqP // ?; omega.
+    rewrite Z2uK //; lia.
+  + move/esym/eqP : HH; rewrite mulZ_eq0 => /orP[|] /eqP // ?; lia.
 Qed.
 
 Lemma lSum_0_inv len (l : list (int n)) : size l = len -> lSum len l = 0 ->
@@ -311,7 +311,7 @@ elim => // hd tl _.
 case=> l'.
 - rewrite take0 [_ ++ _]/= => _ H.
   rewrite [_ ^^ _]/= in H.
-  have {}H : lSum l.+1 (hd :: tl) = 0 by move: (min_lSum l.+1 (hd :: tl)) => ?; omega.
+  have {}H : lSum l.+1 (hd :: tl) = 0 by move: (min_lSum l.+1 (hd :: tl)) => ?; lia.
   by apply lSum_0_inv in H.
 - case=> H.
   rewrite ltnS => l'l.
@@ -322,7 +322,7 @@ case=> l'.
   have {}H'' : 2 ^^ (l'.+1 * n) <= 2 ^^ n * lSum l tl.
     rewrite /= mulSn ZpowerD.
     apply leZ_wpmul2l; [exact: expZ_ge0 | exact: Z.ge_le].
-  move: (min_u2Z hd) => ?; omega.
+  move: (min_u2Z hd) => ?; lia.
 Qed.
 
 Lemma lSum_upd_nth : forall (lst : list (int n)) k m,
@@ -367,11 +367,11 @@ elim.
   move: (min_lSum n0 tlA) => HtlA.
   move: (min_lSum n0 tlB) => HtlB.
   case: (Ztrichotomy (u2Z hdA) (u2Z hdB)) => [X|[X|X]].
-  + apply (@ltZ_trans (u2Z hdB + 2 ^^ n * lSum n0 tlA)); first omega.
+  + apply (@ltZ_trans (u2Z hdB + 2 ^^ n * lSum n0 tlA)); first lia.
     apply/ltZ_add2l/ltZ_pmul2l => //; exact/expZ_gt0.
   + rewrite X.
     apply/ltZ_add2l/ltZ_pmul2l => //; exact/expZ_gt0.
-  + apply poly_Zlt => //; omega.
+  + apply poly_Zlt => //; lia.
 Qed.
 
 Lemma lSum_positive_to_ints : forall k l, size l = (k * n)%nat ->
@@ -640,5 +640,5 @@ elim => [|n IHn].
     destruct n as [|n] => //.
     rewrite lSum_S -addZA /Zbeta ( _ : (n.+1 * 32) = 32 + n * 32)%nat
       // ZpowerD -mulZA -mulZDr {2}(_ : 32 = 1 * 32)%nat //.
-    apply Zodd_bool_Zplus_Zpower => //; omega.
+    apply Zodd_bool_Zplus_Zpower => //; lia.
 Qed.

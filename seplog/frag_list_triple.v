@@ -1,6 +1,6 @@
 (* seplog (c) AIST 2005-2013. R. Affeldt, N. Marti, et al. GNU GPLv3. *)
 (* seplog (c) AIST 2014-2018. R. Affeldt et al. GNU GPLv3. *)
-Require Import Omega List Classical.
+Require Import List Classical.
 From mathcomp Require Import ssreflect ssrbool eqtype ssrnat seq.
 Require Import ZArith_ext Max_ext ssrnat_ext seq_ext.
 Require Import bipl seplog.

@@ -86,13 +86,13 @@ apply fwd_sim_seq with (fun st s _ => uv_bound rk s u v st k /\
     Rewrite_reg rk s.
     rewrite /uv_bound in Hcond.
     split.
-      move=> abs; rewrite abs Z2uK // in Hcond; omega.
+      move=> abs; rewrite abs Z2uK // in Hcond; lia.
     repeat (split; first by tauto).
     rewrite /EGCD.uivi_bounds in Hcond.
     Rewrite_var u2 st. Rewrite_var v2 st. Rewrite_var u3 st. Rewrite_var v3 st.
-    rewrite Zabs_non_eq; last omega.
-    rewrite Zabs_non_eq; last omega.
-    rewrite Z.abs_eq; last omega.
+    rewrite Zabs_non_eq; last lia.
+    rewrite Zabs_non_eq; last lia.
+    rewrite Z.abs_eq; last lia.
     rewrite Z.abs_eq; ssromega.
   + apply (fwd_sim_stren _ (fun st s _ => [ rk ]_ s <> zero32 /\
        u2Z ([ rk ]_ s) < 2 ^^ 31 /\ k = Z.abs_nat (u2Z ([rk ]_ s)) /\
@@ -101,10 +101,10 @@ apply fwd_sim_seq with (fun st s _ => uv_bound rk s u v st k /\
       move=> st s h H.
       rewrite /uv_bound in H.
       split.
-        move=> abs; rewrite abs Z2uK // in H; omega.
+        move=> abs; rewrite abs Z2uK // in H; lia.
       repeat (split; first by tauto).
       rewrite /EGCD.uivi_bounds in H.
-      rewrite Z.abs_eq; last omega.
+      rewrite Z.abs_eq; last lia.
       rewrite Z.abs_eq; ssromega.
     assoc_tac_m.put_in_front v1.
     assoc_tac_m.put_in_front u1.
@@ -216,7 +216,7 @@ apply fwd_sim_seq with (fun st s _ => uv_bound rk s u v st k /\
       Rewrite_reg rk s.
       rewrite /uv_bound in Hcond.
       split.
-        move=> abs; rewrite abs Z2uK // in Hcond; omega.
+        move=> abs; rewrite abs Z2uK // in Hcond; lia.
       Rewrite_var t2 st. Rewrite_var u st.
       repeat (split; first tauto).
       case: Hcond => Hcond [_] /=.
@@ -230,7 +230,7 @@ apply fwd_sim_seq with (fun st s _ => uv_bound rk s u v st k /\
         move=> st s h H.
         rewrite /uv_bound in H.
         split.
-          move=> abs; rewrite abs Z2uK // in H; omega.
+          move=> abs; rewrite abs Z2uK // in H; lia.
         repeat (split; first by tauto).
         rewrite Zabs_non_eq; last by case: H => _ [_] /=; by move/geZP/Z.ge_le.
         ssromega.

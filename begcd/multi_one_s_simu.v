@@ -102,7 +102,7 @@ rewrite /state_mint; split.
       destruct k => //=.
       symmetry in k_rk.
       apply Zabs_nat_0_inv in k_rk.
-      omega.
+      lia.
     destruct k as [|k].
       symmetry in k_rk.
       apply Zabs_nat_0_inv in k_rk.
@@ -114,17 +114,17 @@ rewrite /state_mint; split.
       * by rewrite /= size_nseq -k_rk /= subn1.
       * rewrite Z2sK; last first.
           rewrite k_rk Z_of_nat_Zabs_nat; last exact: min_u2Z.
-          omega.
+          lia.
         rewrite Zsgn_nk; ring.
       * rewrite Z2sK; last first.
           rewrite k_rk Z_of_nat_Zabs_nat; last exact: min_u2Z.
-          omega.
+          lia.
         move/syntax_m.seplog_m.semop_prop_m.exec_cmd0_inv : exec_pseudo.
         case/syntax_m.seplog_m.exec0_assign_inv => _ -> /=.
         by syntax_m.seplog_m.assert_m.expr_m.Store_upd.
       * rewrite Z2sK; last first.
           rewrite k_rk Z_of_nat_Zabs_nat; last exact: min_u2Z.
-          omega.
+          lia.
         move/syntax_m.seplog_m.semop_prop_m.exec_cmd0_inv : exec_pseudo.
         case/syntax_m.seplog_m.exec0_assign_inv => _ ->.
         syntax_m.seplog_m.assert_m.expr_m.Store_upd.
@@ -138,9 +138,9 @@ rewrite /state_mint; split.
       + rewrite [size _]/= size_nseq.
         set xx := Z_of_nat _.
         suff : xx = u2Z ([rk ]_ st)%asm_expr by move=> ->.
-        rewrite {}/xx minus_Sn_m; last by omega.
+        rewrite {}/xx minus_Sn_m; last by lia.
         rewrite /= -minus_n_O Z_of_nat_Zabs_nat //; exact: min_u2Z.
-      + rewrite /= size_nseq subn1 prednK //; apply/ltP; omega.
+      + rewrite /= size_nseq subn1 prednK //; apply/ltP; lia.
       + suff : Z2u 32 (u2Z ([rk ]_ st)%asm_expr) = Z2s 32 (Z_of_nat (S k)).
           by move=> <-.
         have k_rk' : u2Z ([rk ]_ st)%asm_expr = Z_of_nat (S k).
@@ -150,10 +150,10 @@ rewrite /state_mint; split.
         rewrite Z2sK; last first.
           rewrite -k_rk'.
           clear -k_bound.
-          omega.
+          lia.
         rewrite -k_rk' s2Z_u2Z_pos' //.
         clear -k_bound.
-        rewrite [Peano.pred _]/=; omega.
+        rewrite [Peano.pred _]/=; lia.
   + have x0_x : x0 <> x.
       move=> ?; subst x0.
       apply assoc.get_Some_in in x0_mx0.

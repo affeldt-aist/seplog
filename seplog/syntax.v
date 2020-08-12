@@ -232,7 +232,7 @@ induction 1 => Hc st'' H'.
   by rewrite H0 in H.
 Qed.
 
-Fixpoint cmd0_vars (c : cmd0) : list var.v :=
+Definition cmd0_vars (c : cmd0) : list var.v :=
   match c with
     | skip => nil
     | x <- e => app_set (x :: nil) (vars_set e)

@@ -1,6 +1,6 @@
 (* seplog (c) AIST 2005-2013. R. Affeldt, N. Marti, et al. GNU GPLv3. *)
 (* seplog (c) AIST 2014-2018. R. Affeldt et al. GNU GPLv3. *)
-Require Import Omega.
+Require Import Lia.
 From mathcomp Require Import ssreflect ssrbool eqtype ssrnat seq.
 Require Import ssrnat_ext seq_ext.
 Require while.
@@ -171,8 +171,8 @@ elim.
     f_equal; first by repeat f_equal; ssromega.
     f_equal.
     rewrite -H3 H4.
-    f_equal; omega.
-  + done.
+    f_equal; lia.
+  + by [].
   + rewrite /= !size_cat -H1 -H3 /=; ssromega.
 Qed.
 
@@ -215,7 +215,7 @@ elim=> /=; move=> {l l' c sc}.
   case/andP; rewrite leq_eqVlt; case/orP => [ /eqP -> | H1 H2 ]; first by auto.
   right.
   have [l''_p | [l''_p | p_l''] ] : l'' < p \/ l'' = p \/ p < l''.
-    by case: (Nat.lt_trichotomy l'' p) => [ /ltP| [ | /ltP]]; auto.
+    by case: (PeanoNat.Nat.lt_trichotomy l'' p) => [ /ltP| [ | /ltP]]; auto.
   + apply List.in_or_app; right; apply IHc; by rewrite l''_p.
   + subst l''.
     apply List.in_or_app; left; apply List.in_or_app; right; by left.
@@ -580,7 +580,7 @@ elim => //; move=> {c s s'}.
           by apply (proj2 (IHc _ _ _ H6 _ refl_equal)).
         by constructor.
       by constructor.
-- (* while false *) move=> s t c0 H1 n c' m1 H st; case=> X; subst; split; last by done.
+- (* while false *) move=> s t c0 H1 n c' m1 H st; case=> X; subst; split; last by [].
   move=> st'; case=> X; subst.
   inversion H; subst.
   apply exec_sgoto_seq0 with (Some (S l', st')); first by decompose_In.
@@ -626,7 +626,7 @@ Lemma reflection_of_evaluations_sC_none''' (c : cmd0) l s :
   Some (l, s) >- compile_f l c ---> None -> Some s -- c ----> None.
 Proof. move=> /= Hexec; by eapply reflection_of_evaluations_sC_none''; apply Hexec. Qed.
 
-Lemma reflection_of_evaluations_sC_none (c : cmd0) l s l' sc : 
+Lemma reflection_of_evaluations_sC_none (c : cmd0) l s l' sc :
   compile l c sc l' -> Some (l, s) >- sc ---> None -> Some s -- c ----> None.
 Proof.
 case/compile_compile_f => H1 H2 H.
@@ -642,8 +642,8 @@ Qed.
     in the main proof is given as an hypothesis to this intermediate lemma. *)
 
 Lemma reflection_of_evaluations' : forall c_t
-  (IHouter : forall l sc_t l' s s' lstar, compile l c_t sc_t l' -> 
-    Some (l, s) >- sc_t ---> Some (lstar, s') -> 
+  (IHouter : forall l sc_t l' s s' lstar, compile l c_t sc_t l' ->
+    Some (l, s) >- sc_t ---> Some (lstar, s') ->
     lstar = l' /\ Some s -- c_t ---> Some s') sc st st',
   st >- sc ---> st' ->
   forall l l' t, compile l (while t c_t) sc l' ->
@@ -673,8 +673,8 @@ induction H.
         by decompose_In.
         by decompose_not_In.
       case: H1 => [ [[l2 st2]|] [H1 H3] ].
-      - case/(IHouter _ _ _ _ _ _ Hc_t) : H1 => ? H1; subst l2.      
-        apply exec_sgoto_inv_seq1 in H3; last 2 first. 
+      - case/(IHouter _ _ _ _ _ _ Hc_t) : H1 => ? H1; subst l2.
+        apply exec_sgoto_inv_seq1 in H3; last 2 first.
           by decompose_In.
           by decompose_not_In.
         case: H3 => [[ [l3 st3]|] [H3 H4] ].
@@ -685,8 +685,8 @@ induction H.
         + by inversion H4.
       - by inversion H3.
     * by inversion H2.
-  + (* case L = S l *) rewrite /= in H; inversion_clear H; last by done.
-    suff : False by done. omega.
+  + (* case L = S l *) rewrite /= in H; inversion_clear H; last by [].
+    exfalso. lia.
 - (* exec_sgoto_seq1 *) move=> t s0 l'' st' L [? ?] Hneq Hs'' l0 l' sc' L_l [? ?] Hc_t Hwhile.
   subst sc1 sc2 l s s''.
   case: L_l => L_l; subst L.
@@ -704,7 +704,7 @@ induction H.
       case: H2 => [ [[l1 st1]|] [H2 H3] ].
       - case/(exec_sgoto_inv_jmp _ _ _ _) : H2; move=> [? ?] _; subst l1 st1.
         apply exec_sgoto_inv_refl in H3; last by decompose_not_In.
-        subst s'. 
+        subst s'.
         case/boolP : (eval_b t sta0) => t_s0.
         + lapply (IHexec_sgoto2 _ sta0 l'' st' l0 refl_equal t_s0 refl_equal l0 l' sc'); auto.
           case/(_ refl_equal Hc_t Hwhile) => H2 H3.
@@ -770,7 +770,7 @@ induction H.
         by decompose_In.
         by decompose_not_In.
       case: H1 => [ [[l2 st2]|] [H1 H3] ].
-      - case/(proj1 (IndHyp _ _ _ Hsc' _) _ _) : H1 => ? H1; subst l2.      
+      - case/(proj1 (IndHyp _ _ _ Hsc' _) _ _) : H1 => ? H1; subst l2.
         apply exec_sgoto_inv_seq1 in H3; last 2 first.
           by decompose_In.
           by decompose_not_In.
@@ -785,7 +785,7 @@ induction H.
         by decompose_In.
         by decompose_not_In.
       case: H1 => [ [[l2 st2]|] [H1 H3] ].
-      - case/(proj1 (IndHyp _ _ _ Hsc' _) _ _) : H1 => ? H1; subst l2.      
+      - case/(proj1 (IndHyp _ _ _ Hsc' _) _ _) : H1 => ? H1; subst l2.
         apply exec_sgoto_inv_seq1 in H3; last 2 first.
           by decompose_In.
           by decompose_not_In.
@@ -797,7 +797,7 @@ induction H.
         eapply exec_while_true; eauto.
         by constructor.
   + (* case L = S l *) rewrite /= in H; inversion_clear H; last by done.
-    suff : False by done. omega.
+    exfalso. lia.
 - (* exec_sgoto_seq1 *) move=> t s0 L [? ?] Hneq Hs'' l0 l' sc' L_l [? ?] Hsc' Hwhile.
   subst sc1 sc2 l s s''.
   case: L_l => ?; subst L.
@@ -808,7 +808,7 @@ induction H.
       by decompose_In.
       by decompose_not_In.
     case: H0 => [ [[lbl0 sta0]|] [H0 H2] ].
-    * case/(proj1 (IndHyp _ _ _ Hsc' _) _ _) : H0 => ? H0; subst lbl0.      
+    * case/(proj1 (IndHyp _ _ _ Hsc' _) _ _) : H0 => ? H0; subst lbl0.
       apply exec_sgoto_inv_seq1 in H2; last 2 first.
         by decompose_In.
         by decompose_not_In.
@@ -1049,7 +1049,7 @@ elim.
     case/boolP : (eval_b (neg t) s) => Heq.
     * case: {Hexec_beq}(exec_sgoto_inv_cjmp_true _ _ _ _ _ Hexec_beq Heq); case=> ? ? // _; subst l_ s_.
       apply exec_sgoto_inv_refl in Hexec_sc; [done | by decompose_not_In].
-    * have IndHyp : forall n c' n' st, compile n c_t c' n' -> 
+    * have IndHyp : forall n c' n' st, compile n c_t c' n' ->
         Some (n, st) >- c' ---> None -> (Some st -- c_t ---> None).
         move=> n c' n' st H H0.
         exact: (proj2 (IHouter _ _ _ H st) H0).

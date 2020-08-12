@@ -314,16 +314,16 @@ have SI_sid_BU_51 : SI `_ sid = BU2 `_ 51.
     rewrite ltn_add2l.
     apply/ltP.
     apply Zabs_nat_lt.
-    clear -HN1; omega.
+    clear -HN1; lia.
   - rewrite leqnn andbC /=.
-    apply O_lt_Zabs_nat; omega.
+    apply O_lt_Zabs_nat; lia.
 have SI_compmeth_BU_helper :
   4 < compmeth + nat<=u (BU2 `_ 51) + ciph_len_value_nat < 5 + '| the_n |.
   apply/andP; split; first by done.
   apply/ltP; apply Nat2Z.inj_lt.
   rewrite 2!inj_plus [in X in (_ < X)%Z]inj_plus /u2nat Z_of_nat_Zabs_nat; last by apply min_u2Z.
-  rewrite Z_of_nat_Zabs_nat; last by clear -HN1; omega.
-  rewrite -/the_n_plus5 /ciph_len_value_nat Z_of_nat_Zabs_nat; last by omega.
+  rewrite Z_of_nat_Zabs_nat; last by clear -HN1; lia.
+  rewrite -/the_n_plus5 /ciph_len_value_nat Z_of_nat_Zabs_nat; last by lia.
   exact: compmeth_max.
 Ent_L_dup (Hciph_len :: nil).
 Ent_L_dup (Hsess_len :: nil).
@@ -341,10 +341,10 @@ Ent_decompose (1 (* k < 128 *) :: 2 (* k * 2 < ciph_len *) :: 3 (* Hssl_cipher_i
     have k2_bound : (- 2 ^^ 31 <= Z<=nat k * 2 < 2 ^^ 31)%Z.
       move/ltP : Hk; move/Nat2Z.inj_lt.
       rewrite (_ : Z<=nat 128 = 128%Z) // => Hk.
-      simpl expZ; omega.
+      simpl expZ; lia.
     rewrite s2Z_ge_s_cst_e; last by exact k2_bound.
-    apply; first by omega.
-    rewrite -/ciph_len_value_Z [_ ^^ _]/=; omega.
+    apply; first by lia.
+    rewrite -/ciph_len_value_Z [_ ^^ _]/=; lia.
   apply ent_L_sbang_con => k2.
   Ent_L_contract_bbang 0 (* k_ciph *); clear k_ciph.
   Ent_L_contract_bbang 4 (* Hciph_len *).
@@ -382,20 +382,20 @@ Ent_decompose (1 (* k < 128 *) :: 2 (* k * 2 < ciph_len *) :: 3 (* Hssl_cipher_i
     - apply/andP; split; first by done.
       eapply leq_ltn_trans; last by apply SI_compmeth_BU_helper.
       rewrite -addnA leq_add2l -ltnS addn1 ltnS mulnC /ciph_len_value_nat.
-      rewrite Z_of_nat_lt Z_of_nat_Zabs_nat; last by omega.
+      rewrite Z_of_nat_lt Z_of_nat_Zabs_nat; last by lia.
       rewrite inj_mult; exact/ltZP.
     - rewrite leqnn andbC /=.
-      apply O_lt_Zabs_nat; omega.
+      apply O_lt_Zabs_nat; lia.
   rewrite SI_compmeth_BU CI_i_BU.
   have SI_compmeth_BU2 : SI `_ (compmeth + nat<=u (BU2 `_ 51) + 2 * k) =
                          BU2 `_ (54 + nat<=u BU2 `_ 51 + 2 * k).
     rewrite /nth' (nth_slices _ _ _ (esym BU2SI)) //.
     - apply/andP; split; first by done.
       eapply leq_ltn_trans; last by apply SI_compmeth_BU_helper.
-      rewrite leq_add // /ciph_len_value_nat Z_of_nat_le Z_of_nat_Zabs_nat; last by omega.
+      rewrite leq_add // /ciph_len_value_nat Z_of_nat_le Z_of_nat_Zabs_nat; last by lia.
       rewrite mulnC inj_mult; exact/leZP/ltZW.
     - rewrite leqnn andbC /=.
-      apply O_lt_Zabs_nat; omega.
+      apply O_lt_Zabs_nat; lia.
   rewrite SI_compmeth_BU2 Hp0 zext_Z2u // -zext_concat.
   by apply ent_L_bbang, ent_R_sbang.
 Ent_decompose (13 (* final_rb *) :: nil) (0 :: nil); first by apply ent_id.
@@ -403,18 +403,18 @@ Ent_decompose (13 (* final_id *) :: nil) (0 :: nil); first by apply ent_id.
 have nat_the_n : 0 < '| the_n |.
   clear -HN1.
   rewrite (_ : 0 = '| 0 |) //.
-  apply/ltP; apply Zabs2Nat.inj_lt; omega.
+  apply/ltP; apply Zabs2Nat.inj_lt; lia.
 have SI_min_req_BU_18 : SI `_ min_req = BU2 `_ 18.
   rewrite /nth' (nth_slices _ _ _ (esym BU2SI)) //.
   - apply (@leq_ltn_trans (5 + '| 44 |)) => //.
     rewrite ltn_add2l.
-    apply/ltP; apply Zabs2Nat.inj_lt; omega.
+    apply/ltP; apply Zabs2Nat.inj_lt; lia.
   - apply/andP; by rewrite leqnn.
 have SI_maj_req : SI `_ maj_req = BU2 `_ 17.
   rewrite /nth' (nth_slices _ _ _ (esym BU2SI)) //.
   - apply (@leq_ltn_trans (5 + '| 44 |)) => //.
     rewrite ltn_add2l.
-    apply/ltP/Zabs2Nat.inj_lt; omega.
+    apply/ltP/Zabs2Nat.inj_lt; lia.
   - apply/andP; by rewrite leqnn.
 have SI_maj_ver_BU : SI `_ maj_ver = BU1 `_ 9.
   by rewrite /nth' (nth_slices _ _ _ (esym BU1SI)).
@@ -444,9 +444,9 @@ Ent_R_flat; apply ent_R_sbang_con => //.
 have SI_handshake_sz : SI `_ handshake_sz = BU2 `_ 14.
   rewrite /nth' (nth_slices _ _ _ (esym BU2SI)) //.
   - apply/andP; split; first by done.
-    rewrite (_ : 5 = '| Z<=nat 5 |) // -plusE -Zabs_nat_Zplus //; last by omega.
+    rewrite (_ : 5 = '| Z<=nat 5 |) // -plusE -Zabs_nat_Zplus //; last by lia.
     rewrite (_ : handshake_sz = '| 6 |) //.
-    apply/ltP; apply Zabs_nat_lt => //; omega.
+    apply/ltP; apply Zabs_nat_lt => //; lia.
   - by rewrite leqnn andbC.
 have -> : SI `_ maj_ver = S621.SSLv30_maj by rewrite SI_maj_ver_BU BU1_9.
 rewrite -sbang_con.
@@ -462,8 +462,8 @@ have -> : !!( S621.length_maxp (n' SI) ) <==> emp.
   have -> : '| the_n | <= 2 ^ 14.
     rewrite (_ : 2 ^ 14 = '| (2 ^^ 14) |) //.
     apply/leP; apply Zabs2Nat.inj_le => //.
-    omega.
-    simpl expZ; omega.
+    lia.
+    simpl expZ; lia.
   by apply sbang_emp.
 have SI_Shandshake_sz : SI `_ handshake_sz.+1 = BU2 `_ 15.
   rewrite /nth' (nth_slices _ _ _ (esym BU2SI)) //.
@@ -471,8 +471,8 @@ have SI_Shandshake_sz : SI `_ handshake_sz.+1 = BU2 `_ 15.
     rewrite (_ : 5 = '| (Z<=nat 5) |) //.
     rewrite -plusE -Zabs_nat_Zplus //.
     rewrite (_ : handshake_sz.+1 = '| 7 |) //.
-    apply/ltP; apply Zabs_nat_lt; omega.
-    omega.
+    apply/ltP; apply Zabs_nat_lt; lia.
+    lia.
   - by rewrite leqnn andbC.
 have SI_SShandshake_sz : SI `_ handshake_sz.+2 = BU2 `_ 16.
   rewrite /nth' (nth_slices _ _ _ (esym BU2SI)) //.
@@ -480,8 +480,8 @@ have SI_SShandshake_sz : SI `_ handshake_sz.+2 = BU2 `_ 16.
     rewrite (_ : 5 = '| Z<=nat 5 |) //.
     rewrite -plusE -Zabs_nat_Zplus //.
     rewrite (_ : handshake_sz.+2 = '| 8 |) //.
-    apply/ltP; apply Zabs_nat_lt; omega.
-    omega.
+    apply/ltP; apply Zabs_nat_lt; lia.
+    lia.
   - by rewrite leqnn andbC.
 have SI_csuites_BU : SI `_ (csuites + nat<=u (BU2 `_ 51)) = BU2 `_ (52 + nat<=u BU2 `_ 51).
   rewrite /nth' (nth_slices _ _ _ (esym BU2SI)) //.
@@ -490,23 +490,23 @@ have SI_csuites_BU : SI `_ (csuites + nat<=u (BU2 `_ 51)) = BU2 `_ (52 + nat<=u 
     apply/ltP; apply Nat2Z.inj_lt.
     rewrite 2!inj_plus.
     rewrite {1}/u2nat Z_of_nat_Zabs_nat; last by apply min_u2Z.
-    rewrite Z_of_nat_Zabs_nat; last by omega.
+    rewrite Z_of_nat_Zabs_nat; last by lia.
     apply: ltZ_trans; last by apply csuites_max.
     rewrite (_ : Z_of_nat 44 = 44%Z) // (_ : Z<=nat csuites.+1 = 45%Z) //.
-    rewrite -/(BU2 `_ 51); omega.
+    rewrite -/(BU2 `_ 51); lia.
   - rewrite leqnn andbC /=.
-    apply O_lt_Zabs_nat; omega.
+    apply O_lt_Zabs_nat; lia.
 have SI_Scsuites_BU : SI `_ (csuites.+1 + nat<=u BU2 `_ 51) = BU2 `_ (53 + nat<=u BU2 `_ 51).
   rewrite /nth' (nth_slices _ _ _ (esym BU2SI)) //.
   - rewrite (_ : csuites = 44) //.
     apply/andP; split; first by done.
     apply/ltP; apply Nat2Z.inj_lt.
     rewrite 2!inj_plus {1}/u2nat Z_of_nat_Zabs_nat; last by apply min_u2Z.
-    rewrite Z_of_nat_Zabs_nat; last by omega.
+    rewrite Z_of_nat_Zabs_nat; last by lia.
     apply: leZ_ltZ_trans; last by apply csuites_max.
     exact: leZZ.
   - rewrite leqnn andbC /=.
-    apply O_lt_Zabs_nat; omega.
+    apply O_lt_Zabs_nat; lia.
 have SI_ciph_len_value_Z : Z<=u (SI `_ (csuites + nat<=u (BU2 `_ 51)) `||
                                  SI `_ (csuites.+1 + nat<=u (BU2 `_ 51))) = ciph_len_value_Z.
   unfold ciph_len_value_Z, ciph_len_value, ciph_len_exp, Shigh, Slow.
@@ -522,7 +522,7 @@ have SI_compmeth_BU : SI `_ (compmeth + nat<=u (BU2 `_ 51) + ciph_len_value_nat)
                       BU2 `_ (54 + nat<=u BU2 `_ 51 + ciph_len_value_nat).
   rewrite /nth' (@nth_slices _ (8 + 5) '| the_n | SI BU2 5 '| the_n |) //.
   rewrite leqnn andbC /=.
-  apply O_lt_Zabs_nat; omega.
+  apply O_lt_Zabs_nat; lia.
 have SI_comp_len_value_Z :
     Z<=u (SI `_ (compmeth + nat<=u (BU2 `_ 51) + ciph_len_value_nat)) = Z<=s (si32<=phy comp_len_value).
   rewrite /comp_len_value /comp_len_exp SI_compmeth_BU ge_cast_sint_cst_8c.
@@ -570,8 +570,8 @@ Ent_L_stren_by Hextensions' (Hsess_len ::  Hn_old :: Hciph_len :: Hcomp_len :: H
   rewrite -[in X in _ = X -> _](ground_exp_sem (store0 sigma)).
   rewrite -> (@sequiv_add_e_sc_pos _ sigma 5 the_n); last 3 first.
     done.
-    omega.
-    simpl expZ; omega.
+    lia.
+    simpl expZ; lia.
   rewrite -/the_n_plus5.
   rewrite [in X in _ = X -> _](ground_exp_sem (store0 sigma)).
   set lhs := ground_exp _ _.
@@ -580,17 +580,17 @@ Ent_L_stren_by Hextensions' (Hsess_len ::  Hn_old :: Hciph_len :: Hcomp_len :: H
   have {H} : Z<=s (si32<=phy lhs) = Z<=s (si32<=phy rhs) by rewrite H.
   rewrite /lhs /rhs {lhs rhs} si32_of_phy_gb_add_e si32_of_phy_gb_add_e.
   rewrite si32_of_phy_gb_add_e ge_cast_sint_cst_8c (phy_of_si32K (zext 24 BU2`_51)).
-  rewrite i32_ge_s_cst_e i32_ge_s_cst_e Z2sK; last by unfold the_n_plus5; simpl expZ; omega.
+  rewrite i32_ge_s_cst_e i32_ge_s_cst_e Z2sK; last by unfold the_n_plus5; simpl expZ; lia.
   move=> <-.
   rewrite -/ciph_len_value /comp_len_value ge_cst_e -/comp_len_value (_ : Z<=nat _ = 47%Z) //.
   move: (min_u2Z (BU2 `_ 51)) (max_u2Z (BU2 `_ 51)) => BU51max.
   rewrite s2Z_add; last first.
     rewrite -/comp_len_value_Z s2Z_add; last first.
-      rewrite -/ciph_len_value_Z s2Z_add; rewrite Z2sK // (s2Z_zext 24) //; simpl expZ; omega.
-    rewrite -/ciph_len_value_Z s2Z_add; rewrite Z2sK // (s2Z_zext 24) //; simpl expZ; omega.
+      rewrite -/ciph_len_value_Z s2Z_add; rewrite Z2sK // (s2Z_zext 24) //; simpl expZ; lia.
+    rewrite -/ciph_len_value_Z s2Z_add; rewrite Z2sK // (s2Z_zext 24) //; simpl expZ; lia.
   rewrite s2Z_add; last first.
-    rewrite -/ciph_len_value_Z s2Z_add; rewrite Z2sK // (s2Z_zext 24) //; simpl expZ; omega.
-  rewrite -/ciph_len_value_Z s2Z_add; last by rewrite Z2sK // (s2Z_zext 24) //; simpl expZ; omega.
+    rewrite -/ciph_len_value_Z s2Z_add; rewrite Z2sK // (s2Z_zext 24) //; simpl expZ; lia.
+  rewrite -/ciph_len_value_Z s2Z_add; last by rewrite Z2sK // (s2Z_zext 24) //; simpl expZ; lia.
   by rewrite Z2sK // (s2Z_zext 24).
 apply ent_L_sbang_con => Hextensions''.
 clear Hextensions'.
@@ -608,17 +608,17 @@ Ent_decompose (13 (* Hn0 *) :: 10 (* Hn *) :: 7 (* Hm *) :: nil) (0 (* length_ma
     apply s2Z_inj.
     rewrite s2Z_u2Z_pos'; last first.
       split; first by apply min_u2Z.
-      rewrite Z2uK; last by simpl expZ; omega.
-      simpl expZ; omega.
-    rewrite Z2uK; last by simpl expZ; omega.
-    rewrite Z2sK //; by simpl expZ; omega.
+      rewrite Z2uK; last by simpl expZ; lia.
+      simpl expZ; lia.
+    rewrite Z2uK; last by simpl expZ; lia.
+    rewrite Z2sK //; by simpl expZ; lia.
   Bbang2sbang.
   rewrite -(ground_bexp_sem (store0 sigma)).
   rewrite (@sequiv_sub_e_sc _ sigma); last 3 first.
-    simpl expZ; omega.
+    simpl expZ; lia.
     done.
-    simpl expZ; omega.
-  rewrite (_ : 5 + the_n - 5 = the_n)%Z; last by omega.
+    simpl expZ; lia.
+  rewrite (_ : 5 + the_n - 5 = the_n)%Z; last by lia.
   rewrite (ground_bexp_sem (store0 sigma)) gb_eq_e.
   apply ent_sbang_sbang.
   move/eqP.
@@ -629,7 +629,7 @@ Ent_decompose (13 (* Hn0 *) :: 10 (* Hn *) :: 7 (* Hm *) :: nil) (0 (* length_ma
   set lhs := Z2s _ _.
   set rhs := si32<=phy _.
   move=> abs; have {abs} : s2Z lhs = s2Z rhs. by rewrite abs.
-  rewrite Z2sK; last by simpl expZ; omega.
+  rewrite Z2sK; last by simpl expZ; lia.
   move=> K; rewrite K; rewrite /rhs /lhs.
   rewrite si32_of_phy_gb_add_e s2Z_add; last first.
     rewrite s2Z_ge_s_cst_e // si32_of_phy_gb_or_e sint_shl_e_to_i32_ge -SI_Shandshake_sz -SI_SShandshake_sz.
@@ -689,7 +689,7 @@ have -> : !!( (tls_min S7412.cipher_suites_type <= Z<=nat (ciph_len SI) <=
   rewrite /ciph_len /sess_len SI_sid_BU_51 Z_of_nat_Zabs_nat; last by apply min_u2Z.
   rewrite SI_ciph_len_value_Z.
   apply sbang_emp.
-  simpl (tls_min S7412.cipher_suites_type); simpl (tls_max S7412.cipher_suites_type); omega.
+  simpl (tls_min S7412.cipher_suites_type); simpl (tls_max S7412.cipher_suites_type); lia.
 Ent_R_flat.
 rewrite -sbang_con.
 Ent_decompose (18 (* Hciph_len *) :: 19 (* Hciph_len_even *) :: nil) (0 (* even (ciph_len SI) *) :: nil).
@@ -709,8 +709,8 @@ Ent_decompose (18 (* Hciph_len *) :: 19 (* Hciph_len_even *) :: nil) (0 (* even 
     rewrite /lhs si32_of_phy_gb_or_e sint_shl_e_to_i32_ge /u2nat ge_cast_sint_cst_8c.
     by rewrite phy_of_si32K (@u2Z_or 24) u2Z_concat (u2Z_zext 16).
   rewrite -X i32_ge_s_cst_e /u2nat -s2Z_u2Z_pos; last first.
-    rewrite Z2sK; [omega | simpl expZ; omega].
-  rewrite Z2sK; last by simpl expZ; omega.
+    rewrite Z2sK; [lia | simpl expZ; lia].
+  rewrite Z2sK; last by simpl expZ; lia.
   by rewrite Zabs_nat_mult muln2 odd_double.
 have comp_len_SI : comp_len SI = nat<=s (si32<=phy comp_len_value).
   rewrite /s2nat -SI_comp_len_value_Z /comp_len /sess_len SI_sid_BU_51.
@@ -718,11 +718,11 @@ have comp_len_SI : comp_len SI = nat<=s (si32<=phy comp_len_value).
   by rewrite -SI_ciph_len_value_Z /sess_len SI_sid_BU_51.
 rewrite -sbang_con -conA.
 apply ent_R_sbang_con.
-  rewrite comp_len_SI Z_of_nat_Zabs_nat; rewrite -/comp_len_value_Z; omega.
+  rewrite comp_len_SI Z_of_nat_Zabs_nat; rewrite -/comp_len_value_Z; lia.
 rewrite -sbang_con -[in X in _ ===> X] conA.
 apply ent_R_sbang_con.
   move: HSI_new; clear -the_n_n_SI HN1.
-  rewrite /the_n_plus5 Zabs2Nat.inj_add //; last by omega.
+  rewrite /the_n_plus5 Zabs2Nat.inj_add //; last by lia.
   by rewrite the_n_n_SI addnC.
 Ent_decompose (7 (* Hm *) :: 9 (* Hn*) :: 11 (* Hn0 *) :: nil) (0 :: nil).
   unfold Hm, Hn, Hn0, S7412.client_extensions_present, m, sess_len, ciph_len, comp_len, sess_len.
@@ -752,16 +752,16 @@ Ent_decompose (7 (* Hm *) :: 9 (* Hn*) :: 11 (* Hn0 *) :: nil) (0 :: nil).
     rewrite (_ : [ `( the_n_plus5 )_32 ]pc = [ the_n_plus5 ]sc :> exp _ (ityp: sint)); last first.
       congr ([ _ ]pc).
       rewrite Z2s_Z2u_k //.
-      simpl expZ; unfold the_n_plus5; omega.
+      simpl expZ; unfold the_n_plus5; lia.
     rewrite sequiv_sub_e_sc; last 3 first.
-      simpl expZ; unfold the_n_plus5; omega.
+      simpl expZ; unfold the_n_plus5; lia.
       done.
-      simpl expZ; unfold the_n_plus5; omega.
+      simpl expZ; unfold the_n_plus5; lia.
     rewrite /the_n_plus5 (_ : 5 + the_n - 5 = the_n)%Z; last by ring.
     rewrite (ground_exp_sem (store0 sigma)).
     apply si32_of_phy_inj.
     rewrite i32_ge_s_cst_e phy_of_si32K Z2s_Z2u_k //.
-    simpl expZ; unfold the_n_plus5; omega.
+    simpl expZ; unfold the_n_plus5; lia.
   set lhs := [ _ ]ge.
   set rhs := [ `( the_n )_32 ]p.
   move=> abs; have {abs} : si32<=phy lhs = si32<=phy rhs by rewrite abs.
@@ -769,7 +769,7 @@ Ent_decompose (7 (* Hm *) :: 9 (* Hn*) :: 11 (* Hn0 *) :: nil) (0 :: nil).
   set lhs := _ `+ _.
   move=> abs; have {abs} : u2Z lhs = the_n.
     rewrite abs Z2uK //.
-    simpl expZ; omega.
+    simpl expZ; lia.
   rewrite {}/lhs.
   set tmp := [ _ \| _ ]ge.
   have tmptmp : u2Z (si32<=phy tmp) = (Z<=u BU2`_15 * 256 + Z<=u BU2`_16)%Z.
@@ -789,12 +789,12 @@ Ent_decompose (7 (* Hm *) :: 9 (* Hn*) :: 11 (* Hn0 *) :: nil) (0 :: nil).
   rewrite Z2s_Z2u_k // Z2uK //.
   move=> Htmptmp.
   rewrite /the_n_plus5 -Htmptmp (_ : Z<=nat _ = 47%Z) // in Hextensions''.
-  rewrite (_ : Z<=nat 1 = 1%Z) // (_ : Z<=nat 2 = 2%Z) // Z_of_nat_Zabs_nat; last by omega.
+  rewrite (_ : Z<=nat 1 = 1%Z) // (_ : Z<=nat 2 = 2%Z) // Z_of_nat_Zabs_nat; last by lia.
   rewrite -/comp_len_value_Z in Hextensions''.
   clear -Hextensions'' Hciph_len_bound_Z.
   rewrite (_ : Z<=nat ciph_len_value_nat = ciph_len_value_Z); last first.
-    rewrite /ciph_len_value_nat Z_of_nat_Zabs_nat //; omega.
-  omega.
+    rewrite /ciph_len_value_nat Z_of_nat_Zabs_nat //; lia.
+  lia.
 Ent_L_contract_bbang 0.
 apply ent_L_sbang_con => i_CI.
 Ent_L_contract_bbang 0.

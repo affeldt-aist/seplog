@@ -1,11 +1,11 @@
 (* seplog (c) AIST 2005-2013. R. Affeldt, N. Marti, et al. GNU GPLv3. *)
 (* seplog (c) AIST 2014-2018. R. Affeldt et al. GNU GPLv3. *)
 From mathcomp Require Import ssreflect ssrfun ssrbool eqtype ssrnat seq.
-Require Import ZArith.
-Require Import Znumtheory.
+Require Import ZArith Lia Znumtheory.
 Require Import ssrZ.
 Export ZArith.
 Export Znumtheory.
+Export Lia.
 
 Notation "m ^ n" := (expn m n) : nat_scope. (* TODO: kludge *)
 
@@ -28,13 +28,13 @@ Canonical Structure positive_eqType := Eval hnf in EqType _ positive_eqMixin.
 Local Open Scope Z_scope.
 
 Lemma Zminus_le_decr a b : 0 <= b -> a - b <= a.
-Proof. move=> Hb. omega. Qed.
+Proof. by move=> ?; lia. Qed.
 
 Lemma Zle_scale a b : 0 <= a -> 0 < b -> a <= a * b.
 Proof.
 move=> Ha Hb.
 rewrite (_ : a * b = a + a * (b - 1)); last by ring.
-rewrite -{1}(addZ0 a); apply/leZ_add2l/mulZ_ge0; omega.
+by rewrite -{1}(addZ0 a); apply/leZ_add2l/mulZ_ge0; lia.
 Qed.
 
 Lemma Zle_scale_neg a b : a <=0 -> 0 < b -> a * b <= a.
@@ -44,7 +44,7 @@ rewrite (_ : a * b = a + a * (b - 1)); last by ring.
 rewrite -{3}(addZ0 a).
 apply leZ_add2l.
 rewrite mulZC.
-apply mulZ_ge0_le0 => //; omega.
+by apply mulZ_ge0_le0 => //; lia.
 Qed.
 
 (* NB: Coq.ZArith.Zorder.Zmult_lt_compat2 *)
@@ -53,7 +53,7 @@ Proof.
 move=> Ha Hb Hc Habc.
 apply (ltZ_pmul2r b) => //.
 apply (@ltZ_leZ_trans c) => //.
-apply Zle_scale; omega.
+by apply Zle_scale; lia.
 Qed.
 
 Lemma Zlt_Zmult_inv a b c : (a * b < c -> 0 < a -> 0 <= c -> b < c)%Z.
@@ -66,7 +66,7 @@ by rewrite mulZC.
 Qed.
 
 Lemma Zlt_Zplus_inv a b c : 0 <= b -> a + b < c -> a < c.
-Proof. move=> Hb ab_c. omega. Qed.
+Proof. by move=> ? ?; lia. Qed.
 
 Lemma Z_of_nat_neg : forall z, (Z_of_nat z <= 0)%Z -> z = O.
 Proof. by case. Qed.
@@ -78,28 +78,28 @@ Lemma Z_of_nat_lt0 : forall a, (0 < a)%nat -> 0 < Z_of_nat a.
 Proof. case=> //; by inversion 1. Qed.
 
 Lemma Zplus_pos_inv a b c d : a <= c -> b <= d -> a + b = c + d -> a = c /\ b = d.
-Proof. move=> H H1 H2. omega. Qed.
+Proof. by move=> ? ? ?; lia. Qed.
 
 Lemma Zle_plus_0_inv a b : a + b <= 0 -> 0 <= a -> b <= 0.
-Proof. move=> H. omega. Qed.
+Proof. by move=> ?; lia. Qed.
 
 Lemma Zle_0_mult_inv a b : 0 <= a * b -> (0 <= a /\ 0 <= b) \/ (a <= 0 /\ b <= 0).
 Proof.
 move=> H; destruct a.
-- destruct b; omega.
+- by destruct b; lia.
 - destruct b.
-  + omega.
+  + by lia.
   + by left.
   + move: (Pos2Z.is_pos p) => H1.
     move: (Zlt_neg_0 p0) => H2.
     have ? : Zpos p * Zneg p0 < 0 by rewrite mulZC pmulZ_llt0.
-    omega.
+    by lia.
 - destruct b.
-  + omega.
+  + by lia.
   + move: (Pos2Z.is_pos p0) => H1.
     move: (Zlt_neg_0 p) => H2.
     have ? : Zneg p * Zpos p0 < 0 by rewrite pmulZ_llt0.
-    omega.
+    by lia.
   + by right.
 Qed.
 
@@ -118,32 +118,32 @@ move=> H; destruct a.
 - rewrite mul0Z in H.
   by apply ltZZ in H.
 - destruct b.
-  + omega.
+  + by lia.
   + by left.
   + move: (Pos2Z.is_pos p) => ?.
     move: (Zlt_neg_0 p0) => ?.
     have ? : Zpos p * Zneg p0 < 0 by rewrite mulZC pmulZ_llt0.
-    omega.
+    by lia.
 - destruct b.
-  + omega.
+  + by lia.
   + move: (Pos2Z.is_pos p0) => ?.
     move: (Zlt_neg_0 p) => ?.
     have ? : Zneg p * Zpos p0 < 0 by rewrite pmulZ_llt0.
-    omega.
+    by lia.
   + by right.
 Qed.
 
 Lemma Zlt_mult_interval_inv b k a : (0 < k)%Z -> (- b <= k * a < b)%Z -> (- b <= a < b)%Z.
 Proof.
 move=> Hk [H1 H2]; split.
-  case: (Z_lt_le_dec 0 a) => ?; first by apply (@leZ_trans Z0); omega.
+  case: (Z_lt_le_dec 0 a) => ?; first by apply (@leZ_trans Z0); lia.
   apply (leZ_trans H1).
   rewrite -{2}(mul1Z a).
-  apply Z.mul_le_mono_nonpos_r => //; omega.
-case: (Z_lt_ge_dec 0 a) => ?; last omega.
+  by apply Z.mul_le_mono_nonpos_r => //; lia.
+case: (Z_lt_ge_dec 0 a) => ?; last by lia.
 apply: (leZ_ltZ_trans _ H2).
 rewrite -{1}(mul1Z a).
-apply Z.mul_le_mono_pos_r => //; omega.
+by apply Z.mul_le_mono_pos_r => //; lia.
 Qed.
 
 Lemma Zabs_Z_of_nat : forall n, `| Z_of_nat n | = Z_of_nat n.
@@ -190,54 +190,54 @@ Proof. by case. Qed.
 Lemma Zlt_0_Zdiv a b : 0 < b -> b <= a -> 0 < a / b.
 Proof.
 move/Z.lt_gt => Hb Hba.
-rewrite (_ : a = b * 1 + (a - b)); last omega.
-rewrite mulZC Z_div_plus_full_l; last omega.
+rewrite (_ : a = b * 1 + (a - b)); last by lia.
+rewrite mulZC Z_div_plus_full_l; last by lia.
 apply (@ltZ_leZ_trans 1); first by auto.
-have ? : 0 <= (a - b) / b by apply Z_div_pos => //; omega.
-omega.
+have ? : 0 <= (a - b) / b by apply Z_div_pos => //; lia.
+by lia.
 Qed.
 
 Lemma Z_div_neg a b : b > 0 -> a <= 0 -> a / b <= 0.
-Proof. move=> ? ?; apply Zdiv_le_upper_bound => //; exact/Z.gt_lt. Qed.
+Proof. by move=> ? ?; apply Zdiv_le_upper_bound => //; exact/Z.gt_lt. Qed.
 
 Lemma Zdiv_le_pos : forall z b, 0 <= z -> 0 < b -> z / b <= z.
-Proof. move=> *. apply Zdiv_le_upper_bound => //; exact: Zle_scale. Qed.
+Proof. by move=> *; apply Zdiv_le_upper_bound => //; exact: Zle_scale. Qed.
 
 Lemma Zdiv_le_neg : forall z b, z <= 0 -> 0 < b -> z <= z / b.
-Proof. move=> *; apply Zdiv_le_lower_bound => //; exact: Zle_scale_neg. Qed.
+Proof. by move=> *; apply Zdiv_le_lower_bound => //; exact: Zle_scale_neg. Qed.
 
 Lemma poly_eq0_inv : forall a b k, 0 <= k -> -k < b < k ->
   a * k + b = 0 -> a = 0 /\ b = 0.
 Proof.
 move=> a b k H H0 H1.
 case/leZ_eqVlt : H => H.
-subst k; omega.
-have {}H1 : a * k = - b by omega.
+  by subst k; lia.
+have {}H1 : a * k = - b by lia.
 case: (Z_lt_ge_dec a 0) => ?.
 - have H2 :  b > 0.
-    suff ? : -b < 0 by omega.
+    suff ? : -b < 0 by lia.
     by rewrite -H1 pmulZ_llt0.
   have H5 : a * k <= - k.
-    rewrite (_ : -k = (-1) * k); last omega.
-    apply leZ_pmul2r; omega.
+    rewrite (_ : -k = (-1) * k); last by lia.
+    by apply leZ_pmul2r; lia.
   rewrite H1 in H5.
-  have ? : k <= b by omega.
-  omega.
+  have ? : k <= b by lia.
+  by lia.
 - case: (Z.eq_dec a 0) => H2.
   + split; first by [].
-    subst a; omega.
-  + have H3 : a > 0 by omega.
+    by subst a; lia.
+  + have H3 : a > 0 by lia.
     have H4 : b < 0.
-      suff ? : 0 < -b by omega.
+      suff ? : 0 < -b by lia.
       rewrite -H1.
-      apply mulZ_gt0; omega.
+      by apply mulZ_gt0; lia.
     have H5 : k <= a * k.
-      rewrite (_ : k = 1 * k); last omega.
-      apply leZ_pmul => //; omega.
+      rewrite (_ : k = 1 * k); last by lia.
+      by apply leZ_pmul => //; lia.
     rewrite H1 in H5.
-    have ? : -k >= b by omega.
+    have ? : -k >= b by lia.
     exfalso.
-    omega.
+    by lia.
 Qed.
 
 Lemma poly_eq_inv a b a' b' k :
@@ -245,10 +245,10 @@ Lemma poly_eq_inv a b a' b' k :
   a * k + b = a' * k + b' -> a = a' /\ b = b'.
 Proof.
 move=> H H0.
-have {}H0 : (a - a') * k + (b - b') = 0 by rewrite mulZBl; omega.
-have H1 : (0 < k) by omega.
-have H2 : (-k < b - b' < k) by omega.
-move: (poly_eq0_inv _ _ _ (ltZW H1) H2 H0) => ?; omega.
+have {}H0 : (a - a') * k + (b - b') = 0 by rewrite mulZBl; lia.
+have H1 : (0 < k) by lia.
+have H2 : (-k < b - b' < k) by lia.
+by move: (poly_eq0_inv _ _ _ (ltZW H1) H2 H0) => ?; lia.
 Qed.
 
 Lemma poly_Zlt1_inv b a k : 0 <= b -> 0 <= a -> 0 <= k ->
@@ -260,8 +260,8 @@ move=> {Ha}.
 have H' : 1 * k <= Zpos p * k.
   apply leZ_wpmul2r => //.
   by case: p H.
-have ? : k <= b + Zpos p * k by omega.
-omega.
+have ? : k <= b + Zpos p * k by lia.
+by lia.
 Qed.
 
 Lemma poly_Zlt1_Zabs_inv b a k : 0 <= b -> 0 <= a -> 0 <= k ->
@@ -269,7 +269,7 @@ Lemma poly_Zlt1_Zabs_inv b a k : 0 <= b -> 0 <= a -> 0 <= k ->
 Proof.
 move=> Hb Ha Hk.
 rewrite Z.abs_eq //; first exact/poly_Zlt1_inv.
-apply addZ_ge0 => //; exact/mulZ_ge0.
+by apply addZ_ge0 => //; exact/mulZ_ge0.
 Qed.
 
 Lemma poly_Zlt a a' b b' k :
@@ -280,10 +280,10 @@ Lemma poly_Zlt a a' b b' k :
   a + k * b < a' + k * b'.
 Proof.
 move=> Ha Ha' Hb Hb' Hk Hak Haa' Hbb'.
-have [b'' Hb''] : exists b'', b' = 1 + b'' by exists (b'-1); omega.
+have [b'' Hb''] : exists b'', b' = 1 + b'' by exists (b'-1); lia.
 subst b'.
 rewrite mulZDr mulZ1 addZA.
-apply ltZ_le_add => //; [omega| apply leZ_wpmul2l => //; omega].
+by apply ltZ_le_add => //; [lia| apply leZ_wpmul2l => //; lia].
 Qed.
 
 Lemma ZsgnK z : sgZ (sgZ z) = sgZ z.
@@ -296,11 +296,11 @@ Proof.
 move=> a; case.
 - move=> _; rewrite Zmod_0_r //.
 - move=> p H.
-  have X : Zpos p > 0 by done.
+  have X : Zpos p > 0 by [].
   move: (Z_mod_lt a (Zpos p) X).
   by tauto.
 - move=> p H.
-  move: (Zlt_neg_0 p) => H'; by omega.
+  by move: (Zlt_neg_0 p) => H'; lia.
 Qed.
 
 (* similar to Coq.ZArith.Zpower.Zpower_nat *)
@@ -323,13 +323,13 @@ rewrite addSn 2!ZpowerS IH; ring.
 Qed.
 
 Lemma expZ_gt0 : forall n, 0 < 2 ^^ n.
-Proof. elim => // n IH; rewrite ZpowerS; omega. Qed.
+Proof. by elim => // n IH; rewrite ZpowerS; lia. Qed.
 
 Lemma expZ_ge0 n : 0 <= 2 ^^ n.
 Proof. by move: (expZ_gt0 n) => /ltZW. Qed.
 
 Lemma expZ_ge1 n : 1 <= 2 ^^ n.
-Proof. move: (expZ_gt0 n) => ?; omega. Qed.
+Proof. by move: (expZ_gt0 n) => ?; lia. Qed.
 
 Lemma expZ_2_lt : forall n m, (n < m)%nat -> 2 ^^ n < 2 ^^ m.
 Proof.
@@ -337,9 +337,9 @@ elim => [ [|m _] | n IH [ // |m] ].
 - by rewrite ltnn.
 - apply (@ltZ_leZ_trans 2) => //.
   rewrite ZpowerS.
-  move: (expZ_ge1 m) => ?; omega.
+  by move: (expZ_ge1 m) => ?; lia.
 - rewrite ltnS => /IH.
-  rewrite 2!ZpowerS => ?; omega.
+  by rewrite 2!ZpowerS => ?; lia.
 Qed.
 
 Lemma Zpower_2_le n m : (2 ^^ n <=? 2 ^^ m) = (n <= m)%nat.
@@ -399,7 +399,7 @@ Proof. by move=> [|n] //= _; rewrite mulZC Z_mod_mult. Qed.
 
 Lemma Zpower_div b : forall n, 0 < b -> O <> n -> b ^^ n / b = b ^^ (n - 1).
 Proof.
-move=> [|n] //= Hb _. rewrite mulZC subSS subn0 Z_div_mult_full //. omega.
+by move=> [|n] //= Hb _; rewrite mulZC subSS subn0 Z_div_mult_full //; lia.
 Qed.
 
 Lemma id_rem_minus a b : (a - b) ^^ 2 = a ^^ 2 + b ^^ 2 - 2 * a * b.
@@ -573,7 +573,7 @@ elim => [d1 d2 Hd1 /= H | n IH d1 d2 Hd1].
     by exists O, O.
   + subst d1.
     suff : ~ (-1 >= 0) by contradiction.
-    omega.
+    by [].
 - rewrite ZpowerS mulZC => H.
   symmetry in H.
   move: (Zdivide_intro _ _ _ H) => H'.
@@ -582,16 +582,16 @@ elim => [d1 d2 Hd1 /= H | n IH d1 d2 Hd1].
     have X : 2 ^^ n = kd1 * d2.
       rewrite Hkd1 (mulZC kd1) (mulZC (2 ^^ n)) -mulZA in H.
       by apply eqZ_mul2l in H.
-    apply IH in X; last omega.
+    apply IH in X; last by lia.
     case: X => [p [q [H1 H2]]].
     exists p.+1, q; by rewrite ZpowerS Hkd1 H1 mulZC.
   - inversion H' as [kd2 Hkd2]; clear H'.
     have X : 2 ^^ n = d1 * kd2.
       rewrite Hkd2 mulZA in H.
       by apply eqZ_mul2r in H.
-    apply IH in X; last omega.
+    apply IH in X; last by lia.
     case: X => [p [q [H1 H2]]].
-    exists p, q.+1; by rewrite ZpowerS Hkd2 H2 mulZC.
+    by exists p, q.+1; rewrite ZpowerS Hkd2 H2 mulZC.
 Qed.
 
 Definition Zmax_seq l := foldl (fun e a => Z.max e a) 0 l.
@@ -610,7 +610,7 @@ by apply Zone_divide.
 by apply Zone_divide.
 move=> d [dpower Hdpower] [dm Hdm].
 have [k Hk] : exists k, 1 = k * d.
-  have [X|X] : dpower >= 0 \/ dpower < 0 by omega.
+  have [X|X] : dpower >= 0 \/ dpower < 0 by lia.
   - case: (Zpower_Zdivide _ _ _ X Hdpower) => p [q [H1 H2]].
     case: (leqP q 0) => [|Hq].
     + rewrite leqn0 => /eqP Hq; subst q.
@@ -627,13 +627,13 @@ have [k Hk] : exists k, 1 = k * d.
   - have Y : d < 0.
       destruct d => //.
       * rewrite mulZ0 in Hdpower.
-        move: (expZ_gt0 n) => ?; omega.
+        by move: (expZ_gt0 n) => ?; lia.
       * move: (expZ_gt0 n) => Y.
         rewrite Hdpower in Y.
         apply Zmult_gt_0_lt_0_reg_r in Y => //.
-        omega.
+        by lia.
     have Hdpower' : 2 ^^ n = -dpower * (-d) by rewrite mulZNN.
-    have X' : (-dpower) >= 0 by omega.
+    have X' : (-dpower) >= 0 by lia.
     case: (Zpower_Zdivide _ _ _ X' Hdpower') => p [q [H1 H2]].
     case: (leqP q 0) => [|Hq].
     + rewrite leqn0 => /eqP Hq; subst q.
@@ -781,7 +781,7 @@ Lemma Zpower_shift_2 n : 4 * n < \B^1 -> n < 2 ^^ 30.
 Proof.
 rewrite Zbeta1E.
 have -> : (32 = 2 + 30)%nat by [].
-rewrite ZpowerD [Zmult]lock /= -lock; omega.
+by rewrite ZpowerD [Zmult]lock /= -lock; lia.
 Qed.
 
 Lemma Zbeta1_1 a : ~ a * \B^1 = 1.
@@ -790,16 +790,16 @@ move=> H.
 move: (Ztrichotomy a 0) => [X | [X | X]].
 - by destruct a.
 - by rewrite X in H.
-- suff H' : 1 < a * \B^1 by omega.
+- suff H' : 1 < a * \B^1 by lia.
   apply (@leZ_ltZ_trans (a * 1)).
-  + rewrite mulZ1; omega.
-  + apply ltZ_pmul2l => //; exact: Z.gt_lt.
+  + by rewrite mulZ1; lia.
+  + by apply ltZ_pmul2l => //; exact: Z.gt_lt.
 Qed.
 
 Lemma inv_mod_beta0 m : 1 * m + 0 * \B^1 = m. Proof. ring. Qed.
 Lemma inv_mod_beta1 m : 0 * m + 1 * \B^1 = \B^1. Proof. ring. Qed.
 Lemma inv_mod_beta2 : forall m d, Zis_gcd m (\B^1) d -> Zis_gcd m (\B^1) d.
-Proof. done. Qed.
+Proof. by []. Qed.
 
 Definition inv_mod_beta m :=
   match euclid_rec m \B^1 \B^1 (Zbeta_ge0 1) 1 0 m 0 1
@@ -884,7 +884,7 @@ case: {Hgcd Hgcd'}(Zis_gcd_uniqueness_apart_sign _ _ _ _ Hgcd Hgcd') => Hinv; su
 - have Hinv' : d * d' =m -1 {{ m }}.
     exists (- m').
     have X : 1 + d * d' = - m' * m by rewrite Hinv; ring.
-    omega.
+    by lia.
   move: {H}(eqmod_reg_mult _ _ d' _ H) => H.
   rewrite -mulZA mulZC in H.
   move: {H}(eqmod_rewrite _ _ _ _ _ Hinv' H) => H.
@@ -892,7 +892,7 @@ case: {Hgcd Hgcd'}(Zis_gcd_uniqueness_apart_sign _ _ _ _ Hgcd Hgcd') => Hinv; su
   rewrite -mulZA mulZC in H.
   move: {H}(eqmod_rewrite _ _ _ _ _ Hinv' H) => [k H].
   exists k.
-  have -> : k * m = -1 * b + 1 * a by omega.
+  have -> : k * m = -1 * b + 1 * a by lia.
   ring.
 Qed.
 
@@ -918,19 +918,19 @@ Lemma eqmod_inv a a' m : 0 <= a < m -> 0 <= a' < m -> a =m a' {{ m }} -> a = a'.
 Proof.
 move=> [Ham1 Ham2] [Ha'm1 Ha'm2] [[|p|p] H].
 - by rewrite mul0Z addZ0 in H.
-- suff ? : m <= a by omega.
+- suff ? : m <= a by lia.
   rewrite H -{1}(add0Z m).
   apply leZ_add => //.
   rewrite -{1}(mul1Z m).
-  apply leZ_pmul2r => //; [omega | by destruct p].
-- suff ? : a < 0 by omega.
+  by apply leZ_pmul2r => //; [lia | by destruct p].
+- suff ? : a < 0 by lia.
   rewrite H.
-  have : forall a b, a < -b -> a + b < 0 by move=> ? ?; omega.
+  have : forall a b, a < -b -> a + b < 0 by move=> ? ?; lia.
   apply.
   rewrite -mulNZ Zopp_neg.
   apply (@ltZ_leZ_trans m) => //.
   rewrite -{1}(mul1Z m).
-  apply leZ_wpmul2r; [omega | by destruct p].
+  by apply leZ_wpmul2r; [lia | destruct p].
 Qed.
 
 Local Close Scope eqmod_scope.
@@ -1133,7 +1133,7 @@ Ltac omegaz' ome :=
   ome.
 
 (* extension of omega to handle goals/hypos that contains Z_of_nat *)
-Ltac omegaz := omegaz' omega.
+Ltac omegaz := omegaz' lia.
 
 Goal forall x y,
   ((Z_of_nat x) + 4%Z - 2%Z > (Z_of_nat (y +4)))%Z ->

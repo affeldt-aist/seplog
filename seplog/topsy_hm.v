@@ -249,7 +249,7 @@ Ltac Heap_List_equiv :=
   match goal with
     | id: Heap_List ?l ?start1 ?s1 ?h |-  Heap_List ?l ?start2 ?s2 ?h =>
       assert (Heap_List_equivA1: start2 = start1);
-        [omega |
+        [lia |
           ((rewrite Heap_List_equivA1) || idtac);
           eapply (Heap_List_inde_store); apply id
         ]

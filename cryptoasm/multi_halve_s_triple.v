@@ -198,7 +198,7 @@ move: Hc.
 apply monotony => // h' Hh'.
 split => //.
 split; last by move: Hh'; exact/mapstos_ext.
-rewrite Hb -s2Z_u2Z_pos; last by omega.
+rewrite Hb -s2Z_u2Z_pos; last by lia.
 apply Zsgn_pos in Hslen.
 by rewrite slen_nk Hslen mul1Z.
 
@@ -292,7 +292,7 @@ case: H => [Ha [Hb [Hc [Hd [He [Hf Hg]]]]]].
 have [X|X] : u2Z (([prev ]_ s) `>> 31) = 0 \/
   u2Z (([prev ]_ s) `>> 31) = 1.
   move: (shrl_lt ([prev ]_ s) 31) => /= X1.
-  move: (min_u2Z (([prev ]_ s) `>> 31)) => ?; omega.
+  move: (min_u2Z (([prev ]_ s) `>> 31)) => ?; lia.
 
 exists zero32.
 exists A'(*0*).
@@ -483,7 +483,7 @@ have no_overflow : u2Z ([prev ]_ s `>> 31) = 0.
     case: Heven => _ Heven.
     have [Hoverflow|Hoverflow] : u2Z ([prev ]_ s `>> 31) = 0 \/ u2Z ([prev ]_ s `>> 31) = 1.
       move: (shrl_lt ([prev ]_ s) 31) => /= X1.
-      move: (min_u2Z (([prev ]_ s) `>> 31)) => ?; omega.
+      move: (min_u2Z (([prev ]_ s) `>> 31)) => ?; lia.
       assumption.
     rewrite Hoverflow in Heven .
     by inversion Heven.
@@ -582,7 +582,7 @@ rewrite -HSum in Hodd.
 
 have [Hoverflow|Hoverflow] : u2Z ([prev ]_ s `>> 31) = 0 \/ u2Z ([prev ]_ s `>> 31) = 1.
   move: (shrl_lt ([prev ]_ s) 31) => /= X1.
-  move: (min_u2Z (([prev ]_ s) `>> 31)) => ?; omega.
+  move: (min_u2Z (([prev ]_ s) `>> 31)) => ?; lia.
 - rewrite Hoverflow addZ0 in Hodd.
   apply Zodd_not_Zeven in Hodd.
   exfalso.
@@ -627,33 +627,33 @@ destruct nk => //.
 rewrite [(if beq_nat nk.+1 0 then 0 else 1)]/= in HSum.
 have no_overflow : u2Z (store.lo s) = 0.
   have [X|X] : u2Z (store.lo s) = 0 \/ u2Z (store.lo s) = 1.
-    move: (min_u2Z (store.lo s)) => ?; omega.
+    move: (min_u2Z (store.lo s)) => ?; lia.
   by [].
   rewrite X mul1Z in HSum.
   have A'_bound : \S_{ nk.+1 } A' <= 2 ^^ (nk.+1 * 32 - 1).
     have H1 : 2 * \S_{ nk.+1 } A' + 1 < \B^nk.+1.
       rewrite HSum'.
       by apply max_lSum.
-    have {}H1 : 2 * \S_{ nk.+1 } A' <= \B^nk.+1 by omega.
+    have {}H1 : 2 * \S_{ nk.+1 } A' <= \B^nk.+1 by lia.
     rewrite ZbetaE in H1.
     rewrite (_ : (nk.+1 * 32 = (nk.+1 * 32 - 1).+1)%nat) in H1; last by rewrite mulSn -subSn.
     rewrite (_ : 2 ^^ (nk.+1 * 32 - 1).+1 = 2 * 2 ^^ (nk.+1 * 32 - 1) ) in H1; last by [].
     do 2 rewrite (mulZC 2) in H1.
     by apply Zmult_le_reg_r in H1.
-  have H1 : \S_{ nk.+1 } A'' <= 2 ^^ (nk.+1 * 32 - 1) + 1 - \B^nk.+1 by omega.
+  have H1 : \S_{ nk.+1 } A'' <= 2 ^^ (nk.+1 * 32 - 1) + 1 - \B^nk.+1 by lia.
   have H2 : 2 ^^ (nk.+1 * 32 - 1) + 1 - \B^nk.+1 <= 0.
     have H2 : 2 ^^ (nk.+1 * 32 - 1) + 1 <= \B^nk.+1.
       rewrite ZbetaE.
       have ? : 2 ^^ (nk.+1 * 32 - 1) < 2 ^^ (nk.+1 * 32).
         apply/expZ_2_lt; by rewrite subn1 prednK.
-      omega.
-    omega.
-  have H3 : \S_{ nk.+1 } A'' = 0 by move: (min_lSum nk.+1 A'') => ?; omega.
-  have H4 : \S_{ nk.+1 } A' = \B^nk.+1 - 1 by omega.
+      lia.
+    lia.
+  have H3 : \S_{ nk.+1 } A'' = 0 by move: (min_lSum nk.+1 A'') => ?; lia.
+  have H4 : \S_{ nk.+1 } A' = \B^nk.+1 - 1 by lia.
   rewrite H4 in HSum'.
-  rewrite (_ : 2 * (\B^nk.+1 - 1) + 1 = 2 * \B^nk.+1 - 1) in HSum'; last by omega.
+  rewrite (_ : 2 * (\B^nk.+1 - 1) + 1 = 2 * \B^nk.+1 - 1) in HSum'; last by lia.
   have H5 : 2 * \B^nk.+1 <= \B^nk.+1.
-    suff H5 : 2 * \B^nk.+1 - 1 < \B^nk.+1 by omega.
+    suff H5 : 2 * \B^nk.+1 - 1 < \B^nk.+1 by lia.
     apply: leZ_ltZ_trans; last by apply max_lSum.
     rewrite HSum'; exact/leZZ.
   move/leZP in H5; rewrite {1}(_ : 2 = 2 ^^ 1) // -ZpowerD Zpower_2_le in H5.
@@ -683,14 +683,14 @@ split.
   apply Zsgn_neg.
   case/leZ_eqVlt : (min_lSum nk A'') => abs.
   - rewrite -abs mulZ0 in A''_A.
-    move: (min_lSum nk A) => ?; omega.
-  - omega.
+    move: (min_lSum nk A) => ?; lia.
+  - lia.
 split; first by [].
 split; first by Assert_upd.
 rewrite Z2uK // Hone (_ : '| 31 | = 31)%nat //.
 move: (@shl_shrl 32 one32 1).
 move=> ->.
-  rewrite Z2uK //; omega.
+  rewrite Z2uK //; lia.
 by rewrite Z2uK.
 Qed.
 

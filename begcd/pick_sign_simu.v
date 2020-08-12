@@ -41,7 +41,7 @@ have Hmem_sing : (var_e rx |~> int_e slen ** assert_m.emp)%asm_assert st
   case/Zmod_divides => // c Hh1.
   rewrite Hh1 mulZC Z_div_mult_full // Z_of_nat_Zabs_nat.
   by rewrite mulZC.
-  move: (min_u2Z ([var_e rx ]e_ st)) => ?; omega.
+  move: (min_u2Z ([var_e rx ]e_ st)) => ?; lia.
 
 have [st' Hst'] : exists st', Some (st, h) -- code ---> Some (st', h).
   have [[st' he'] Hst'] : exists st', Some (st, h) -- code ---> Some st'.
@@ -104,7 +104,7 @@ move/(_ Hst'_proj) => H; split => Htest.
   move/geZP in Htest.
   rewrite abs /= in H1.
   rewrite Hd -H1 in Htest.
-  case/Z_le_lt_eq_dec: (min_lSum L A); first by move=> ?; omega.
+  case/Z_le_lt_eq_dec: (min_lSum L A); first by move=> ?; lia.
   move=> abs'.
   rewrite -abs' mulZ0 in Hd.
   by rewrite Hd -H1 in Hc.
@@ -143,7 +143,7 @@ have Hmem_sing : (var_e rx |~> int_e slen ** assert_m.emp)%asm_assert st
   case/Zmod_divides => // c Hh1.
   rewrite Hh1 mulZC Z_div_mult_full // Z_of_nat_Zabs_nat.
   by rewrite mulZC.
-  move: (min_u2Z ([var_e rx ]e_ st)) => ?; omega.
+  move: (min_u2Z ([var_e rx ]e_ st)) => ?; lia.
 
 have [st' Hst'] : exists st', Some (st, h) -- code ---> Some (st', h).
   have [[st' he'] Hst'] : exists st', Some (st, h) -- code ---> Some st'.
@@ -242,7 +242,7 @@ have Hmem_sing : (var_e rx |~> int_e slen ** assert_m.emp)%asm_assert st
   case/Zmod_divides => // c Hh1.
   rewrite Hh1 mulZC Z_div_mult_full // Z_of_nat_Zabs_nat.
   by rewrite mulZC.
-  move: (min_u2Z ([var_e rx ]e_ st)%asm_expr) => ?; omega.
+  move: (min_u2Z ([var_e rx ]e_ st)%asm_expr) => ?; lia.
 
 have [st' Hst'] : exists st', Some (st, h) -- code ---> Some (st', h).
   have [[st' he'] Hst'] : exists st', Some (st, h) -- code ---> Some st'.
@@ -311,7 +311,7 @@ move/(_ Hst'_proj) => H; split => Htest.
       rewrite H3 in Htest.
       rewrite Zmult_1_l in Htest.
       move: (min_lSum L A).
-      case/Z_le_lt_eq_dec => abs; first omega.
+      case/Z_le_lt_eq_dec => abs; first lia.
       rewrite -abs mulZ0 in Hd .
       rewrite Hd /= in Hc.
       by rewrite Hc in H1.

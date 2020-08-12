@@ -41,10 +41,10 @@ elim.
 - move=> s0 Hkext h.
   eapply exist.
   apply while.exec_while_false.
-  rewrite /= in Hkext *; apply/negPn/eqP; omega.
+  rewrite /= in Hkext *; apply/negPn/eqP; lia.
 - move=> kext IH s0 Hkext h.
   apply exists_while.
-  + rewrite /=; apply/negP/negPn/eqP; omegaz. (* rewrite Z_S in Hkext; omega. *)
+  + rewrite /=; apply/negP/negPn/eqP; omegaz. (* rewrite Z_S in Hkext; lia. *)
   + apply exists_seq_P2 with (fun st => u2Z [k]_(fst st) - u2Z [ext]_(fst st) = Z_of_nat kext).
     * exists_lwxs l_x H_l_x z_x Hz_x.
       exists_lw l_y H_l_y z_y Hz_y.
@@ -91,7 +91,7 @@ elim.
           repeat Reg_upd.
           rewrite Z_S in Hkext.
           rewrite add0i (@u2Z_sext 16) // Z2uK //.
-          move: (min_u2Z [ext ]_ s0) => ?; omega.
+          move: (min_u2Z [ext ]_ s0) => ?; lia.
         move/(_ X) => {X}.
         assert ( X : u2Z [k ]_ _s - u2Z [ext ]_ _s = Z_of_nat kext.+1).
           rewrite /_s.
@@ -120,8 +120,8 @@ elim.
           repeat Reg_upd.
           intuition.
           rewrite u2Z_add sext_Z2u // Z2uK //.
-          omega.
-          move: (max_u2Z ([k]_si)) => ?; omega.
+          lia.
+          move: (max_u2Z ([k]_si)) => ?; lia.
         + exists None; split; by [apply while.exec_none | ].
     * move=> [ si hi ] Hsi.
       exact: IH.

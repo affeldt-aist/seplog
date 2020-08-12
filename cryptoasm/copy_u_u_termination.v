@@ -41,12 +41,12 @@ move: na2 s0 Ha2 h; elim.
   rewrite negbK.
   rewrite /= in Ha2.
   apply/eqP.
-  omega.
+  lia.
 - move=> na2 IH s0 Hna2 h.
   apply exists_while.
   + rewrite /=.
     apply/eqP => abs.
-    rewrite abs Z_S subZZ in Hna2;omega.
+    rewrite abs Z_S subZZ in Hna2;lia.
   + apply exists_seq_P2 with (fun st => u2Z [rk]_(fst st) - u2Z [a2]_(fst st) = Z_of_nat na2)%mips_expr.
     * exists_lwxs l_idx H_l_idx z_idx H_z_idx.
       exists_sw_P l_idx2 H_l_idx2 z_idx2 H_z_idx2.
@@ -58,12 +58,12 @@ move: na2 s0 Ha2 h; elim.
       repeat Reg_upd.
       rewrite Z_S in Hna2.
       rewrite sext_Z2u // u2Z_add_Z2u //.
-      omega.
+      lia.
       move: (min_u2Z ([rk ]_ s0)%mips_expr) => ?.
       move: (min_u2Z ([a2 ]_ s0)%mips_expr) => ?.
       move: (max_u2Z ([rk ]_ s0)%mips_expr) => ?.
       move: (max_u2Z ([a2 ]_ s0)%mips_expr) => ?.
-      omega.
+      lia.
     * move=> [si hi] Hna2'.
       by apply IH.
 Qed.

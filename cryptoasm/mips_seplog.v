@@ -200,12 +200,12 @@ move=> ST c ST'; elim => //; clear ST c ST'.
 - (* lw *) move=> s h rt offst base p z Hp Hz P s0 h0 s' h' [] X Y; subst.
   case=> X Y; subst; case=> p' [Hp' [z' [Hz' HP]]].
 suff : z = z' by move=> ->.
-  have X : p = p' by rewrite [eval _ _]/= in Hp'; by omega.
+  have X : p = p' by rewrite [eval _ _]/= in Hp'; by lia.
   subst; rewrite Hz' in Hz; by case: Hz.
 - (* lwxs *) move=> s h rt index base p z Hp Hz P s0 eh0 s' h' [] X Y; subst.
   case=> X Y; subst; case=> p' [Hp' [z' [Hz' HP]]].
   suff : z = z' by move=> ->.
-  have X : p = p' by omega.
+  have X : p = p' by lia.
   subst; rewrite Hz' in Hz; by case: Hz.
 - (* maddu *) by move=> s h rs rt P s0 h0 s1 h1 [] <- <- [] <- <-.
 - (* mfhi *) by move=> s h rd P s0 h0 s1 h1 [] <- <- [] <- <-.
@@ -236,7 +236,7 @@ suff : z = z' by move=> ->.
 - (* sw *) move => s h rt off base p H [z Hz] P s1 h1 s' h' [] X Y; subst.
   case=> X Y; subst; case=> l [Hl [z' Hz']].
   suff : p = l by move=> ->.
-  omega.
+  lia.
 - (* xor *) by move=> s h rd rs rt P s1 h1 s' h' [] <- <- [] <- <-.
 - (* xori *) by move=> s h rt rs imm P s1 h1 s' h' [] <- <- [] <- <-.
 Qed.

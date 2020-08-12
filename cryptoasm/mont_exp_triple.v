@@ -207,7 +207,7 @@ have {}r_i' : s2Z [i]_s < 0.
  apply Znot_ge_lt; contradict r_i'; exact: Z.ge_le.
 exists A0, A0', new_va, new_va'; repeat (split; trivial).
 have Hni : ni = -1.
-  rewrite r_i in r_i'; case: Hi => Hi _; omega.
+  rewrite r_i in r_i'; case: Hi => Hi _; lia.
 by rewrite Hni //= shrl_0 in HSumA01.
 
 clear HlenA HA A HSumA HlenA' A' HA' HSumA'SumM va Hna va' Hna'.

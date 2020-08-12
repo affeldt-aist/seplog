@@ -1469,7 +1469,7 @@ have : foldl f (true, s) (nseq k tt) = (true, nil).
   rewrite doubleS [size _]/=.
   case=> H.
   rewrite /f [Z<=nat]lock /= -lock drop0 ifT; last first.
-    by apply/leZP; rewrite 2!Z_S; omega.
+    by apply/leZP; rewrite 2!Z_S; lia.
   by apply IHk.
 rewrite Hk.
 move Htmp : k.*2 => k'.
@@ -1480,7 +1480,7 @@ destruct s as [|s1 [|s2 s3]] => //.
 rewrite doubleS [size _]/=.
 case => Hs.
 rewrite /f [Z<=nat]lock /= -lock ifT; last first.
-  apply/leZP; rewrite 2!Z_S; omega.
+  apply/leZP; rewrite 2!Z_S; lia.
 rewrite drop0; by apply IHk'.
 Qed.
 

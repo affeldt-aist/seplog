@@ -158,7 +158,7 @@ apply s2Z_inj in a0_a1.
 by rewrite a0_a1 u2Z_Z2s_pos in Ha1.
 case: a0_a1 => a0_a1.
 by rewrite -r_a1 a0_a1.
-rewrite a0_a1 in Ha1'; omega.
+rewrite a0_a1 in Ha1'; lia.
 
 move=> s h [h1 [h2 [h1_d_h2 [h1_U_h2 [Hh1 Hh2]]]]].
 case: Hh1 => [A' [slen' [len_A' [r_x [r_Y [slen'_nk [HZsgn [mem [Ha3 HSum]]]]]]]]].
@@ -202,7 +202,7 @@ rewrite a0_a1 in Ha1.
 by move: (Ha1 (leZZ _)).
 case: a0_a1 => a0_a1.
 rewrite a0_a1 in Ha1.
-exfalso; omega.
+exfalso; lia.
 rewrite -conAE conCE -conAE in mem.
 case: mem => h1 [h2 [h1_d_h2 [h1_U_h2 [Hh1 Hh2]]]].
 Compose_sepcon h1 h2.

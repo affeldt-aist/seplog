@@ -1391,7 +1391,7 @@ Resolve_topsy.
   - apply In_hl_or_app; by left.
   - rewrite /= /alloc /topsy_hm.free /= -andbA andbC /= in H2.
     apply In_hl_or_app; right => /=.
-    have : get_endl x3 adr <> x by omega.
+    have : get_endl x3 adr <> x by lia.
     by move/eqP/negbTE => ->.
 - exists x1; Resolve_topsy.
   exists x2; Resolve_topsy.

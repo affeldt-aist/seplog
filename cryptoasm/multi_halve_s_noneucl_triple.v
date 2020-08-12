@@ -345,7 +345,7 @@ case: H => H [a_va [rk_nk [a0_ptr [HSum [Hshift a_fit]]]]].
 have [X|X] : u2Z (([prev ]_ s) `>> 31) = 0 \/
   u2Z (([prev ]_ s) `>> 31) = 1.
   move: (shrl_lt ([prev ]_ s) 31) => /= X1.
-  move: (min_u2Z (([prev ]_ s) `>> 31)) => ?; omega.
+  move: (min_u2Z (([prev ]_ s) `>> 31)) => ?; lia.
 exists 0.
 split.
   apply mkVarSigned with zero32 ptr A' => //.
@@ -400,6 +400,6 @@ f_equal; first ring.
 f_equal.
 rewrite -mulZA -mulZDr Zsgn_Zmult ZsgnK.
 have : 0 < 2 * \S_{ nk } A' + u2Z (([prev ]_ s) `>> 31).
-  move: (min_u2Z (([prev ]_ s) `>> 31)) => ?; omega.
+  move: (min_u2Z (([prev ]_ s) `>> 31)) => ?; lia.
 move/Zsgn_pos => ->; ring.
 Qed.

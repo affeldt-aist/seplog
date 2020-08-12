@@ -1,6 +1,6 @@
 (* seplog (c) AIST 2005-2013. R. Affeldt, N. Marti, et al. GNU GPLv3. *)
 (* seplog (c) AIST 2014-2018. R. Affeldt et al. GNU GPLv3. *)
-Require Import Classical Epsilon.
+Require Import Classical Epsilon Lia.
 From mathcomp Require Import ssreflect ssrfun ssrbool eqtype ssrnat seq.
 Require Import ssrZ ZArith_ext seq_ext uniq_tac machine_int.
 Import MachineInt.
@@ -36,9 +36,9 @@ elim.
   exists (Some (s, h)).
   apply while.exec_while_false.
   rewrite /= in Hj32 *.
-  apply/negPn/eqP; omega.
+  apply/negPn/eqP; lia.
 - (* case j < 32 *) move=> j32 IHj32 s h Hj32; apply exists_while.
-  + rewrite Z_S in Hj32; rewrite /=; apply/eqP; omega.
+  + rewrite Z_S in Hj32; rewrite /=; apply/eqP; lia.
   + apply exists_seq_P2 with (fun st => u2Z [thirtytwo]_(fst st) - u2Z [j]_(fst st) = Z_of_nat j32).
     * apply exists_seq_P with (fun s' => forall st, s' = Some st ->
       u2Z [thirtytwo]_(fst st) - u2Z [j]_(fst st) = Z_of_nat (S j32)).
@@ -78,8 +78,8 @@ elim.
           move: {Hsj}(Hsj _ (refl_equal _)) => Hsj.
           simpl fst in Hsj.
           rewrite u2Z_add sext_Z2u // Z2uK //.
-          omega.
-          move: (max_u2Z ([thirtytwo]_sj)) => ?; omega.
+          lia.
+          move: (max_u2Z ([thirtytwo]_sj)) => ?; lia.
     * move=> [si hi] Hj32'.
       case: {IHj32}(IHj32 si hi Hj32') => sf IHj32.
       by exists sf.
@@ -143,8 +143,8 @@ apply exists_seq_P with (fun sf => forall st, sf = Some st ->
     move: (Hi _ (refl_equal _)).
     rewrite Z_S /= => X.
     rewrite u2Z_add sext_Z2u // Z2uK //.
-    omega.
-    move: (max_u2Z ([n]_si)) => ?; omega.
+    lia.
+    move: (max_u2Z ([n]_si)) => ?; lia.
   + exists None; split; by [apply while.exec_none | ].
 Qed.
 
@@ -177,7 +177,7 @@ move: ni s0 Hni h_init {s_init Hs0}; elim.
   eapply exist.
   apply while.exec_while_false.
   rewrite /= in Hni *.
-  apply/negPn/eqP; omega.
+  apply/negPn/eqP; lia.
 - move=> ni IH s0 Hni h0.
   move: {Hset}(termination_outer_loop s0 h0 ni i L_ l n j thirtytwo k alpha x y m one ext int_ X_ Y_ M_ quot C_ t s_ b2k B2K_ w' w Hset Hni) => [ sf [Hsf Hni'] ].
   destruct sf as [[sf hf] |].
@@ -185,11 +185,11 @@ move: ni s0 Hni h_init {s_init Hs0}; elim.
     case: (IH sf (Hni' _ Logic.eq_refl) hf) => sf0 Hsf0.
     exists sf0.
     eapply while.exec_while_true => /=.
-    - rewrite Z_S in Hni; apply/eqP; omega.
+    - rewrite Z_S in Hni; apply/eqP; lia.
     - exact: Hsf.
     - exact: Hsf0.
   * exists None.
     eapply while.exec_while_true; eauto.
-    - rewrite /=. apply/eqP. by omegaz. (*rewrite Z_S in Hni; apply/eqP. omega.*)
+    - rewrite /=. apply/eqP. by omegaz. (*rewrite Z_S in Hni; apply/eqP. lia.*)
     - exact/while.exec_none.
 Qed.

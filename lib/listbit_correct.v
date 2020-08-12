@@ -1,6 +1,6 @@
 (* seplog (c) AIST 2005-2013. R. Affeldt, N. Marti, et al. GNU GPLv3. *)
 (* seplog (c) AIST 2014-2018. R. Affeldt et al. GNU GPLv3. *)
-Require Import Max.
+Require Import Max Lia.
 From mathcomp Require Import ssreflect ssrfun ssrbool eqtype ssrnat seq.
 Require Import ssrZ ZArith_ext ssrnat_ext seq_ext.
 Require Import listbit.
@@ -38,18 +38,18 @@ Notation "'.[' l ']u'" := (u2Z l) : listbit_correct_scope.
 Local Open Scope listbit_correct_scope.
 
 Lemma u2Z_false l : .[ false :: l ]u = .[ l ]u.
-Proof. done. Qed.
+Proof. by []. Qed.
 
 Lemma u2Z_falses k l : .[ nseq k false ++ l ]u = .[ l ]u.
 Proof. by move: k l; elim. Qed.
 
 Lemma u2Z_true l : .[ true :: l ]u = 2 ^^ size l + .[ l ]u.
-Proof. done. Qed.
+Proof. by []. Qed.
 
 Lemma u2Z_zeros : forall n, .[ zeros n ]u = 0. Proof. by elim. Qed.
 
 Lemma u2Z_ones : forall n, .[ ones n ]u = 2 ^^ n - 1.
-Proof. elim => // n; simpl u2Z => ->; rewrite size_nseq ZpowerS; omega. Qed.
+Proof. by elim => // n; simpl u2Z => ->; rewrite size_nseq ZpowerS; lia. Qed.
 
 Lemma u2Z_app : forall l l', .[ l ++ l' ]u = .[ l ++ zeros (size l') ]u + .[ l' ]u.
 Proof.
@@ -126,7 +126,7 @@ Proof.
 move=> H.
 move: (max_u2Z _ _ (leqnn (size l))) => X.
 rewrite leqNgt; apply/negP.
-move/expZ_2_lt/(ltZ_trans X) => ?; omega.
+by move/expZ_2_lt/(ltZ_trans X) => ?; lia.
 Qed.
 
 Lemma u2Z_inj : forall n (v w : list bool),
@@ -139,16 +139,16 @@ move=> w0 w; case => Hv; case => Hw; move: v0 w0.
 case; case => //.
 + rewrite !u2Z_true => H1.
   rewrite Hv Hw in H1.
-  rewrite (IHn v w) //; omega.
+  by rewrite (IHn v w) //; lia.
 + rewrite u2Z_false u2Z_true => H1.
   have H2 : .[ w ]u < 2 ^^ size v by apply max_u2Z; rewrite Hv Hw.
   move: (min_u2Z v) => H3.
-  have H4 : ~ (.[ w ]u < 2^^ size v) by omega.
+  have H4 : ~ (.[ w ]u < 2^^ size v) by lia.
   contradiction.
 + rewrite u2Z_false u2Z_true => H1.
   have H2 : .[ v ]u < 2 ^^ size w by apply max_u2Z; rewrite Hv Hw.
   move: (min_u2Z w) => H3.
-  have ? : ~ (.[ v ]u < 2 ^^ size w) by omega.
+  have ? : ~ (.[ v ]u < 2 ^^ size w) by lia.
   contradiction.
 + rewrite !u2Z_false => H1.
   by rewrite (IHn v w).
@@ -175,10 +175,10 @@ elim.
     - rewrite ltnS in Hmn.
       move: Hmn; rewrite leq_eqVlt; case/orP => [/eqP|] Hmn.
       * subst m.
-        have Hl' : ~ (0 <= .[ l ]u) by omega.
+        have Hl' : ~ (0 <= .[ l ]u) by lia.
         by move/Hl': (min_u2Z l).
       * apply expZ_2_lt in Hmn.
-        have : ~ (2 ^^ m < 2 ^^ n) by move: (min_u2Z l) => ?; omega.
+        have : ~ (2 ^^ m < 2 ^^ n) by move: (min_u2Z l) => ?; lia.
         by move/(_ Hmn).
   + move: Hmn; rewrite leq_eqVlt; case/orP => [/eqP|] Hmn.
     * rewrite Hmn subnn; by exists (false :: l).
@@ -238,11 +238,11 @@ Proof.
 elim.
 - move=> p Hp [|m] H /=; first by inversion H.
   rewrite ltnS; apply Hp.
-  rewrite Zpos_xI ZpowerS in H; omega.
+  by rewrite Zpos_xI ZpowerS in H; lia.
 - move=> p Hp [|m] H /=; first by inversion H.
   rewrite ltnS; apply Hp.
-  rewrite Zpos_xO ZpowerS in H; omega.
-- move=> [|m] Hp /=; [by inversion Hp | done].
+  by rewrite Zpos_xO ZpowerS in H; lia.
+- by move=> [|m] Hp /=; [inversion Hp | by []].
 Qed.
 
 Lemma pos2lst_len2 : forall p m, 2 ^^ m <= Zpos p -> (m < size (pos2lst p))%nat.
@@ -252,15 +252,15 @@ elim => [p IH m Hm /=|p IH m Hm /=|m Hm].
   destruct m.
   + ssromega.
   + rewrite ltnS; apply IH.
-    rewrite ZpowerS in Hm; omega.
+    by rewrite ZpowerS in Hm; lia.
 - rewrite (Zpos_xO p) in Hm.
   destruct m.
   + ssromega.
   + rewrite ltnS; apply IH.
-    erewrite ZpowerS in Hm; omega.
+    by erewrite ZpowerS in Hm; lia.
 - destruct m => //.
   rewrite ZpowerS in Hm.
-  move: (expZ_gt0 m) => ?; omega.
+  by move: (expZ_gt0 m) => ?; lia.
 Qed.
 
 Lemma Zpos_Zpower : forall m p, Zpos p = 2 ^^ m -> rev (pos2lst p) = true :: zeros m.
@@ -273,7 +273,7 @@ elim.
     apply Zeven_not_Zodd in H.
     rewrite -Hp in H; contradiction.
   + rewrite Zpos_xO ZpowerS in Hp.
-    rewrite rev_cons -cats1 Hn; last by omega.
+    rewrite rev_cons -cats1 Hn; last by lia.
     by rewrite /= -nseqS.
   + have Habsurd : 2 <= 2 ^^ n.+1.
       rewrite {1}(_ : 2 = 2 ^^ 1) //.
@@ -284,16 +284,16 @@ elim.
 Qed.
 
 Lemma Zneg_Zpower m p : Zneg p = - 2 ^^ m -> rev (pos2lst p) = true :: zeros m.
-Proof. move=> H. apply Zpos_Zpower. rewrite -Zopp_neg; omega. Qed.
+Proof. by move=> H; apply Zpos_Zpower; rewrite -Zopp_neg; lia. Qed.
 
 Lemma Zpos_Zpower_m1 : forall m p, Zpos p = 2 ^^ m - 1 -> rev (pos2lst p) = ones m.
 Proof.
 elim=> // n Hn [p|p|] Hp.
-+ rewrite rev_cons -cats1 Hn; last by rewrite Zpos_xI ZpowerS in Hp; omega.
++ rewrite rev_cons -cats1 Hn; last by rewrite Zpos_xI ZpowerS in Hp; lia.
   by rewrite -nseqS.
 + have Habsurd : Zeven (Zpos p~0) by rewrite Zpos_xO; apply Zeven_2.
   have H : Zodd (2 ^^ n.+1 - 1).
-    apply Zeven_plus_Zodd; [by apply Zeven_power | done].
+    by apply Zeven_plus_Zodd; [apply Zeven_power | by []].
   apply Zeven_not_Zodd in H => //.
   by rewrite -Hp.
 + rewrite ZpowerS in Hp.
@@ -340,16 +340,16 @@ elim=> // n IH.
 rewrite /Z2u.
 move Hz : (_ ^^ _ - 1) => z.
 destruct z => //.
-have X : 2 ^^ n.+1 - 1 <> 0.
-  rewrite ZpowerS.
-  move: (expZ_gt0 n) => ?; omega.
-contradiction.
-apply Zpos_Zpower_m1 => //.
-have X : 0 < 2 ^^ n.+1 - 1.
-  rewrite ZpowerS.
-  move: (expZ_gt0 n) => ?; omega.
-rewrite Hz in X.
-by destruct p.
+- have X : 2 ^^ n.+1 - 1 <> 0.
+    rewrite ZpowerS.
+    by move: (expZ_gt0 n) => ?; lia.
+  contradiction.
+- by apply Zpos_Zpower_m1.
+- have X : 0 < 2 ^^ n.+1 - 1.
+    rewrite ZpowerS.
+    by move: (expZ_gt0 n) => ?; lia.
+  rewrite Hz in X.
+  by destruct p.
 Qed.
 
 Lemma Z2u_nil : forall z, 0 <= z -> Z2u z = [::] -> z = 0.
@@ -377,7 +377,7 @@ case.
     rewrite /= !revK.
     by move/pos2lst_inj => ->.
 - move=> p b H.
-  move: (Zlt_neg_0 p) => ?; omega.
+  by move: (Zlt_neg_0 p) => ?; lia.
 Qed.
 
 Lemma u2Z_rev_poslst: forall p, .[ rev (pos2lst p) ]u = Zpos p.
@@ -460,7 +460,7 @@ elim=> //.
     apply max_u2Z.
     by rewrite Ha.
     rewrite Hb.
-    move: (min_u2Z tb) => ?; omega.
+    by move: (min_u2Z tb) => ?; lia.
   - by apply IH.
 Qed.
 
@@ -508,7 +508,7 @@ elim.
   + move=> H.
     rewrite Ha in H.
     have X : .[tb]u < 2^^n by apply max_u2Z => //; rewrite Hb.
-    have Z : 2 ^^ n < .[ tb ]u by move: (min_u2Z ta) => ?; omega.
+    have Z : 2 ^^ n < .[ tb ]u by move: (min_u2Z ta) => ?; lia.
     by move: (ltZ_trans X Z) => /ltZZ.
   + rewrite Ha Hb => /ltZ_add2l; by auto.
   + exact: IH.
@@ -533,30 +533,38 @@ induction n.
             repeat rewrite u2Z_last in H1;
               simpl u2Z;
                 simpl u2Z in H1).
-  + have H2 : u2Z (rev a) + u2Z (rev b1) + u2Z [:: true] < 2 ^^ n. rewrite /=; omega.
+  + have H2 : u2Z (rev a) + u2Z (rev b1) + u2Z [:: true] < 2 ^^ n.
+      by rewrite /=; lia.
     move: (IHn _ _ true H H0 H2) => H3.
-    rewrite /= in H3; omega.
-  + have H2 : u2Z (rev a) + u2Z (rev b1) + u2Z [:: true] < 2 ^^ n. rewrite /=; omega.
+    by rewrite /= in H3; lia.
+  + have H2 : u2Z (rev a) + u2Z (rev b1) + u2Z [:: true] < 2 ^^ n.
+      by rewrite /=; lia.
     move: (IHn _ _ true H H0 H2) => H3.
-    rewrite /= in H3; omega.
-  + have H2 : u2Z (rev a) + u2Z (rev b1) + u2Z [:: true] < 2 ^^ n. rewrite /=; omega.
+    by rewrite /= in H3; lia.
+  + have H2 : u2Z (rev a) + u2Z (rev b1) + u2Z [:: true] < 2 ^^ n.
+      by rewrite /=; lia.
     move: (IHn _ _ true H H0 H2) => H3.
-    rewrite /= in H3; omega.
-  + have H2 : u2Z (rev a) + u2Z (rev b1) + u2Z [:: false] < 2 ^^ n. rewrite /=; omega.
+    by rewrite /= in H3; lia.
+  + have H2 : u2Z (rev a) + u2Z (rev b1) + u2Z [:: false] < 2 ^^ n.
+      by rewrite /=; lia.
     move: (IHn _ _ false H H0 H2) => H3.
-    rewrite /= in H3; omega.
-  + have H2 : u2Z (rev a) + u2Z (rev b1) + u2Z [:: true] < 2 ^^ n. rewrite /=; omega.
+    by rewrite /= in H3; lia.
+  + have H2 : u2Z (rev a) + u2Z (rev b1) + u2Z [:: true] < 2 ^^ n.
+      by rewrite /=; lia.
     move: (IHn _ _ true H H0 H2) => H3.
-    rewrite /= in H3; omega.
-  + have H2 : u2Z (rev a) + u2Z (rev b1) + u2Z [:: false] < 2 ^^ n. rewrite /=; omega.
+    by rewrite /= in H3; lia.
+  + have H2 : u2Z (rev a) + u2Z (rev b1) + u2Z [:: false] < 2 ^^ n.
+      by rewrite /=; lia.
     move: (IHn _ _ false H H0 H2) => H3.
-    rewrite /= in H3; omega.
-  + have H2 : u2Z (rev a) + u2Z (rev b1) + u2Z [:: false] < 2 ^^ n. rewrite /=; omega.
+    by rewrite /= in H3; lia.
+  + have H2 : u2Z (rev a) + u2Z (rev b1) + u2Z [:: false] < 2 ^^ n.
+      by rewrite /=; lia.
     move: (IHn _ _ false H H0 H2) => H3.
-    rewrite /= in H3; omega.
-  + have H2 : u2Z (rev a) + u2Z (rev b1) + u2Z [:: false] < 2 ^^ n. rewrite /=; omega.
+    by rewrite /= in H3; lia.
+  + have H2 : u2Z (rev a) + u2Z (rev b1) + u2Z [:: false] < 2 ^^ n.
+      by rewrite /=; lia.
     move: (IHn _ _ false H H0 H2) => H3.
-    rewrite /= in H3; omega.
+    by rewrite /= in H3; lia.
 Qed.
 
 (** The hardware addition behaves like the mathematical addition only
@@ -566,10 +574,10 @@ Lemma add_nat n a b : size a = n -> size b = n -> .[ a ]u + .[ b ]u < 2 ^^ n ->
 Proof.
 move=> Ha Hb H.
 rewrite /add (add'_nat n).
-rewrite 2!revK /=; ring.
+by rewrite 2!revK /=; ring.
 by rewrite size_rev.
 by rewrite size_rev.
-rewrite 2!revK /=; omega.
+by rewrite 2!revK /=; lia.
 Qed.
 
 Lemma u2Z_add' : forall n l k carry, size l = n -> size k = n ->
@@ -604,7 +612,7 @@ Lemma add'_nat_overflow : forall n (a b : list bool) carry,
   .[ rev a ]u + .[ rev b ]u + .[ [:: carry] ]u.
 Proof.
 induction n.
-- move=> [|ha ta] // [|hb tb] // [|] _ _ //= H; omega.
+- by move=> [|ha ta] // [|hb tb] // [|] _ _ //= H; lia.
 - move=> [|b0 a] // [|b b1] // carry [H] [H0] H1.
   destruct b0; destruct b; destruct carry; (
     simpl add';
@@ -617,38 +625,38 @@ induction n.
               simpl u2Z in H1;
                 simpl u2Z;
                   rewrite ZpowerS in H1).
-  + have H2 : 2 ^^ n <= u2Z (rev a) + u2Z (rev b1) + u2Z [:: true] by simpl; omega.
+  + have H2 : 2 ^^ n <= u2Z (rev a) + u2Z (rev b1) + u2Z [:: true] by simpl; lia.
     move: (IHn _ _ _ H H0 H2) => H3.
     rewrite /= in H3.
-    rewrite ZpowerS; omega.
-  + have H2 : 2 ^^ n <= u2Z (rev a) + u2Z (rev b1) + u2Z [:: true] by simpl; omega.
+    by rewrite ZpowerS; lia.
+  + have H2 : 2 ^^ n <= u2Z (rev a) + u2Z (rev b1) + u2Z [:: true] by simpl; lia.
     move: (IHn _ _ true H H0 H2) => H3.
     rewrite /= in H3.
-    rewrite ZpowerS; omega.
-  + have H2 : 2 ^^ n <= u2Z (rev a) + u2Z (rev b1) + u2Z [:: true] by simpl; omega.
+    by rewrite ZpowerS; lia.
+  + have H2 : 2 ^^ n <= u2Z (rev a) + u2Z (rev b1) + u2Z [:: true] by simpl; lia.
     move: (IHn _ _ true H H0 H2) => H3.
     rewrite /= in H3.
-    rewrite ZpowerS; omega.
-  + have H2 : 2 ^^ n <= u2Z (rev a) + u2Z (rev b1) + u2Z [:: false] by simpl; omega.
+    by rewrite ZpowerS; lia.
+  + have H2 : 2 ^^ n <= u2Z (rev a) + u2Z (rev b1) + u2Z [:: false] by simpl; lia.
     move: (IHn _ _ false H H0 H2) => H3.
     rewrite /= in H3.
-    rewrite ZpowerS; omega.
-  + have H2 : 2^^n <= u2Z (rev a) + u2Z (rev b1) + u2Z [:: true] by simpl; omega.
+    by rewrite ZpowerS; lia.
+  + have H2 : 2^^n <= u2Z (rev a) + u2Z (rev b1) + u2Z [:: true] by simpl; lia.
     move: (IHn _ _ true H H0 H2) => H3.
     rewrite /= in H3.
-    rewrite ZpowerS; omega.
-  + have H2 : 2^^n <= u2Z (rev a) + u2Z (rev b1) + u2Z [:: false] by simpl; omega.
+    by rewrite ZpowerS; lia.
+  + have H2 : 2^^n <= u2Z (rev a) + u2Z (rev b1) + u2Z [:: false] by simpl; lia.
     move: (IHn _ _ false H H0 H2) => H3.
     rewrite /= in H3.
-    rewrite ZpowerS; omega.
-  + have H2 : 2^^n <= u2Z (rev a) + u2Z (rev b1) + u2Z [:: false] by simpl; omega.
+    by rewrite ZpowerS; lia.
+  + have H2 : 2^^n <= u2Z (rev a) + u2Z (rev b1) + u2Z [:: false] by simpl; lia.
     move: (IHn _ _ false H H0 H2) => H3.
     rewrite /= in H3.
-    rewrite ZpowerS; omega.
-  + have H2 : 2^^n <= u2Z (rev a) + u2Z (rev b1) + u2Z [:: false] by simpl; omega.
+    by rewrite ZpowerS; lia.
+  + have H2 : 2^^n <= u2Z (rev a) + u2Z (rev b1) + u2Z [:: false] by simpl; lia.
     move: (IHn _ _ false H H0 H2) => H3.
     rewrite /= in H3.
-    rewrite ZpowerS; omega.
+    by rewrite ZpowerS; lia.
 Qed.
 
 Lemma add_overflow n a b : size a = n -> size b = n -> 2 ^^ n <= .[ a ]u + .[ b ]u ->
@@ -656,10 +664,10 @@ Lemma add_overflow n a b : size a = n -> size b = n -> 2 ^^ n <= .[ a ]u + .[ b 
 Proof.
 move=> Ha Hb H.
 rewrite /add (add'_nat_overflow n).
-rewrite 2!revK /=; ring.
+by rewrite 2!revK /=; ring.
 by rewrite size_rev.
 by rewrite size_rev.
-rewrite 2!revK /=; omega.
+by rewrite 2!revK /=; lia.
 Qed.
 
 (** subtraction *)
@@ -677,8 +685,8 @@ elim: n => [ | n IHn].
   case => // => hdb.
   case => //.
   case => // => _ _ _ /=.
-  move: hda hdb; case => //=; case => //=; move=> *; omega.
-  move: hda hdb; case => //=; case => //=; move=> *; omega.
+  by move: hda hdb; case => //=; case => //=; move=> *; lia.
+  by move: hda hdb; case => //=; case => //=; move=> *; lia.
 + move=> a b borrow H H0 _.
   case/lastP : a H => // hda tla.
   rewrite size_rcons; case => H3.
@@ -691,25 +699,25 @@ elim: n => [ | n IHn].
   * move: tlb H4; case => // => H4.
     - move: borrow; case => // => H2.
       + rewrite !rev_cat /= !rev_cons -cats1 /= u2Z_app u2Z_app_zeros /=.
-        by rewrite -(IHn _ _ true H3 H4) /=; try omega.
+        by rewrite -(IHn _ _ true H3 H4) /=; try lia.
       + rewrite !rev_cat /= !rev_cons -cats1 /= u2Z_app u2Z_app_zeros /=.
-        by rewrite -(IHn _ _ false H3 H4) /=; try omega.
+        by rewrite -(IHn _ _ false H3 H4) /=; try lia.
     - move: borrow; case => // => H2.
       + rewrite !rev_cat /= !rev_cons -cats1 /= u2Z_app u2Z_app_zeros /=.
-        by rewrite -(IHn _ _ false H3 H4) /=; try omega.
+        by rewrite -(IHn _ _ false H3 H4) /=; try lia.
       + rewrite !rev_cat /= !rev_cons -cats1 /= u2Z_app u2Z_app_zeros /=.
-        by rewrite -(IHn _ _ false H3 H4) /=; try omega.
+        by rewrite -(IHn _ _ false H3 H4) /=; try lia.
   * move: tlb H4; case => // => H4.
     - move: borrow; case => // => H2.
       + rewrite !rev_cat /= !rev_cons -cats1 /= u2Z_app u2Z_app_zeros /=.
-        by rewrite -(IHn _ _ true H3 H4) /=; try omega.
+        by rewrite -(IHn _ _ true H3 H4) /=; try lia.
       + rewrite !rev_cat /= !rev_cons -cats1 /= u2Z_app u2Z_app_zeros /=.
-        by rewrite -(IHn _ _ true H3 H4) /=; try omega.
+        by rewrite -(IHn _ _ true H3 H4) /=; try lia.
     - move: borrow; case => // => H2.
       + rewrite !rev_cat /= !rev_cons -cats1 /= u2Z_app u2Z_app_zeros /=.
-        by rewrite -(IHn _ _ true H3 H4) /=; try omega.
+        by rewrite -(IHn _ _ true H3 H4) /=; try lia.
       + rewrite !rev_cat /= !rev_cons -cats1 /= u2Z_app u2Z_app_zeros /=.
-        by rewrite -(IHn _ _ false H3 H4) /=; try omega.
+        by rewrite -(IHn _ _ false H3 H4) /=; try lia.
 Qed.
 
 Lemma sub_nat n a b borrow : size a = n -> size b = n ->
@@ -731,8 +739,8 @@ elim: n => [ | n IHn].
   case => // => hdb.
   case => //.
   case => // => _ _ _ /=.
-  move: hda hdb; case => //=; case => //=; move=> *; omega.
-  move: hda hdb; case => //=; case => //=; move=> *; omega.
+  by move: hda hdb; case => //=; case => //=; move=> *; lia.
+  by move: hda hdb; case => //=; case => //=; move=> *; lia.
 + move=> a b borrow H H0 _.
   case/lastP : a H => // hda tla.
   rewrite size_rcons; case => H3.
@@ -746,47 +754,47 @@ elim: n => [ | n IHn].
   * move: tlb H4; case => // => H4.
     - move: borrow; case => // => H2.
       + ring_simplify.
-        apply trans_eq with (2 * (.[ hda ]u + 2 ^^ n.+1 - .[hdb ]u)); last by omega.
-        rewrite -(IHn _ _ true H3 H4) //; try by rewrite /=; omega.
+        apply trans_eq with (2 * (.[ hda ]u + 2 ^^ n.+1 - .[hdb ]u)); last by lia.
+        rewrite -(IHn _ _ true H3 H4) //; try by rewrite /=; lia.
         rewrite !rev_cat rev_cons -!cats1 !cat0s [LHS]/= rev_cons [LHS]/=.
         rewrite -cats1 u2Z_app u2Z_app_zeros [Zmult]lock /= -lock; ring.
       + ring_simplify.
-        apply trans_eq with (2 * (.[ hda ]u + 2 ^^ n.+1 - .[hdb ]u)); last by omega.
-        rewrite -(IHn _ _ false H3 H4) //; try by rewrite /=; omega.
+        apply trans_eq with (2 * (.[ hda ]u + 2 ^^ n.+1 - .[hdb ]u)); last by lia.
+        rewrite -(IHn _ _ false H3 H4) //; try by rewrite /=; lia.
         rewrite !rev_cat rev_cons -!cats1 !cat0s [LHS]/= rev_cons [LHS]/=.
         rewrite -cats1 u2Z_app u2Z_app_zeros [Zmult]lock /= -lock; ring.
     - move: borrow; case => // => H2.
       + ring_simplify.
-        apply trans_eq with (2 * (.[ hda ]u + 2 ^^ n.+1 - .[hdb ]u) + 1); last by omega.
-        rewrite -(IHn _ _ false H3 H4) //; try by rewrite /=; omega.
+        apply trans_eq with (2 * (.[ hda ]u + 2 ^^ n.+1 - .[hdb ]u) + 1); last by lia.
+        rewrite -(IHn _ _ false H3 H4) //; try by rewrite /=; lia.
         rewrite !rev_cat rev_cons -!cats1 !cat0s [LHS]/= rev_cons [LHS]/=.
         rewrite -cats1 u2Z_app u2Z_app_zeros [Zmult]lock /= -lock; ring.
       + ring_simplify.
-        apply trans_eq with (2 * (.[ hda ]u + 2 ^^ n.+1 - .[hdb ]u) + 1); last by omega.
-        rewrite -(IHn _ _ false H3 H4) //; try by rewrite /=; omega.
+        apply trans_eq with (2 * (.[ hda ]u + 2 ^^ n.+1 - .[hdb ]u) + 1); last by lia.
+        rewrite -(IHn _ _ false H3 H4) //; try by rewrite /=; lia.
         rewrite !rev_cat rev_cons -!cats1 !cat0s [LHS]/= rev_cons [LHS]/=.
         rewrite -cats1 u2Z_app u2Z_app_zeros [Zmult]lock /= -lock; ring.
   * move: tlb H4; case => // => H4.
     - move: borrow; case => // => H2.
       + ring_simplify.
-        apply trans_eq with (2 * (.[ hda ]u+ 2 ^^ n.+1 - .[hdb ]u) - 1); last by omega.
-        rewrite -(IHn _ _ true H3 H4) //; try by rewrite /=; omega.
+        apply trans_eq with (2 * (.[ hda ]u+ 2 ^^ n.+1 - .[hdb ]u) - 1); last by lia.
+        rewrite -(IHn _ _ true H3 H4) //; try by rewrite /=; lia.
         rewrite !rev_cat rev_cons -!cats1 !cat0s [LHS]/= rev_cons [LHS]/=.
         rewrite -cats1 u2Z_app u2Z_app_zeros [Zmult]lock /= -lock; ring.
       + ring_simplify.
-        apply trans_eq with (2 * (.[ hda ]u+ 2 ^^ n.+1 - .[hdb ]u) - 1); last by omega.
-        rewrite -(IHn _ _ true H3 H4) //; try by rewrite /=; omega.
+        apply trans_eq with (2 * (.[ hda ]u+ 2 ^^ n.+1 - .[hdb ]u) - 1); last by lia.
+        rewrite -(IHn _ _ true H3 H4) //; try by rewrite /=; lia.
         rewrite !rev_cat rev_cons -!cats1 !cat0s [LHS]/= rev_cons [LHS]/=.
         rewrite -cats1 u2Z_app u2Z_app_zeros [Zmult]lock /= -lock; ring.
     - move: borrow; case => // => H2.
       + ring_simplify.
-        apply trans_eq with (2 * (.[hda ]u + 2 ^^ n.+1 - .[hdb ]u)); last by omega.
-        rewrite -(IHn _ _ true H3 H4) //; try by rewrite /=; omega.
+        apply trans_eq with (2 * (.[hda ]u + 2 ^^ n.+1 - .[hdb ]u)); last by lia.
+        rewrite -(IHn _ _ true H3 H4) //; try by rewrite /=; lia.
         rewrite !rev_cat rev_cons -!cats1 !cat0s [LHS]/= rev_cons [LHS]/=.
         rewrite -cats1 u2Z_app u2Z_app_zeros [Zmult]lock /= -lock; ring.
       + ring_simplify.
-        apply trans_eq with (2 * (.[ hda ]u + 2 ^^ n.+1 - .[hdb ]u)); last by omega.
-        rewrite -(IHn _ _ false H3 H4) //; try by rewrite /=; omega.
+        apply trans_eq with (2 * (.[ hda ]u + 2 ^^ n.+1 - .[hdb ]u)); last by lia.
+        rewrite -(IHn _ _ false H3 H4) //; try by rewrite /=; lia.
         rewrite !rev_cat rev_cons -!cats1 !cat0s [LHS]/= rev_cons [LHS]/=.
         rewrite -cats1 u2Z_app u2Z_app_zeros [Zmult]lock /= -lock; ring.
 Qed.
@@ -803,7 +811,7 @@ Lemma adjust_u2Z: forall n lst, .[ lst ]u < 2 ^^ n ->
   .[ adjust_u lst n ]u = .[ lst ]u.
 Proof.
 move=> n lst H.
-have [/leP H0|H0] : (size lst >= n \/ size lst < n)%coq_nat by omega.
+have [/leP H0|H0] : (size lst >= n \/ size lst < n)%coq_nat by lia.
 - elim (u2Z_power_inv _ _ _ H0 (refl_equal _) H) => x Hx.
   rewrite /adjust_u.
   have H' : (size lst < n = false)%nat by apply/ltP; ssromega.
@@ -899,7 +907,7 @@ induction n; intros.
       - rewrite u2Z_false u2Z_true IHn // H //.
         lapply (max_u2Z n.+2 a); last by rewrite H.
         intro.
-        rewrite -(Zpower_plus n.+2); omega.
+        by rewrite -(Zpower_plus n.+2); lia.
       - case=> x H2.
         rewrite H2 size_nseq in H.
         subst x.
@@ -917,7 +925,7 @@ induction n; intros.
       rewrite H // u2Z_false.
       lapply (max_u2Z n.+2 a); last by rewrite H.
       move=> H1.
-      rewrite -(Zpower_plus n.+2); omega.
+      by rewrite -(Zpower_plus n.+2); lia.
     * case=> x H1.
       rewrite H1 size_nseq in H.
       subst x.
@@ -1041,15 +1049,15 @@ Lemma shl_u2Z' : forall n lst, size lst = n ->
       u2Z (shl k lst) <= 2 ^^ (l + k) - 2 ^^ k.
 Proof.
 induction k.
-- rewrite /= addn0; omega.
+- by rewrite /= addn0; lia.
 - move=> H1.
   have H2 : (k + l <= n)%nat by rewrite ltnW.
   move/IHk : H2 => H2 {IHk}.
   rewrite (shl_u2Z k n lst H l) // in H2; last by rewrite ltnW.
   rewrite (shl_u2Z k.+1 n lst H l) //.
   rewrite (_ : 2 ^^ (l + k.+1) - 2 ^^ k.+1 = 2 * (2 ^^ (l + k) - 2 ^^ k)); last first.
-    rewrite addnS !ZpowerS; omega.
-  rewrite ZpowerS mulZC -mulZA (mulZC (2 ^^ k)); omega.
+    by rewrite addnS !ZpowerS; lia.
+  by rewrite ZpowerS mulZC -mulZA (mulZC (2 ^^ k)); lia.
 Qed.
 
 (** properties of shift-left-extend w.r.t. lst2nat *)
@@ -1069,9 +1077,9 @@ Lemma shl_ext_u2Z' : forall n lst, size lst = n ->
 Proof.
 unfold shl_ext.
 induction k.
-rewrite /= cats0 addn0; omega.
+  by rewrite /= cats0 addn0; lia.
 rewrite (_ : lst ++ zeros k.+1 = (lst ++ zeros k) ++ zeros 1); last by rewrite /= -catA -nseqS.
-rewrite u2Z_app_zeros addnS 2!ZpowerS [2 ^^ 0]/= ZpowerS; omega.
+by rewrite u2Z_app_zeros addnS 2!ZpowerS [2 ^^ 0]/= ZpowerS; lia.
 Qed.
 
 (** properties of shrl_lst / u2Z *)
@@ -1087,7 +1095,7 @@ case: (le_gt_dec m n) => X.
   rewrite (shrl_app_zeros _ m) //.
   move: Hlenl.
   rewrite Hl' size_cat /= size_nseq -minusE -plusE => ?; ssromega.
-have : (n - m = O)%coq_nat by omega.
+have : (n - m = O)%coq_nat by lia.
 rewrite minusE => ->; by rewrite shrl_0.
 Qed.
 
@@ -1107,7 +1115,7 @@ elim.
       by rewrite size_cat /= size_nseq // addnC.
     rewrite (u2Z_app (zeros n)) zeros_app u2Z_zeros /= in H.
     have {}H : u2Z (rcons hd tl) = 0.
-      move: (min_u2Z (rcons hd tl)) => ?; omega.
+      by move: (min_u2Z (rcons hd tl)) => ?; lia.
     by move/(u2Z_zeros_inv (n.+1)) : H => ->.
 - move=> k IHk [|n].
   + by inversion 2.
@@ -1141,7 +1149,7 @@ move => n [|[|] tl] l /= H H0.
   case: H => H.
   rewrite H /= in H0.
   have H1 :  ~ (2 ^^ l + .[ tl ]u < 2 ^^ l).
-    move: (min_u2Z tl) => ?; omega.
+    by move: (min_u2Z tl) => ?; lia.
   tauto.
 - by rewrite sext_0 u2Z_app zeros_app u2Z_zeros.
 Qed.
@@ -1207,18 +1215,18 @@ induction n; intros.
   assert ( .[ b ]u < 2^^n ).
     apply max_u2Z.
     by rewrite H0.
-  have H3 : .[ a ]u < 0 by omega.
+  have H3 : .[ a ]u < 0 by lia.
   have : (~(.[ a ]u < 0)).
-    move: (min_u2Z a) => ?; omega.
+    move: (min_u2Z a) => ?; lia.
   by move/(_ H3).
   rewrite s2Z_false s2Z_true H in H1.
   have H2 : .[ a ]u < 2 ^^ n by apply max_u2Z; rewrite H.
-  have H3 : .[ b ]u < 0 by omega.
-  have: ~( .[ b ]u < 0) by move: (min_u2Z b) => ?; omega.
+  have H3 : .[ b ]u < 0 by lia.
+  have: ~( .[ b ]u < 0) by move: (min_u2Z b) => ?; lia.
   by move/(_ H3).
   do 2 rewrite s2Z_true in H1.
   rewrite H H0 in H1.
-  assert (.[ a ]u = .[ b ]u) by omega.
+  assert (.[ a ]u = .[ b ]u) by lia.
   by rewrite (u2Z_inj n a b).
 Qed.
 
@@ -1235,7 +1243,7 @@ have H1 : 0 <= .[ l ]u < 2 ^^ n.
   split.
   - by apply min_u2Z.
   - apply max_u2Z; by rewrite H.
-omega.
+by lia.
 Qed.
 
 Lemma s2Z_u2Z_pos_equiv : forall n lst, size lst = n ->
@@ -1254,15 +1262,15 @@ induction n.
   + split => H0.
     * rewrite H in H0.
       rewrite H.
-      have H3 : (2 ^^ n <= .[ lst ]u) by omega.
+      have H3 : (2 ^^ n <= .[ lst ]u) by lia.
       lapply (max_u2Z n lst).
       - move=> H4.
-        have H5 : (~(2 ^^ n <= .[ lst ]u)) by omega.
+        have H5 : (~(2 ^^ n <= .[ lst ]u)) by lia.
         contradiction.
       - by rewrite H.
     * rewrite H in H0.
       rewrite H.
-      move: (min_u2Z lst) => ?; omega.
+      by move: (min_u2Z lst) => ?; lia.
 Qed.
 
 Lemma s2Z_u2Z_neg : forall n l, size l = n ->  .[ l ]s < 0 ->
@@ -1273,8 +1281,8 @@ destruct n.
 - destruct l; try discriminate.
   destruct l; try discriminate.
 - destruct b; last first.
-  simpl in H0.
-  generalize (min_u2Z l); omega.
+    simpl in H0.
+    by generalize (min_u2Z l); lia.
   rewrite u2Z_true s2Z_true ZpowerS.
   case : H => ->; ring.
 Qed.
@@ -1317,7 +1325,7 @@ move=> n IH [| [|] tl ] // [H].
   have X : .[ tl ]u < 2^^n.+1.
     apply max_u2Z.
     by rewrite H.
-  rewrite H; omega.
+  by rewrite H; lia.
 - move: {IH}(IH _ H) => IH.
   rewrite s2Z_false.
   apply max_u2Z.
@@ -1332,13 +1340,13 @@ case=> //; case; case=> //.
   move: {IH}(IH _ H) => IH.
   rewrite s2Z_true.
   apply (@leZ_trans (-2 ^^ n.+1)).
-  omega.
+  by lia.
 - rewrite H.
-  move: (min_u2Z tl) => ?; omega.
+  by move: (min_u2Z tl) => ?; lia.
 - move: {IH}(IH _ H) => IH.
   rewrite s2Z_false.
   apply (@leZ_trans 0); last exact: min_u2Z.
-  move: (expZ_gt0 n.+1) => ?; omega.
+  by move: (expZ_gt0 n.+1) => ?; lia.
 Qed.
 
 Lemma s2Z_overflow_len l n : 2 ^^ n <= .[ l ]s -> (n.+1 <= size l)%nat.
@@ -1419,15 +1427,15 @@ case.
     have : xxx < 0.
       have Ht : .[t ]u < 2 ^^ n.
         apply max_u2Z; by rewrite len_t.
-     rewrite /xxx len_t; omega.
+      by rewrite /xxx len_t; lia.
     by destruct xxx.
   + have : 0 < .[t ]u.
       move: (min_u2Z t) => X.
-      have : .[t ]u = 0 \/ 0 < .[t ]u by omega.
+      have : .[t ]u = 0 \/ 0 < .[t ]u by lia.
       case=> //.
       move/(u2Z_zeros_inv _ _ len_t) => ?; subst t.
       tauto.
-      by destruct (.[t ]u).
+    by destruct (.[t ]u).
 Qed.
 
 Lemma s2Z_neg_ones : forall n lst, size lst = n ->
@@ -1445,10 +1453,10 @@ induction n.
   + rewrite s2Z_false in H1.
     case : H1 => H2 H3.
     move: (min_u2Z lst) => H1.
-    assert (~ (u2Z lst < 0)) by omega.
+    assert (~ (u2Z lst < 0)) by lia.
     tauto.
   + rewrite s2Z_true H in H1.
-    have [H3|H3] : (l' = n \/ l' < n)%coq_nat by move/ltP in H0; omega.
+    have [H3|H3] : (l' = n \/ l' < n)%coq_nat by move/ltP in H0; lia.
     * subst l'.
       rewrite subSnn.
       by exists lst; auto.
@@ -1465,19 +1473,19 @@ induction n.
         clear H.
         destruct l'.
         simpl in H1.
-        have H : ~(-1<=-2) by omega.
+        have H : ~(-1<=-2) by lia.
         tauto.
         by inversion H3.
         rewrite ltnS in H3.
         assert (u2Z lst < 2 ^^ n.+1).
           apply max_u2Z; by rewrite H.
         assert (- 2 ^^ n.+2 + u2Z lst < - 2 ^^ n.+1).
-          rewrite ZpowerS; omega.
-        assert ( - 2 ^^ l' <  - 2 ^^ n.+1) by omega.
-        assert ( 2 ^^ l' > 2 ^^ n.+1) by omega.
+          by rewrite ZpowerS; lia.
+        assert ( - 2 ^^ l' <  - 2 ^^ n.+1) by lia.
+        assert ( 2 ^^ l' > 2 ^^ n.+1) by lia.
         have : (l' <= n.+1)%nat by ssromega.
         rewrite -Zpower_2_le => /leZP ?.
-        assert ( ~ (2 ^^ l' <= 2 ^^ n.+1)) by omega.
+        assert ( ~ (2 ^^ l' <= 2 ^^ n.+1)) by lia.
         tauto.
       rewrite s2Z_true in H2.
       rewrite u2Z_true in H1.
@@ -1485,7 +1493,7 @@ induction n.
       case : H => H.
       rewrite !H in H2, H1.
       rewrite ZpowerS in H1.
-      have H4 : (- 2 ^^ l' <= - 2 ^^ n + u2Z lst < 0) by omega.
+      have H4 : (- 2 ^^ l' <= - 2 ^^ n + u2Z lst < 0) by lia.
       move: (H2 H4) => [x H6].
       rewrite (_ : n.+1 - l' = (n - l').+1)%nat in H6.
       + simpl in H6.
@@ -1512,17 +1520,17 @@ destruct lst.
   destruct b; last first.
   + rewrite s2Z_false in H1.
     move/ltP in H0.
-    assert (n >= l')%coq_nat by omega.
-    assert ( u2Z lst < 2 ^^ l') by omega.
+    assert (n >= l')%coq_nat by lia.
+    assert ( u2Z lst < 2 ^^ l') by lia.
     move/leP in H2.
     case: (u2Z_power_inv _ _ _ H2 H H3) => x H4.
     exists x.
-    rewrite H4 (_ : (n.+1 - l')%nat = ((n-l').+1 )%coq_nat) // -!minusE; omega.
+    by rewrite H4 (_ : (n.+1 - l')%nat = ((n-l').+1 )%coq_nat) // -!minusE; lia.
   - rewrite s2Z_true H in H1.
     assert (u2Z lst < 2 ^^ n).
       apply max_u2Z; by rewrite H.
-    have H3 : - 2 ^^ n + u2Z lst < 0 by omega.
-    have : ~( - 2 ^^ n + u2Z lst < 0) by omega.
+    have H3 : - 2 ^^ n + u2Z lst < 0 by lia.
+    have : ~( - 2 ^^ n + u2Z lst < 0) by lia.
     by move/(_ H3).
 Qed.
 
@@ -1537,7 +1545,7 @@ case: a_n => ?; subst n.
 move: (max_u2Z (size ta) _ (leqnn _)) => ?.
 exfalso.
 move/leZP in a_pos.
-omega.
+by lia.
 Qed.
 
 Lemma s2Z_shl : forall l lst, size lst = l ->
@@ -1604,7 +1612,7 @@ induction l.
           destruct l' => //.
           simpl in H1.
           rewrite H1 s2Z_false u2Z_false ZpowerS; ring.
-        + rewrite (size_shl k l.+1) //; omega.
+        + by rewrite (size_shl k l.+1) //; lia.
 Qed.
 
 Lemma shra_ones n a m : size a = n.+1 -> .[ a ]s < 0 -> (n <= m)%nat ->
@@ -1637,9 +1645,9 @@ destruct h.
   rewrite len_a.
   move/(_ (leqnn _)) => X.
   rewrite len_a in Ha.
-  have abs : - 2 ^^ n + .[t ]u < 0 by omega.
-  suff : False by done.
-  omega.
+  have abs : - 2 ^^ n + .[t ]u < 0 by lia.
+  exfalso.
+  by lia.
 - rewrite /=; f_equal.
   rewrite len_a.
   move/minn_idPr : (n_m) => ->.
@@ -1725,7 +1733,7 @@ induction n.
       lapply H4; last first.
         contradict H0; by rewrite H0.
       move=> {}H4.
-      rewrite ZpowerS; omega.
+      by rewrite ZpowerS; lia.
   + rewrite cplt2_prop; last 2 first.
       by move=> [ [|k] Hk].
       by move=> [ [|k] Hk].
@@ -1776,10 +1784,10 @@ Proof.
 move Heq : (- 2 ^^ m) => z.
 destruct z as [|p|p].
 - exfalso.
-  move: (expZ_gt0 m) => ?; omega.
+  by move: (expZ_gt0 m) => ?; lia.
 - have Habsurd : - (2 ^^ m) > 0 by rewrite Heq; apply Zgt_pos_0.
   exfalso.
-  move: (expZ_gt0 m) => ?; omega.
+  by move: (expZ_gt0 m) => ?; lia.
 - rewrite /= cplt2_prop /=; last 2 first.
     case=> x H1.
     rewrite (Zneg_Zpower m) // in H1.
@@ -1813,14 +1821,14 @@ Proof.
 elim=> // n.
 rewrite ZpowerS.
 move H : (2 ^^ n) => [|p|p] /=.
-- move: (expZ_gt0 n) => ?; omega.
+- by move: (expZ_gt0 n) => ?; lia.
 - rewrite rev_cons -cats1.
   rewrite size_cat size_rev /= -addn1 -plusE.
   by move=>->.
 - exfalso.
   move: (expZ_gt0 n).
   rewrite H => Z.
-  move: (Zlt_neg_0 p) => ?; omega.
+  by move: (Zlt_neg_0 p) => ?; lia.
 Qed.
 
 Lemma Z2s_len n : forall z, 0 < z < 2 ^^ n -> (size (Z2s z) <= n.+1)%nat.
@@ -1835,12 +1843,12 @@ Lemma Z2s_overflow_len z n : 2 ^^ n <= z -> (n < size (Z2s z))%nat.
 Proof.
 destruct z.
 - move=> Hn.
-  move: (expZ_gt0 n) => ?; omega.
+  by move: (expZ_gt0 n) => ?; lia.
 - move=> H.
   rewrite /= size_rev ltnS ltnW //.
   by apply pos2lst_len2.
 - move=> H.
-  move: (expZ_gt0 n) (Zlt_neg_0 p) => ? ?; omega.
+  by move: (expZ_gt0 n) (Zlt_neg_0 p) => ? ?; lia.
 Qed.
 
 Lemma s2Z_cplt1 : forall n a, size a = n.+1 -> .[ cplt1 a ]s = - .[ a ]s - 1.
@@ -1865,7 +1873,7 @@ destruct ha.
   rewrite 2!s2Z_true u2Z_false u2Z_true.
   simpl size.
   rewrite size_cplt1 Ha ZpowerS.
-  simpl s2Z => ?; omega.
+  by simpl s2Z => ?; lia.
 simpl cplt1.
 rewrite s2Z_true.
 simpl size.
@@ -1877,10 +1885,10 @@ destruct ha'.
   simpl cplt1.
   rewrite s2Z_false u2Z_false.
   simpl s2Z.
-  rewrite Ha => ?; omega.
+  by rewrite Ha => ?; lia.
 simpl cplt1.
 rewrite s2Z_true u2Z_true size_cplt1 Ha.
-simpl s2Z => ?; omega.
+by simpl s2Z => ?; lia.
 Qed.
 
 Lemma sext_s2Z : forall l n, .[ sext n l ]s = .[ l ]s.
@@ -2014,13 +2022,13 @@ Proof.
 elim => // n IHn.
 - move=> [|b l] // [|b0 k] // c [H] [H0] H1 H2.
   destruct n.
-  + destruct l; last by done.
-    destruct k; last by done.
+  + destruct l; last by [].
+    destruct k; last by [].
     destruct b; destruct b0; destruct c; auto.
-    rewrite /= in H2; omega.
-    rewrite /= in H2; omega.
-    rewrite /= in H2; omega.
-    rewrite /= in H2; omega.
+    by rewrite /= in H2; lia.
+    by rewrite /= in H2; lia.
+    by rewrite /= in H2; lia.
+    by rewrite /= in H2; lia.
   + destruct b; destruct b0; destruct c; simpl rev; rewrite !rev_cons -!cats1.
     * rewrite s2Z_last; last first.
         move/eqP; rewrite -size_eq0.
@@ -2029,7 +2037,7 @@ elim => // n IHn.
       rewrite !u2Z_last IHn //.
       rewrite (ZpowerS 2 n.+2); ring.
       rewrite !rev_cons -!cats1 in H2.
-      simpl rev in H2. rewrite ZpowerS !u2Z_last in H2. simpl u2Z in H2. simpl u2Z; omega.
+      simpl rev in H2. rewrite ZpowerS !u2Z_last in H2. simpl u2Z in H2. by simpl u2Z; lia.
     * rewrite s2Z_last; last first.
         move/eqP; rewrite -size_eq0.
         rewrite size_rev size_add'; last by rewrite !size_cat H H0.
@@ -2037,7 +2045,7 @@ elim => // n IHn.
       rewrite !u2Z_last IHn //.
       rewrite (ZpowerS 2 n.+2); ring.
       rewrite !rev_cons -!cats1 in H2.
-      simpl rev in H2. rewrite ZpowerS !u2Z_last in H2. simpl u2Z in H2. simpl u2Z; omega.
+      simpl rev in H2. rewrite ZpowerS !u2Z_last in H2. simpl u2Z in H2. by simpl u2Z; lia.
     * rewrite s2Z_last; last first.
         move/eqP; rewrite -size_eq0.
         rewrite size_rev size_add'; last by rewrite !size_cat H H0.
@@ -2045,7 +2053,7 @@ elim => // n IHn.
       rewrite !u2Z_last IHn //.
       simpl u2Z. rewrite (ZpowerS 2 n.+2); ring.
       rewrite !rev_cons -!cats1 in H2.
-      simpl rev in H2. rewrite ZpowerS !u2Z_last in H2. simpl u2Z in H2. simpl u2Z; omega.
+      simpl rev in H2. rewrite ZpowerS !u2Z_last in H2. simpl u2Z in H2. by simpl u2Z; lia.
     * rewrite s2Z_last; last first.
         move/eqP; rewrite -size_eq0.
         rewrite size_rev size_add'; last by rewrite !size_cat H H0.
@@ -2053,7 +2061,7 @@ elim => // n IHn.
       rewrite !u2Z_last IHn //.
       simpl u2Z. rewrite (ZpowerS 2 n.+2); ring.
       rewrite !rev_cons -!cats1 in H2.
-      simpl rev in H2. rewrite ZpowerS !u2Z_last in H2. simpl u2Z in H2. simpl u2Z; omega.
+      simpl rev in H2. rewrite ZpowerS !u2Z_last in H2. simpl u2Z in H2. by simpl u2Z; lia.
     * rewrite s2Z_last; last first.
         move/eqP; rewrite -size_eq0.
         rewrite size_rev size_add'; last by rewrite !size_cat H H0.
@@ -2061,7 +2069,7 @@ elim => // n IHn.
       rewrite !u2Z_last IHn //.
       simpl u2Z. rewrite (ZpowerS 2 n.+2); ring.
       rewrite !rev_cons -!cats1 in H2.
-      simpl rev in H2. rewrite ZpowerS !u2Z_last in H2. simpl u2Z in H2. simpl u2Z; omega.
+      simpl rev in H2. rewrite ZpowerS !u2Z_last in H2. simpl u2Z in H2. by simpl u2Z; lia.
     * rewrite s2Z_last; last first.
         move/eqP; rewrite -size_eq0.
         rewrite size_rev size_add'; last by rewrite !size_cat H H0.
@@ -2069,7 +2077,7 @@ elim => // n IHn.
       rewrite !u2Z_last IHn //.
       simpl u2Z. rewrite (ZpowerS 2 n.+2); ring.
       rewrite !rev_cons -!cats1 in H2.
-      simpl rev in H2. rewrite ZpowerS !u2Z_last in H2. simpl u2Z in H2. simpl u2Z; omega.
+      simpl rev in H2. rewrite ZpowerS !u2Z_last in H2. simpl u2Z in H2. by simpl u2Z; lia.
     * rewrite s2Z_last; last first.
         move/eqP; rewrite -size_eq0.
         rewrite size_rev size_add'; last by rewrite !size_cat H H0.
@@ -2077,7 +2085,7 @@ elim => // n IHn.
       rewrite !u2Z_last IHn //.
       simpl u2Z. rewrite (ZpowerS 2 n.+2); ring.
       rewrite !rev_cons -!cats1 in H2.
-      simpl rev in H2. rewrite ZpowerS !u2Z_last in H2. simpl u2Z in H2. simpl u2Z; omega.
+      simpl rev in H2. rewrite ZpowerS !u2Z_last in H2. simpl u2Z in H2. by simpl u2Z; lia.
     * rewrite s2Z_last; last first.
         move/eqP; rewrite -size_eq0.
         rewrite size_rev size_add'; last by rewrite !size_cat H H0.
@@ -2085,7 +2093,7 @@ elim => // n IHn.
       rewrite !u2Z_last IHn //.
       simpl u2Z. rewrite (ZpowerS 2 n.+2); ring.
       rewrite !rev_cons -!cats1 in H2.
-      simpl rev in H2. rewrite ZpowerS !u2Z_last in H2. simpl u2Z in H2. simpl u2Z; omega.
+      simpl rev in H2. rewrite ZpowerS !u2Z_last in H2. simpl u2Z in H2. by simpl u2Z; lia.
 Qed.
 
 Lemma add_Z_truei n l k c : size l = n -> size k = n ->
@@ -2109,11 +2117,11 @@ case.
 - case => // b [] // [] // b0 [] // _ _ c H.
   move: b b0 H; case; case; move=> H.
   + destruct c => //=.
-    simpl in H;omega.
+    by simpl in H; lia.
   + by destruct c.
   + by destruct c.
   + destruct c => //=.
-    simpl in H; omega.
+    by simpl in H; lia.
 - move=> n [|a0 a] // [|b0 b] // [H] [H0] c H1.
   destruct a0; destruct b0.
   - (* we add two negative numbers *)
@@ -2122,15 +2130,15 @@ case.
     * simpl u2Z.
       rewrite ZpowerS.
       destruct c; ring.
-    * destruct c; simpl u2Z; omega.
+    * by destruct c; simpl u2Z; lia.
   - rewrite (addC (true :: a) (false :: b) c) (add_Z_falsei n.+1) //.
     + rewrite s2Z_true s2Z_false in H1.
       rewrite s2Z_true s2Z_false.
       destruct c.
       * simpl u2Z.
-        rewrite H in H1 *; omega.
+        by rewrite H in H1 *; lia.
       * simpl u2Z.
-        rewrite H in H1 *; omega.
+        by rewrite H in H1 *; lia.
   - (* we add a positive number with a negative number (never overflows) *)
     rewrite s2Z_false s2Z_true H0 in H1.
     destruct c.
@@ -2142,10 +2150,10 @@ case.
     destruct c.
     + rewrite 2!s2Z_false in H1.
       rewrite 2!s2Z_false (add_Z_falseo n.+1) //.
-      simpl u2Z; omega.
+      by simpl u2Z; lia.
     + rewrite 2!s2Z_false in H1.
       rewrite 2!s2Z_false (add_Z_falseo n.+1) //.
-      simpl u2Z; omega.
+      by simpl u2Z; lia.
 Qed.
 
 Lemma sub_Z n a b : size a = n.+1 -> size b = n.+1 ->
@@ -2156,7 +2164,7 @@ move=> Ha Hb H.
 rewrite (sub_add_cplt1 n.+1) //= (add_Z n) //.
 - rewrite (s2Z_cplt1 n) //; ring.
 - by rewrite size_cplt1.
-- rewrite (s2Z_cplt1 n) //; omega.
+- by rewrite (s2Z_cplt1 n) //; lia.
 Qed.
 
 (** correctness of the signed multiplication *)

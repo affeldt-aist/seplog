@@ -38,11 +38,11 @@ have [sf [exec_mips _]] : {sf | Some (s, h) -- multi_double_u rk rx a0 a1 a2 a3 
     exists (Some (s0, h)); split; last by [].
     apply while.exec_while_false.
     + rewrite /= in Ha0 *.
-      apply/negPn/eqP; omega.
+      apply/negPn/eqP; lia.
     + move=> na0 IH s0 st h Hset Ha0.
       apply exists_while_P.
       * rewrite /=; rewrite Z_S in Ha0.
-        apply/eqP; omega.
+        apply/eqP; lia.
       * apply exists_seq_P with (fun s => forall s', s = Some s' ->
         u2Z ([ rk ]_(fst s')) - u2Z ([ a0 ]_(fst s')) = Z_of_nat na0).
         - exists_lwxs l_a0 H_l_a0 z_a0 H_z_a0.
@@ -67,9 +67,9 @@ have [sf [exec_mips _]] : {sf | Some (s, h) -- multi_double_u rk rx a0 a1 a2 a3 
           repeat Reg_upd.
           rewrite Z_S in Ha0.
           rewrite sext_Z2u // u2Z_add_Z2u //.
-          omega.
+          lia.
           move: (min_u2Z ([a0]_s0)) (min_u2Z ([rk]_s0)) (max_u2Z ([rk]_s0)) => ? ? ?.
-          omega.
+          lia.
         - move=> si Hsi.
           destruct si as [[sti hi] |].
           + apply IH => //.

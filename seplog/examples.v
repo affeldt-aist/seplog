@@ -81,7 +81,7 @@ apply hoare_prop_m.hoare_weak with (fun s _ =>
 move=> s h /= [[vx [vy [d [H1 [H2 [H4 [H5 [H6 H7]]]]]]]] /negPn/eqP H8].
 rewrite H4 H5 in H8; subst vy vx.
 rewrite -H8{H2 H8} in H6.
-have H : 0 <= store.get x s by omega.
+have H : 0 <= store.get x s by lia.
 case: (Zis_gcd_eq _ _ H H6) => X.
 - by exists d.
 - exists (-d); split; first by [].
@@ -99,7 +99,7 @@ split; first by [].
 split.
 - move/negbTE: H8; rewrite /= /ZIT.eqb => H8.
   move/gtZP : H9; rewrite /= => H9.
-  subst vx vy; omega.
+  subst vx vy; lia.
 - split; first by [].
   split.
   + rewrite /=.
@@ -117,7 +117,7 @@ repeat Store_upd => //.
 split.
 - move/negbTE: H8 => /= /eqP H8.
   move/negbTE: H9 => /gtZP /= H9.
-  subst vx vy; omega.
+  subst vx vy; lia.
 - split; first by [].
   split.
   + by rewrite /= H4 H5.
@@ -168,7 +168,7 @@ repeat Store_upd => //.
 split; first by [].
 split.
 - move/negbTE : H1 => /eqP /= H1.
-  subst wa wb; omega.
+  subst wa wb; lia.
 - split; first by [].
   split => //.
   split; first by [].
@@ -186,7 +186,7 @@ apply hoare_assign'.
 move=> s h /= [wa [wb [d [H2 [H3 [H4 [H6 [H7 [H8 H9]]]]]]]]].
 exists wb, (wa mod wb), d.
 repeat Store_upd => //.
-split; first by omega.
+split; first by lia.
 split.
 - case: (Z_mod_lt wa wb (Z.lt_gt _ _ H3)) => X1 _ //.
 - split; first by [].
@@ -194,7 +194,7 @@ split.
   split; last by [].
   move: (Z_div_mod_eq wa wb (Z.lt_gt _ _ H3)) => H.
   have ->: wa mod wb = wb * (- (wa / wb)) + wa.
-    have -> : wa mod wb = wa - wb * (wa / wb) by omega.
+    have -> : wa mod wb = wa - wb * (wa / wb) by lia.
     ring.
   by apply (Zis_gcd_for_euclid2 (wb) d (-(wa / wb)) wa).
 Qed.
@@ -214,7 +214,7 @@ move=> n_pos x m Hvars.
 apply (hoare_prop_m.hoare_stren (fun s _ => [ x ]_ s * Zfact ([ m ]_ s) = Zfact n /\ 0 <= [ m ]_ s)).
 move=> s h /= [H1 H2].
 rewrite H1 H2.
-split; [ring | omega].
+split; [ring | lia].
 apply hoare_prop_m.hoare_weak with (fun s _ =>
   ([ x ]_ s * Zfact ([ m ]_ s) = Zfact n /\  0 <= [ m ]_ s) /\
   ~~ [ var_e m \!= cst_e 0 ]b_ s).
@@ -227,8 +227,8 @@ apply hoare_assign with (fun s _ =>
 move=> s h /= [[H1 H2] H3].
 rewrite /wp_assign; repeat Store_upd => //.
 move/eqP : H3 => /= H3.
-split; last by omega.
-rewrite -H1 (Zfact_pos ([ m ]_ s)) /=; last by omega.
+split; last by lia.
+rewrite -H1 (Zfact_pos ([ m ]_ s)) /=; last by lia.
 open_integral_type_goal.
 ring.
 apply hoare_assign'.
@@ -343,7 +343,7 @@ destruct i.
     discriminate.
   simpl in H3.
   injection H3; clear H3; intros.
-  have ? : n = O by omega.
+  have ? : n = O by lia.
   subst n.
   by rewrite /string' inE eqxx in H2.
 assert (string (z :: lst)).
@@ -368,11 +368,11 @@ inversion_clear H0.
 destruct x.
 injection H1.
 intros.
-omega.
+lia.
 simpl in H1.
 injection H1.
 intros.
-omega.
+lia.
 Qed.
 
 Lemma string_last' : forall i lst, string lst -> (i = size lst - 1)%nat ->
@@ -395,12 +395,12 @@ destruct lst'.
 simpl in H2.
 rewrite H2.
 simpl.
-omega.
+lia.
 rewrite H2.
 simpl.
 red in H.
 simpl in H.
-omega.
+lia.
 inversion_clear H as [lst'].
 inversion_clear H1.
 destruct lst.
@@ -534,7 +534,7 @@ apply hoare_mutation_backwards'' with (fun s h => exists i,
 move=> s h [[x [H2 [H3 [H4 [H5 [H6 H7]]]]]] H1].
 (* is (drop buf_lst i) the empty heap ? *)
 (* It depend if the size of buf_lst is larger than i  *)
-have [H0 | H0] : (size buf_lst <= x \/ x < size buf_lst)%coq_nat by omega.
+have [H0 | H0] : (size buf_lst <= x \/ x < size buf_lst)%coq_nat by lia.
 
 - (* if the size of the buffer is lesser or equal, that means that we are trying to write outside buf_lst ... *)
   rewrite drop_oversize in H2; last by ssromega.
@@ -555,7 +555,7 @@ have [H0 | H0] : (size buf_lst <= x \/ x < size buf_lst)%coq_nat by omega.
       rewrite nth_default // in H5.
       rewrite H5 in H.
       exfalso.
-      omega.
+      lia.
     + move/ltP in H0.
       rewrite (drop_nth (-1)) // in H2.
       case_sepcon H2.
@@ -746,10 +746,10 @@ split => //.
 move=> [[H1 H2] H3].
 move/negbTE : H3 => /eqP H3.
 split.
-  rewrite -H1 (Zfact_pos (store.get m s)); last omega.
+  rewrite -H1 (Zfact_pos (store.get m s)); last lia.
   open_integral_type_goal.
   ring.
-open_integral_type_goal; omega.
+open_integral_type_goal; lia.
 move=> s h /= [-> ->].
 split => //; ring.
 Qed.

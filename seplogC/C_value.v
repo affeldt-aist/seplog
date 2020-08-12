@@ -1602,7 +1602,7 @@ have -> : x = ptr<=phy (mkPhy (:* t) l e) `+ Z2u ptr_len (Z_of_nat shift).
 have Htmp : u2Z (Z2u ptr_len (Z_of_nat shift)) = Z_of_nat shift.
   rewrite Z2uK //.
   set tmp := ptr<=phy _ in Hshift.
-  move: (min_u2Z tmp) => ?; omega.
+  move: (min_u2Z tmp) => ?; lia.
 rewrite {2}/u2nat u2Z_add; last by rewrite Htmp.
 rewrite Zabs_nat_Zplus; last 2 first.
   by apply min_u2Z.

@@ -360,7 +360,7 @@ elim=> //; clear st c st'.
   case/exec0_lw_inv.
   move=> [p' [Hp' [z' [Hz' Hs']]]].
   have -> // : z = z'.
-    have X : p = p' by omega.
+    have X : p = p' by lia.
     subst.
     rewrite Hz' in Hz; by case: Hz.
   move=> X.
@@ -378,7 +378,7 @@ elim=> //; clear st c st'.
   case/exec0_lwxs_inv.
   move=> [p' [Hp' [z' [Hz' Hs']]]].
   have ->// : z = z'.
-    have X : p = p' by omega.
+    have X : p = p' by lia.
     subst.
     rewrite Hz' in Hz; by case: Hz.
   move=> X.
@@ -428,7 +428,7 @@ elim=> //; clear st c st'.
 - (* sw *) move=> s h rt off base p Hp [z Hz] st''.
   case/exec0_sw_inv.
   move=> [p' [Hp' [z' [Hz' ->]]]].
-  have ->// : p = p' by omega.
+  have ->// : p = p' by lia.
   move=> X.
   exfalso.
   apply X.
@@ -1058,7 +1058,7 @@ do 2 constructor.
 contradict X.
 case: X => l [H1 H2].
 suff : p = l by move=> ->.
-omega.
+lia.
 Qed.
 
 Lemma exists_sw_seq rt (off : int 16) base c s h p :
@@ -1071,10 +1071,10 @@ apply constructive_indefinite_description.
 case: (classic (exists l , u2Z ([base]_s `+ sext 16 off) = 4 * Z_of_nat l /\ exists z, heap.get l h = Some z)) => X.
 - case:X => l0 [Hl0 [z Hz]].
   exists s'; eapply while.exec_seq; eauto; do 2 constructor.
-  omega.
+  lia.
   exists z => //.
   suff : p = l0 by move=> ->.
-  omega.
+  lia.
 - exists None.
   eapply while.exec_seq.
   constructor.
@@ -1092,10 +1092,10 @@ apply constructive_indefinite_description.
 case: (classic (exists l, u2Z ([base]_s `+ sext 16 off) = 4 * Z_of_nat l /\ exists z, heap.get l h = Some z)) => X.
 - case:X => l0 [Hl0 [z Hz]].
   exists s'; split => //; eapply while.exec_seq; eauto; do 2 constructor.
-  omega.
+  lia.
   exists z => //.
   suff : p = l0 by move=> ->.
-  omega.
+  lia.
 - exists None; split => //.
   eapply while.exec_seq.
   constructor.
@@ -1104,7 +1104,7 @@ case: (classic (exists l, u2Z ([base]_s `+ sext 16 off) = 4 * Z_of_nat l /\ exis
 Qed.
 
 Lemma exists_lw_seq_P rt (off : int 16) base c s h p z (P : state -> Prop) :
-  u2Z ([base]_s `+ sext 16 off) = 4 * Z_of_nat p -> 
+  u2Z ([base]_s `+ sext 16 off) = 4 * Z_of_nat p ->
   heap.get p h = Some z ->
   {s' | Some (store.upd rt z s, h) -- c ---> s' /\ forall st, s' = Some st -> P st } ->
   {s' | Some (s, h) -- lw rt off base ; c ---> s' /\ forall st, s' = Some st -> P st }.
@@ -1113,7 +1113,7 @@ move=> Hp Hz [s' [H HP]].
 apply constructive_indefinite_description.
 case: (classic (exists l, u2Z ([base]_s `+ sext 16 off) = 4 * Z_of_nat l /\ exists z, heap.get l h = Some z)) => X.
 - case:X => l0 [Hl0 [z0 Hz0]].
-  have X : p = l0 by omega.
+  have X : p = l0 by lia.
   subst l0.
   have X : z = z0 by rewrite Hz in Hz0; case: Hz0 => //.
   subst z0.
@@ -1128,7 +1128,7 @@ case: (classic (exists l, u2Z ([base]_s `+ sext 16 off) = 4 * Z_of_nat l /\ exis
 Qed.
 
 Lemma exists_lwxs_seq_P rt idx base c s h p z (P : state -> Prop) :
-  u2Z ([base]_s `+ ([idx]_s `<< 2)) = 4 * Z_of_nat p -> 
+  u2Z ([base]_s `+ ([idx]_s `<< 2)) = 4 * Z_of_nat p ->
   heap.get p h = Some z ->
   {s' | Some (store.upd rt z s, h) -- c ---> s' /\ forall st, s' = Some st -> P st } ->
   {s' | Some (s, h) -- lwxs rt idx base; c ---> s' /\ forall st, s' = Some st -> P st }.
@@ -1137,7 +1137,7 @@ move=> Hp Hz [s' [H HP]].
 apply constructive_indefinite_description.
 case: (classic (exists l, u2Z ([base]_s `+ ([idx]_s `<< 2)) = 4 * Z_of_nat l /\ exists z, heap.get l h = Some z)) => X.
 - case:X => l0 [Hl0 [z0 Hz0]].
-  have X : p = l0 by omega.
+  have X : p = l0 by lia.
   subst l0.
   have X : z = z0 by rewrite Hz in Hz0; case: Hz0 => //.
   subst z0.
@@ -1151,8 +1151,8 @@ Qed.
 Lemma exists_while s h (c : while.cmd) bt : eval_b bt s ->
   { s' | Some (s, h) -- c ; While bt {{ c }} ---> s'} ->
   { s' | Some (s, h) -- While bt {{ c }} ---> s'}.
-Proof. 
-move=> Heval_b [s' H]; exists s'; by apply semop_prop_m.while_seq'. 
+Proof.
+move=> Heval_b [s' H]; exists s'; by apply semop_prop_m.while_seq'.
 Qed.
 
 Lemma exists_while_P s h (c : while.cmd) bt (P : state -> Prop) :

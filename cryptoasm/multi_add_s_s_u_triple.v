@@ -241,7 +241,7 @@ have Htmp2 : sgZ (s2Z (Z2u 32 (Z_of_nat nk))) = 1.
 split; first by tauto.
 split; first by [].
 split.
-  rewrite Htmp2 mul1Z s2Z_u2Z_pos' // Htmp [Peano.pred _]/=; omega.
+  rewrite Htmp2 mul1Z s2Z_u2Z_pos' // Htmp [Peano.pred _]/=; lia.
 split.
   rewrite Htmp2 Hslenx_2 /= (_: sgZ (\S_{ nk } VY) = 1) //=.
   apply Zsgn_pos; tauto.
@@ -276,7 +276,7 @@ case: (Zsgn_spec (s2Z slenx)).
   move/s2Z_inj in Ha1.
   apply s2Z_inj.
   rewrite Ha1 Z2sK //= s2Z_u2Z_pos' //=; by rewrite Z2uK.
-  omega.
+  lia.
 move => [].
   case => H1 H2.
   rewrite -H1 /= in Ha1.
@@ -288,7 +288,7 @@ case => H1 H2.
 apply Zsgn_pos0 in Htest2.
 rewrite Ha1 H2 /= in Htest2.
 exfalso.
-omega.
+lia.
 
 (* multi_add_u_u rk a1 ry X Z a0 a3 a2 *)
 
@@ -383,7 +383,7 @@ split; first by rewrite mul1Z.
 split.
   rewrite sgn_slenx mul1Z.
   apply/esym/Zsgn_pos.
-  move: (min_lSum nk VX) => ?; omega.
+  move: (min_lSum nk VX) => ?; lia.
 split.
   rewrite conCE in Hh2.
   rewrite -mapsto2_mapstos 3!conAE.
@@ -432,9 +432,9 @@ by [].
   rewrite Ha1 in Htest.
   apply Zsgn_neg.
   case: (Zsgn_spec (s2Z slenx)).
-    case=> _ abs; rewrite abs in Htest; omega.
+    case=> _ abs; rewrite abs in Htest; lia.
   case.
-    case=> _ abs; rewrite abs in Htest; omega.
+    case=> _ abs; rewrite abs in Htest; lia.
   by case; move/Z.gt_lt.
 - move=> s h.
   case=> h1 [h2 [h1dh2 [h1Uh2 [Hh1 Hh2]]]].
@@ -622,7 +622,7 @@ split; first by [].
 split; first by rewrite mul1Z.
 split.
   rewrite sgn_slenx.
-  apply/esym/Zsgn_pos; omega.
+  apply/esym/Zsgn_pos; lia.
 split.
   rewrite conCE in Hh''.
   rewrite -mapsto2_mapstos.
@@ -633,12 +633,12 @@ split.
   apply u2Z_inj; by rewrite Htmp0.
 split; first by [].
 have {Ha3}[Ha3 | Ha3] : u2Z [a3 ]_ s = 0 \/ u2Z [a3 ]_ s = 1.
-  move: (min_u2Z [a3]_s) => ?; omega.
+  move: (min_u2Z [a3]_s) => ?; lia.
 - rewrite HSum Ha3 sgn_slenx; ring.
 - rewrite Ha3 mul1Z in HSum.
   have abs : \B^nk <= \S_{ nk } VZ'.
     rewrite HSum.
-    move: (Zbeta_gt0 nk) => ?; omega.
+    move: (Zbeta_gt0 nk) => ?; lia.
     move: (max_lSum nk VZ').
     by move/(leZ_ltZ_trans abs)/ltZZ.
 
@@ -733,15 +733,15 @@ rewrite -mapsto2_mapstos 2!conAE in Hmem.
 move: Hmem; apply monotony => // h1.
 apply mapsto_ext => //=; by rewrite sext_Z2u // addi0.
 apply currying=> h1' Hh1'.
-have Htmp : s2Z (Z2s 32 (- Z_of_nat nk)) = - Z_of_nat nk by rewrite Z2sK //; omega.
-have Htmp2 : sgZ (- Z_of_nat nk) = -1 by apply Zsgn_neg; omega.
+have Htmp : s2Z (Z2s 32 (- Z_of_nat nk)) = - Z_of_nat nk by rewrite Z2sK //; lia.
+have Htmp2 : sgZ (- Z_of_nat nk) = -1 by apply Zsgn_neg; lia.
 exists VZ', (Z2s 32 (- Z_of_nat nk)); repeat (split => //).
 
 by rewrite Htmp Htmp2 mulN1Z.
 
 rewrite sgn_slenx Htmp Htmp2.
 symmetry.
-apply Zsgn_neg; omega.
+apply Zsgn_neg; lia.
 
 rewrite conCE in Hh1'.
 rewrite -mapsto2_mapstos 2!conAE.
@@ -753,12 +753,12 @@ by rewrite Htmp.
 
 rewrite Htmp sgn_slenx Htmp2.
 have {Ha3}[Ha3 | Ha3] : u2Z [a3 ]_ s = 0 \/ u2Z [a3 ]_ s = 1.
-  move: (min_u2Z [a3]_s) => ?; omega.
+  move: (min_u2Z [a3]_s) => ?; lia.
 - rewrite HSum Ha3; ring.
 - rewrite Ha3 mul1Z in HSum.
   have abs : \B^nk <= \S_{ nk } VZ'.
     rewrite HSum.
-    move: (Zbeta_gt0 nk) => ?; omega.
+    move: (Zbeta_gt0 nk) => ?; lia.
     move: (max_lSum nk VZ').
     by move/(leZ_ltZ_trans abs)/ltZZ.
 Qed.

@@ -144,11 +144,11 @@ apply fwd_sim_ifte_spec => //.
     Rewrite_reg rk s.
     rewrite /uv_bound in Hcond.
     split.
-      move=> abs; rewrite abs Z2uK // in Hcond; omega.
+      move=> abs; rewrite abs Z2uK // in Hcond; lia.
     repeat (split; first tauto).
     rewrite /EGCD.ti_bounds in Hcond.
     Rewrite_var t2 st.
-    rewrite Zabs_non_eq; last omega.
+    rewrite Zabs_non_eq; last lia.
     Rewrite_var u st; ssromega.
   + apply fwd_sim_pcode_equiv with (v1 <- var_e t1 \- var_e v ; v1 <- .--e var_e v1)%pseudo_expr%pseudo_cmd; last first.
       apply equiv_pcode_trans with (v1 <- .--e (var_e t1 \- var_e v))%pseudo_expr%pseudo_cmd.
@@ -178,7 +178,7 @@ apply fwd_sim_ifte_spec => //.
         move=> st s h H.
         rewrite /uv_bound in H.
         split.
-          move=> abs; rewrite abs Z2uK // in H; omega.
+          move=> abs; rewrite abs Z2uK // in H; lia.
         repeat (split; first by tauto).
         rewrite /EGCD.ti_bounds in H.
         rewrite Z.abs_eq; ssromega.

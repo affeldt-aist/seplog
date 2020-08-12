@@ -1,7 +1,7 @@
 (* seplog (c) AIST 2005-2013. R. Affeldt, N. Marti, et al. GNU GPLv3. *)
 (* seplog (c) AIST 2014-2018. R. Affeldt et al. GNU GPLv3. *)
 From mathcomp Require Import ssreflect ssrfun ssrbool eqtype ssrnat seq.
-Require Import Max.
+Require Import Max Lia.
 Require Import ssrZ ZArith_ext seq_ext ssrnat_ext.
 Require Import seplog integral_type.
 
@@ -232,67 +232,67 @@ induction b; simpl; intros; auto.
     rewrite andbT orbF.
     case/boolP : (0 >=? _ - _)%Z => [/geZP H0|] /=.
       case/boolP : (0 >=? _ - _)%Z => [/geZP H1|] /=.
-        apply/esym/eqP; omega.
+        apply/esym/eqP; lia.
       rewrite Z.geb_leb -ltZNge' => /ltZP H1.
-      apply/esym/eqP; omega.
+      apply/esym/eqP; lia.
     rewrite Z.geb_leb -ltZNge' => /ltZP H0.
-    apply/esym/eqP; omega.
+    apply/esym/eqP; lia.
   + open_integral_type_goal => /=.
     rewrite 2!andbT orbF.
     case/boolP : (0 >=? _ - _)%Z => [/geZP H0|] /=.
-      apply/esym/eqP; omega.
+      apply/esym/eqP; lia.
     rewrite Z.geb_leb -ltZNge' => /ltZP H0.
     case/boolP : (0 >=? _ - _)%Z => [/geZP H1|] /=.
-      apply/esym/eqP; omega.
+      apply/esym/eqP; lia.
     rewrite Z.geb_leb -ltZNge' => /ltZP H1.
-    apply/esym/eqP; omega.
+    apply/esym/eqP; lia.
   + open_integral_type_goal.
     rewrite andbT orbF.
     case/boolP : (0 >=? _ - _)%Z => [/geZP H0|] /=.
       case/boolP : (_ >=? _)%Z => [/geZP H1|] //=.
-      rewrite Z.geb_leb -ltZNge' => /ltZP H1; omega.
+      rewrite Z.geb_leb -ltZNge' => /ltZP H1; lia.
     rewrite Z.geb_leb -ltZNge' => /ltZP H0.
     apply/esym/negbTE.
-    rewrite Z.geb_leb -ltZNge'; apply/ltZP; omega.
+    rewrite Z.geb_leb -ltZNge'; apply/ltZP; lia.
   + repeat open_integral_type_goal.
     rewrite andbT orbF.
     case/boolP : (0 >=? _ - _)%Z => [/geZP H0|] /=.
-      apply/esym/gtZP; omega.
+      apply/esym/gtZP; lia.
     rewrite Z.geb_leb -ltZNge' => /ltZP H0.
     apply/esym/negbTE.
-    rewrite Z.gtb_ltb ltZNge' negbK; apply/leZP; omega.
+    rewrite Z.gtb_ltb ltZNge' negbK; apply/leZP; lia.
 - destruct b; simpl; auto.
   + destruct b => //=.
     * open_integral_type_goal.
       rewrite 2!andbT orbF.
       case/boolP : (0 >=? _)%Z => [/geZP H0|] /=.
-        apply/esym/eqP; omega.
+        apply/esym/eqP; lia.
       rewrite Z.geb_leb -ltZNge' => /ltZP H0.
       case/boolP : (0 >=? _)%Z => [/geZP H1|] /=.
-        apply/esym/eqP; omega.
+        apply/esym/eqP; lia.
       rewrite Z.geb_leb -ltZNge' => /ltZP H1.
-      apply/esym/eqP; omega.
+      apply/esym/eqP; lia.
     * open_integral_type_goal.
       rewrite andbT orbF.
       case/boolP : (0 >=? _)%Z => [/geZP H0|] /=.
         case/boolP : (0 >=? _)%Z => [/geZP H1|] /=.
-          rewrite negbK; apply/esym/eqP; omega.
+          rewrite negbK; apply/esym/eqP; lia.
         rewrite Z.geb_leb -ltZNge' => /ltZP H1.
-        rewrite negbK; apply/esym/eqP; omega.
+        rewrite negbK; apply/esym/eqP; lia.
       rewrite Z.geb_leb -ltZNge' => /ltZP H0.
-      rewrite negbK; apply/esym/eqP; omega.
+      rewrite negbK; apply/esym/eqP; lia.
     * open_integral_type_goal.
       rewrite andbT orbF.
       case/boolP : (0 >=? _)%Z => [/geZP H0|] /=.
-        rewrite Z.geb_leb -ltZNge'; apply/esym/ltZP; omega.
+        rewrite Z.geb_leb -ltZNge'; apply/esym/ltZP; lia.
       rewrite Z.geb_leb -ltZNge' => /ltZP H0.
-      rewrite Z.geb_leb -ltZNge'; apply/esym/ltZP; omega.
+      rewrite Z.geb_leb -ltZNge'; apply/esym/ltZP; lia.
     * open_integral_type_goal.
       rewrite andbT orbF.
       case/boolP : (0 >=? _)%Z => [/geZP H0|] /=.
-        rewrite Z.gtb_ltb ltZNge' negbK; apply/esym/leZP; omega.
+        rewrite Z.gtb_ltb ltZNge' negbK; apply/esym/leZP; lia.
       rewrite Z.geb_leb -ltZNge' => /ltZP H0.
-      rewrite Z.gtb_ltb ltZNge' negbK; apply/esym/leZP; omega.
+      rewrite Z.gtb_ltb ltZNge' negbK; apply/esym/leZP; lia.
   + inversion_clear H; simpl in H0; generalize (expr_b_min_size b); intros; assert (False); [ssromega | contradiction].
     inversion_clear H; simpl in H0;
       generalize (expr_b_min_size b2); generalize (expr_b_min_size b3); intros; assert (False); [ssromega | contradiction].
@@ -938,14 +938,14 @@ destruct (expr_compute (simpl_constraint e)); destruct (expr_compute (simpl_cons
       by rewrite H3.
       rewrite -H0; by case: X.
       rewrite -H1; by case: X.
-    omega.
+    lia.
   - rewrite /=.
     apply ZIT.geP.
-    have -> : 0 <? z = false by apply/ltZP; omega.
+    have -> : 0 <? z = false by apply/ltZP; lia.
     rewrite /= -simpl_constraint_correct; tauto.
   - rewrite /=.
     apply ZIT.geP.
-    have -> : z0 <? 0 = false by apply/ltZP; omega.
+    have -> : z0 <? 0 = false by apply/ltZP; lia.
     rewrite andbC /= -simpl_constraint_correct; tauto.
   - rewrite /=.
     generalize (Zlt_cases 0 z) => H6.
@@ -964,7 +964,7 @@ destruct (expr_compute (simpl_constraint e)); destruct (expr_compute (simpl_cons
         rewrite -H0;tauto.
       rewrite /=.
       open_integral_type_goal.
-      omega.
+      lia.
     + rewrite /= -simpl_constraint_correct.
       apply/geZP; tauto.
     + rewrite /= -simpl_constraint_correct.
@@ -1277,7 +1277,7 @@ destruct (eval_orlist
   (elim_varlist_orlist
     (simpl_orlist (expr_b2constraints (simpl_expr_b (\~ b))))
     (vars_b_set (simpl_expr_b b)))); last by [].
-destruct b0; first by done.
+destruct b0; first by [].
 by rewrite (H2 _ (refl_equal _) s) in H1.
 Qed.
 
@@ -1438,7 +1438,7 @@ elim.
   rewrite store.get_emp; by destruct x.
 - move=> /= a l H x.
   rewrite subSS subn0.
-  have [H0 | H0] : (x = size l \/ x <> size l)%nat by omega.
+  have [H0 | H0] : (x = size l \/ x <> size l)%nat by lia.
   + subst x.
     by rewrite store.get_upd' nth_rev // subSS subnn.
   + rewrite store.get_upd //; last by apply/eqP.
@@ -1493,7 +1493,7 @@ Ltac Reflection_is_correct :=
        intro h;
        let y := fresh in
        generalize (proj1 (expr_bP e s) h); clear h; intro y; simpl in y;
-       repeat (rewrite lookup_list2store in y); simpl in y; firstorder
+       repeat (rewrite lookup_list2store in y); simpl in y; firstorder; try lia
 (*move/expr_bP.
 rewrite [list2store]lock /= -lock !lookup_list2store /=.
 by auto.*)

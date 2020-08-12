@@ -888,7 +888,7 @@ Record wfctxt := mkWfctxt {
   wfctxtg :> Ctxt.t ;
   Hwfctxtg : wf_ctxt wfctxtg }.
 
-Fixpoint topsort_tags t : seq tag :=
+Definition topsort_tags t : seq tag :=
   match t with
     | ityp _ => nil
     | ptyp t' => nil

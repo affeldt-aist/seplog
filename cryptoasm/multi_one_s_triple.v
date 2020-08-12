@@ -129,8 +129,8 @@ apply hoare_ifte_bang.
   have <- : cplt2 slen = Z2u 32 (Z_of_nat nk).
     apply s2Z_inj.
     rewrite [X in _ = X]s2Z_u2Z_pos'; last first.
-      rewrite Z2uK //; clear -Hnk; simpl in *; omega.
-    rewrite Z2uK; last by clear -Hnk; simpl in *; omega.
+      rewrite Z2uK //; clear -Hnk; simpl in *; lia.
+    rewrite Z2uK; last by clear -Hnk; simpl in *; lia.
     rewrite s2Z_cplt2; last first.
       move/weirdE2; rewrite Hslen slen_neq mulN1Z eqZ_opp.
       move=> /ltZ_eqF; apply; by case: Hnk.
@@ -183,11 +183,11 @@ have {H2} {}H1 : 0 < s2Z slen.
     contradict H2.
     rewrite (_ : 0 = s2Z (Z2u 32 0)) in H2; last by rewrite s2Z_u2Z_pos' // Z2uK.
     by rewrite (s2Z_inj H2) Z2uK.
-  subst slen; omega.
+  subst slen; lia.
 move/Zsgn_pos in H1.
 rewrite H1 s2Z_u2Z_pos'; last first.
-  rewrite Z2uK //; clear -Hnk; simpl in *; omega.
-rewrite Z2uK //; last by clear -Hnk; simpl in *; omega.
+  rewrite Z2uK //; clear -Hnk; simpl in *; lia.
+rewrite Z2uK //; last by clear -Hnk; simpl in *; lia.
 ring.
 
 (** multi_zero_signed' rx rk a1 a2 a3 ; *)
@@ -323,7 +323,7 @@ move: H.
 apply monotony=> // h3.
 apply bangify => ->.
 rewrite Z2uK //.
-clear -Hnk; simpl in *; omega.
+clear -Hnk; simpl in *; lia.
 Qed.
 
 Lemma multi_one_s_triple rx rk a0 a1 a2 a3 : uniq(rx, rk, a0, a1, a2, a3, r0) ->

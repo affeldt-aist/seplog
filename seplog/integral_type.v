@@ -215,24 +215,24 @@ Proof. by rewrite /gtb Z.gtb_ltb ltZNge' negbK -Z.geb_leb. Qed.
 Lemma gtbE a b : gtb a b = geb a b && (a != b).
 Proof.
 apply/gtZP; case: ifP => [|/negP X Y].
-  case/andP => /geZP X /eqP Y; omega.
-apply/X/andP; split; [apply/geZP; omega | apply/eqP; omega].
+  case/andP => /geZP X /eqP Y; lia.
+apply/X/andP; split; [apply/geZP; lia | apply/eqP; lia].
 Qed.
 
-Lemma gtW a b : gt a b -> ge a b. Proof. rewrite /gt /ge; omega. Qed.
+Lemma gtW a b : gt a b -> ge a b. Proof. rewrite /gt /ge; lia. Qed.
 
 Lemma ge_trans b a c : ge a b -> ge b c -> ge a c.
 Proof. move=> *; exact: (Zge_trans _ b) . Qed.
 
 Lemma gt_add1 n : gt (add (of_nat 1) n) n.
-Proof. rewrite /gt /add /of_nat [Z_of_nat _]/=; omega. Qed.
+Proof. rewrite /gt /add /of_nat [Z_of_nat _]/=; lia. Qed.
 
 End ZIT.
 
 Module Import ZIT_prop_m := IntegralType_Prop ZIT.
 
 (* turn the abstract (A.t_geb _ _) = true, (A.t_ge _ _ ), etc. hypotheses into their implementation,
-   so as to be able to use third-party tactics to solve goals (e.g., omega) *)
+   so as to be able to use third-party tactics to solve goals (e.g., lia) *)
 
 Ltac open_integral_type_hyp :=
   match goal with
