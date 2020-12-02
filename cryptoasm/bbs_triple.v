@@ -632,7 +632,7 @@ rewrite drop_bits // (bits.orC (32 - nj.+1)); last 2 first.
   by rewrite /bits.zeros size_nseq.
   by rewrite size_drop size_bits.
 rewrite bits.orl0 //; last by rewrite size_drop size_bits.
-rewrite -add1n drop_addn drop1 Hbbs'' bits.tail_zeros; last by apply/ltP; ssromega.
+rewrite -add1n -drop_drop drop1 Hbbs'' bits.tail_zeros; last by apply/ltP; ssromega.
 by rewrite addnC subnDA // size_drop size_bits.
 by rewrite -Hrw' Hrw int_orC.
 

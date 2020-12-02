@@ -233,7 +233,7 @@ induction n.
     rewrite (_ : b :: _ ++ [:: t] = (b :: h) ++ [:: t]) //.
     rewrite -H 2!subSS.
     move K : (size h - n) => [|k] //.
-    by rewrite drop_cat -K leq_subr.
+    by rewrite drop_cat -K /= ltnS leq_subr.
 Qed.
 
 Lemma adjust_u_S' : forall n lst l, size lst = l -> l < n ->

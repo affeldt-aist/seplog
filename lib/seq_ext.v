@@ -569,22 +569,13 @@ elim.
 Qed.
 
 Lemma dropS {A} : forall (l : seq A) i, drop (S i) l = drop 1 (drop i l).
-Proof. by elim => //= a l IH [|i]. Qed.
+Proof. by move=> l i; rewrite drop_drop. Qed.
 
 Lemma dropS' {A} : forall (l : seq A) i, drop (S i) l = drop i (drop 1 l).
-Proof. case => // a l i /=; by rewrite drop0. Qed.
+Proof. by move=> l a; rewrite drop_drop addn1. Qed.
 
-Lemma drop_drop {A} : forall i j (l : seq A), drop i (drop j l) = drop j (drop i l).
-Proof.
-elim => [|n IH] j l; first by rewrite 2!drop0.
-by rewrite (dropS l n) dropS IH -(dropS' _ j) -(dropS _ j).
-Qed.
-
-Lemma drop_addn {A} : forall i j (l : seq A), drop (i + j) l = drop i (drop j l).
-Proof.
-elim => [|i IH] j l; first by rewrite drop0.
-by rewrite addSnnS IH dropS (dropS _ i) drop_drop.
-Qed.
+Lemma drop_dropC {A} : forall i j (l : seq A), drop i (drop j l) = drop j (drop i l).
+Proof. by move=> i j l; rewrite drop_drop addnC -drop_drop. Qed.
 
 End seq_Type.
 
@@ -1373,8 +1364,8 @@ Lemma slice_shift {A} : forall d (l1 l2 : seq A) i1 i2 sz sz',
   l1 |{ i1 + d, sz') = l2 |{ i2 + d, sz').
 Proof.
 move=> d l1 l2 i1 i2 sz sz' H H0.
-rewrite /slice !drop_addn (drop_drop i1 d) (drop_drop i2 d) take_drop (take_drop _ d sz').
-f_equal.
+rewrite /slice -!drop_drop (drop_dropC i1 d) (drop_dropC i2 d) take_drop (take_drop _ d sz').
+congr drop.
 by apply take_lt with sz.
 Qed.
 
