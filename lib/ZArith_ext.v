@@ -767,7 +767,7 @@ Proof. by rewrite -ZbetaD. Qed.
 Lemma Zbeta_gt0 l : 0 < \B^l. Proof. exact: expZ_gt0. Qed.
 
 Lemma Zbeta_ge0 n : 0 <= \B^n. Proof. exact: expZ_ge0. Qed.
-Hint Resolve Zbeta_ge0 : core.
+Global Hint Resolve Zbeta_ge0 : core.
 
 Lemma Zbeta_ge1 l : 1 <= \B^l. Proof. exact: expZ_ge1. Qed.
 

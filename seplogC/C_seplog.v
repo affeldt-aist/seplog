@@ -1333,7 +1333,7 @@ Qed.
 Definition sepexists {A: Type} (P: A -> assert) : assert := fun s h => exists x:A, P x s h.
 
 Notation "'sepex' x , p" := (sepexists (fun x => p))
-  (at level 200, x ident, right associativity) : C_assert_scope.
+  (at level 200, x name, right associativity) : C_assert_scope.
 
 Lemma sepex_bbang_dup {A : Type} (p : A -> bexp sigma) :
   (sepex x, `! p x) <==> (sepex x, `! p x) ** (sepex x, `! p x).
@@ -1417,7 +1417,7 @@ Qed.
 Definition sepforall {A: Type} (P: A -> assert) : assert := fun s h => forall x, P x s h.
 
 Notation "'sepall' x , p" := (sepforall (fun x => p))
-  (at level 200, x ident, right associativity) : C_assert_scope.
+  (at level 200, x name, right associativity) : C_assert_scope.
 
 (** Hoare triples *)
 

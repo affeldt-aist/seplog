@@ -1,4 +1,4 @@
-Small extensions to the standard libraries of <a href="https://coq.inria.fr" target="_top">Coq 8.8</a> and <a href="https://math-comp.github.io/math-comp/" target="_top">SSReflect/MathComp</a>. 
+Small extensions to the standard libraries of <a href="https://coq.inria.fr" target="_top">Coq 8.13</a> and <a href="https://math-comp.github.io/math-comp/" target="_top">SSReflect/MathComp</a>. 
 
 They sometimes overlap with standard libraries but still provide new features. 
 machine_int provides a formalization of finite-length integers (int : nat -> Type).
