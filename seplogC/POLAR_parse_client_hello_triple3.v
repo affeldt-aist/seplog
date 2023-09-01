@@ -208,7 +208,7 @@ apply hoare_forloop2 with (inv := inv_outer).
     apply hoare_lookup_fldp_stren, ent_R_lookup_fldp with (pv := ciphers).
     - by rewrite /phylog_conv /= -Eqdep.Eq_rect_eq.eq_rect_eq /= ptr_of_phyK.
     - Ent_R_subst_con_distr.
-      rewrite /reqmin_sslcontext /Ssl_context; do 2 Ent_R_subst_apply.
+      unfold reqmin_sslcontext, Ssl_context; do 2 Ent_R_subst_apply.
       by Ent_monotony0.
   have size_CI : 0 < size CI by case: HCI; case=> CI' [] _ -> _; rewrite size_rcons.
   apply hoare_lookup_mapstos_stren with (i := 0) (l := map phy<=si32 CI) (e := [ ciphers ]c).
@@ -1241,7 +1241,7 @@ idtac "69) lookup".
     apply hoare_lookup_fldp_stren, ent_R_lookup_fldp with (pv := ciphers).
     - by rewrite get_ciphers_ssl_ctxt /phylog_conv /= ptr_of_phyK.
     - Ent_R_subst_con_distr.
-      rewrite /reqmin_sslcontext /Ssl_context.
+      unfold reqmin_sslcontext, Ssl_context.
       do 2 Ent_LR_subst_apply.
       by Ent_monotony0.
 

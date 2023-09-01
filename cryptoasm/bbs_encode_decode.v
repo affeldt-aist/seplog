@@ -237,7 +237,9 @@ rewrite lSum_Z2ints_pos.
 - apply eqmod_sym, eqmod_mod.
   rewrite lSum_Z2ints_pos // -ZbetaE; lia.
   exact: eqmod_refl.
-- split; first exact/Zmod_le/min_lSum.
+- split; first apply/Zmod_le/min_lSum.
+    rewrite -Zpower_b_square.
+    exact/Z.square_nonneg.
   rewrite -ZbetaE lSum_Z2ints_pos //.
   + apply (@ltZ_trans modu); last by [].
     exact: (proj2 (Z_mod_lt (\B^nk ^^ 2) modu (Z.lt_gt _ _ Hmodu))).

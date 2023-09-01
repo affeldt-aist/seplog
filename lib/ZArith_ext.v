@@ -291,15 +291,15 @@ Proof. by case : z. Qed.
 
 Definition bZsgn z := if z == 0 then 1%Z else (-1)%Z.
 
-Lemma Zmod_le : forall a b, 0 <= b -> 0 <= a mod b.
+Lemma Zmod_le : forall a b, 0 <= a -> 0 <= b -> 0 <= a mod b.
 Proof.
 move=> a; case.
-- move=> _; rewrite Zmod_0_r //.
-- move=> p H.
+- by move=> *; rewrite Zmod_0_r.
+- move=> p *.
   have X : Zpos p > 0 by [].
   move: (Z_mod_lt a (Zpos p) X).
   by tauto.
-- move=> p H.
+- move=> p *.
   by move: (Zlt_neg_0 p) => H'; lia.
 Qed.
 

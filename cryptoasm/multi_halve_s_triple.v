@@ -379,9 +379,8 @@ apply while.hoare_seq with
     [a0]_s = ptr)).
 
 have Hslen' : s2Z slen <> - 2 ^ 31.
-  move=> H.
   apply Zsgn_neg in Hslen.
-  rewrite slen_nk Hslen mulN1Z eqZ_opp in H *.
+  rewrite slen_nk Hslen mulN1Z eqZ_opp.
   exact/ltZ_eqF.
 have : uniq(rk, i, r0) by Uniq_uniq r0.
 move/abs_triple_bang/(_ _ Hslen') => Htmp.

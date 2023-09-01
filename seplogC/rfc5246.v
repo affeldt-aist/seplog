@@ -945,7 +945,7 @@ Definition ClientHello_sz sid cys cpm :=
   fixed_sz cipher_suites_type + Z<=nat cys +
   fixed_sz compression_methods_type + Z<=nat cpm.
 Definition client_extensions_present m sid cys cpm :=
-  ClientHello_sz sid cys cpm <? Z<=nat m.
+  (ClientHello_sz sid cys cpm <? Z<=nat m)%Z.
 
 Local Open Scope select_scope.
 
@@ -1118,7 +1118,7 @@ Import S621 S7412 S61 S44.
 Definition ServerHello_sz (sid : nat) :=
   Hello_sz sid + fixed_sz CipherSuite + fixed_sz CompressionMethod.
 Definition server_extensions_present n (fld1 : nat) :=
-  ServerHello_sz fld1 <? Z<=nat n.
+  (ServerHello_sz fld1 <? Z<=nat n)%Z.
 
 Local Open Scope select_scope.
 

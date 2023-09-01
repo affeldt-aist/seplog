@@ -36,7 +36,7 @@ Definition Free_block_compact_size (l : list nat) := nat_list_sum l + 2 * length
 
 Lemma Free_block_list_nempty : forall l, Free_block_compact_size l > 0 -> l <> nil.
 Proof.
-destruct l; unfold Free_block_compact_size; simpl; intros; (discriminate || omega).
+destruct l; unfold Free_block_compact_size; simpl; intros; (discriminate || lia).
 Qed.
 
 (** first execution of findFree:

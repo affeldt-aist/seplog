@@ -266,7 +266,7 @@ move => s h [[H Htest2] Htest1].
 case: H => Hrz [] Hrx [] Hry [] Hrk [] Hheap [] HZ [] HX Ha1.
 suff: ([a1]_ s = one32).
   repeat (split => //).
-  rewrite -Ha1 x s2Z_u2Z_pos'; by rewrite Z2uK.
+  rewrite -Ha1 H s2Z_u2Z_pos'; by rewrite Z2uK.
 rewrite /= in Htest2.
 move/leZP in Htest2.
 rewrite /= store.get_r0 // Z2uK // in Htest1.
