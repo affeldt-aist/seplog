@@ -909,7 +909,7 @@ Program Fixpoint topsort_ctxt_
            (sorted ++ (filter partp c))
            (filter (predC partp) c).
 Next Obligation.
-  apply/ltP; move: H.
+  apply/ltP; move: n.
   move/eqP.
   rewrite eq_sym -size_eq0 !size_filter.
   set partp := (fun p => all _ _).

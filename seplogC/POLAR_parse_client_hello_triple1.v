@@ -148,7 +148,7 @@ Hoare_seq_ext Hbuf.
   apply hoare_lookup_fldp_stren, ent_R_lookup_fldp with (pv := phy<=ptr (g.-typ: ityp uchar) (ptr<=phy bu `+ `( 8 )_ ptr_len)).
   - by rewrite get_in_hdr_ssl_ctxt /phylog_conv /=.
   - Ent_R_subst_con_distr.
-    rewrite /Hssl_in_left /Ssl_context.
+    unfold Hssl_in_left, Ssl_context.
     do 2 Ent_R_subst_apply.
     Ent_monotony0.
     by rewrite sequiv_add_p_cst.
@@ -794,7 +794,7 @@ Hoare_seq_ext Hit.
   apply hoare_lookup_fldp_stren, ent_R_lookup_fldp with (pv := rb).
   - by rewrite get_randbytes_ssl_ctxt /phylog_conv /= ptr_of_phyK.
   - Ent_R_subst_con_distr.
-    rewrite /Hssl_reqmin /Ssl_context.
+    unfold Hssl_reqmin, Ssl_context.
     do 2 Ent_LR_subst_apply.
     by Ent_monotony0.
 

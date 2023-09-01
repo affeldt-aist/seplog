@@ -147,7 +147,7 @@ Definition phyval_to_string_ityp
       let val' := foldl (fun acc x => acc * 256 + u2Z x) 0 val
       in (if is_signed t
         then pp_Z (if 2 ^^ (size val * 8 - 1) <=? val'
-                   then val' - 2 ^^ (size val * 8) else val') tl
+                   then val' - 2 ^^ (size val * 8) else val')%Z tl
         else pp_Z val' ("u" ++ tl))
     else "/* ERROR: phyval_to_string_ityp */" ++ tl)%string.
 

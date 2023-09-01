@@ -202,7 +202,7 @@ Hoare_seq_ext Hssl_session_0.
   apply hoare_lookup_fldp_stren, ent_R_lookup_fldp with (pv := ses).
   - by rewrite get_session_ssl_ctxt /phylog_conv /= ptr_of_phyK.
   - Ent_R_subst_con_distr. (* 1 *)
-    rewrite /reqmin_sslcontext /Ssl_context.
+    unfold reqmin_sslcontext, Ssl_context.
     do 2 Ent_R_subst_apply.
     by Ent_monotony0.
 

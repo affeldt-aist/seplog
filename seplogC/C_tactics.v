@@ -799,7 +799,7 @@ have H2 : wp_assign str_t e (@Sum _ con assert_abelean P) s h2.
   by rewrite (_ : store_upd _ _ _ = s) // -Hh1' store_upd_get_eq.
 have : wp_assign str_t e Q s h2 by apply icon_P.
 inversion_clear 1.
-rewrite -Hh1' store_upd_get_eq in H.
+rewrite -Hh1' store_upd_get_eq in H0.
 case: (Hh1) => _.
 rewrite /emp => ->.
 by rewrite hp.unioneh.
@@ -838,7 +838,7 @@ have H2 : wp_assign str_t e (@Sum _ con assert_abelean P) s h2.
   by rewrite (_ : store_upd _ _ _ = s) // -Hh1' store_upd_get_eq.
 have : wp_assign str_t e Q s (h1 \U h2).
   by rewrite (proj2 Hh1) hp.unioneh; apply icon_P.
-inversion_clear 1; by rewrite -Hh1' store_upd_get_eq in H.
+inversion_clear 1; by rewrite -Hh1' store_upd_get_eq in H0.
 Qed.
 
 Ltac Ent_R_rewrite_bbang_re_icon n :=
@@ -867,7 +867,7 @@ have H2 : wp_assign Hstr e (@Sum _ con assert_abelean P) s h2.
   apply wp_assign_c.
   by rewrite (_ : store_upd _ _ _ = s) // -Hh1' store_upd_get_eq.
 have : wp_assign Hstr e Q s h2 by apply icon_P, H2.
-inversion_clear 1; by rewrite -Hh1' store_upd_get_eq in H.
+inversion_clear 1; by rewrite -Hh1' store_upd_get_eq in H0.
 Qed.
 
 Ltac Ent_rewrite_eq_p_icon n lemma :=
@@ -902,7 +902,7 @@ case: (Hh1) => _.
 rewrite /emp => ?; subst h1.
 rewrite hp.unioneh.
 have : wp_assign Hstr e Q s h2 by apply icon_P.
-inversion_clear 1; by rewrite -Hh1' store_upd_get_eq in H.
+inversion_clear 1; by rewrite -Hh1' store_upd_get_eq in H0.
 Qed.
 
 Ltac Ent_R_rewrite_eq_p_icon n := Ent_rewrite_eq_p_icon n bbang_pe_to_wp_assign'.
