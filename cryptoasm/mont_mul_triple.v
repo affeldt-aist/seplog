@@ -582,7 +582,7 @@ apply trans_eq with (\B^next *
 - rewrite Hm2. set tmp := \S_{ _ } _. ring.
 - rewrite lSum_head_swap0 tail_app; last by rewrite HZ; apply: leq_ltn_trans Hextk.
   rewrite List.app_comm_cons.
-  move: (@list_tail _ zero32 Z) => ->; last by rewrite HZ; destruct nk => //; apply lt_O_Sn.
+  move: (@list_tail _ zero32 Z) => ->; last by rewrite HZ; destruct nk => //; apply Nat.lt_0_succ.
   rewrite Hquot Hinv1 2!lSum_1 /zero32 /nth' -/(Y `32_ 0) -/(M `32_ 0); ring.
 
 apply while.hoare_seq with (fun s h => (exists Z next nint_, size Z = nk /\
@@ -849,7 +849,7 @@ rewrite sext_Z2u // u2Z_add_Z2u //.
 - by rewrite r_int_' Z_S.
 - apply: leZ_ltZ_trans; last exact/Hnz.
   apply (@leZ_trans (Z_of_nat nk)).
-  + rewrite r_int_' (_ : 1 = Z_of_nat 1) // -inj_plus plus_comm; apply/inj_le/leP; by rewrite plusE add1n.
+  + rewrite r_int_' (_ : 1 = Z_of_nat 1) // -inj_plus Nat.add_comm; apply/inj_le/leP; by rewrite plusE add1n.
   + apply leZ_addl; first exact/min_u2Z.
     rewrite mulZC. apply Zle_scale; by [apply Zle_0_nat | ].
 
@@ -1224,9 +1224,9 @@ have Hlenlst1 : size lst1 = nk.-1 by rewrite -HZ H0 size_cat /= addn1.
 have Htmp : [ var_e t \+ int_e (sext 16 zero16) ]e_ s = [ var_e z \+ int_e (Z2u 32 (Z_of_nat (4 * (nk - 1)))) ]e_ s.
   rewrite /= sext_0 addi0; apply u2Z_inj.
   rewrite u2Z_add_Z_of_nat.
-  rewrite inj_mult inj_minus1; last by destruct nk => //; exact/le_n_S/le_O_n.
+  rewrite inj_mult inj_minus1; last by destruct nk => //; exact/le_n_S/Nat.le_0_l.
   rewrite r_t r_z; simpl Z_of_nat; ring.
-  rewrite inj_mult inj_minus1; last by destruct nk => //; exact/le_n_S/le_O_n.
+  rewrite inj_mult inj_minus1; last by destruct nk => //; exact/le_n_S/Nat.le_0_l.
   rewrite r_z; simpl Z_of_nat.
   apply: leZ_ltZ_trans; last exact/Hnz.
   apply/leZ_add2l/leZ_pmul2l => //.
@@ -1281,7 +1281,7 @@ rewrite r_ext r_k.
 
 apply/inj_le/leP; by case/andP: Hextk'.
 
-rewrite -subn1 inj_minus1 //; destruct nk => //; exact/le_n_S/le_O_n.
+rewrite -subn1 inj_minus1 //; destruct nk => //; exact/le_n_S/Nat.le_0_l.
 
 case: Hinv => K [Hinv1 Hinv2].
 exists (K + u2Z [quot]_s * \B^next.-1); split.

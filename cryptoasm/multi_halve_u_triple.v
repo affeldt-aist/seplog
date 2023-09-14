@@ -95,8 +95,8 @@ rewrite subSS subn0.
 repeat (split; trivial).
 - rewrite sext_Z2s // u2Z_add_Z2s //; last first.
     rewrite Hri -(mul1Z (-1)) mulZN1 leZ_subRL addZ0 (_ : 1 = Z<=nat 1) //.
-    exact/inj_le/neq_0_lt.
-  rewrite inj_minus1 //; by [rewrite Hri | apply neq_0_lt].
+    exact/inj_le/Nat.neq_0_lt_0/nesym.
+  rewrite inj_minus1 //; by [rewrite Hri | apply/Nat.neq_0_lt_0/nesym].
 - by Assert_upd.
 
 (** lwxs tmp i a; *)

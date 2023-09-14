@@ -454,7 +454,7 @@ move => P Q T HQP.
 Fail setoid_rewrite HQP.
 Abort.
 
-Instance entail_partial : RelationClasses.PreOrder entails.
+#[global] Instance entail_partial : RelationClasses.PreOrder entails.
 constructor.
 abstract (move => P s h; by []).
 abstract (move => x y z; apply ent_trans).
@@ -474,7 +474,7 @@ move => P Q T HQP.
 Fail setoid_rewrite HQP.
 Abort.
 
-Instance con_morphism : Morphisms.Proper (entails ++> entails ++> entails) con.
+#[global] Instance con_morphism : Morphisms.Proper (entails ++> entails ++> entails) con.
 move => P P' HP Q Q' HQ s h; by apply monotony.
 Qed.
 
@@ -487,7 +487,7 @@ setoid_rewrite HQP.
 Fail setoid_rewrite HTP.
 Abort.
 
-Instance entails_morphism2: Morphisms.Proper (entails ++> entails --> flip impl) entails.
+#[global] Instance entails_morphism2: Morphisms.Proper (entails ++> entails --> flip impl) entails.
 move => P P' HP Q Q' HQ.
 move => HPQ.
 move => s h H.
@@ -496,11 +496,11 @@ apply/HPQ.
 by apply/HP.
 Qed.
 
-Instance entails_morphism3 : Morphisms.Proper (entails --> entails ++> impl) entails.
+#[global] Instance entails_morphism3 : Morphisms.Proper (entails --> entails ++> impl) entails.
 move=> P P' P'_P Q Q' Q_Q' P_Q s h H; by apply/Q_Q'/P_Q/P'_P.
 Qed.
 
-Instance entails_morphism: Morphisms.Proper (equiv ==> equiv ==> iff) entails.
+#[global] Instance entails_morphism: Morphisms.Proper (equiv ==> equiv ==> iff) entails.
 constructor.
 - move => H1 s h Hy.
   apply/H0.
@@ -512,7 +512,7 @@ constructor.
   by apply/H.
 Qed.
 
-Instance assert_abelean : littleop.Abelian con.
+#[global] Instance assert_abelean : littleop.Abelian con.
 eapply littleop.Build_Abelian with (equiv := equiv) (zero := emp).
 exact equiv_equivalence.
 exact conPe.
@@ -521,11 +521,11 @@ exact conA.
 abstract (move => P Q HPQ R S HRS; by apply con_congr).
 Defined.
 
-Instance is_true_true_morphism: Morphisms.Proper (eq ==> iff) is_true.
+#[global] Instance is_true_true_morphism: Morphisms.Proper (eq ==> iff) is_true.
 move => b1 b2 ->; by [].
 Qed.
 
-Instance triple_morphism: Morphisms.Proper (Morphisms.respectful equiv (Morphisms.respectful eq (Morphisms.respectful equiv iff))) hoare.
+#[global] Instance triple_morphism: Morphisms.Proper (Morphisms.respectful equiv (Morphisms.respectful eq (Morphisms.respectful equiv iff))) hoare.
 move => P P' HPP' c c' Hcc' Q Q' HQQ'.
 subst c'.
 split; eapply hoare_conseq.
@@ -535,7 +535,7 @@ by rewrite HQQ'.
 by rewrite HPP'.
 Qed.
 
-Instance triple_morphism2: Morphisms.Proper (Morphisms.respectful (flip entails) (Morphisms.respectful eq (Morphisms.respectful entails impl))) hoare.
+#[global] Instance triple_morphism2: Morphisms.Proper (Morphisms.respectful (flip entails) (Morphisms.respectful eq (Morphisms.respectful entails impl))) hoare.
 move => P P' HPP' c c' Hcc' Q Q' HQQ'.
 subst c'.
 move => H.
@@ -547,12 +547,12 @@ Qed.
 
 Local Open Scope C_types_scope.
 
-Instance wp_assign_morphism {ty : g.-typ} str (Hstr : assoc_get str sigma = Some ty) e :
+#[global] Instance wp_assign_morphism {ty : g.-typ} str (Hstr : assoc_get str sigma = Some ty) e :
   Morphisms.Proper (equiv ==> equiv) (wp_assign Hstr e).
 move=> R R' RR' s h; split; inversion_clear 1; by apply wp_assign_c, RR'.
 Qed.
 
-Instance Or_morphism: Morphisms.Proper (equiv ==> equiv ==> equiv) Or.
+#[global] Instance Or_morphism: Morphisms.Proper (equiv ==> equiv ==> equiv) Or.
 move => P P' HP Q Q' HQ s h; split.
 - move => H.
   inversion_clear H.
@@ -763,7 +763,7 @@ Qed.
 Lemma bbang_contradict' b : `! \~b b ** `! b <==> FF.
 Proof. rewrite conC; apply bbang_contradict. Qed.
 
-Instance bbang_morphism : Morphisms.Proper (bequiv ==> equiv) bbang.
+#[global] Instance bbang_morphism : Morphisms.Proper (bequiv ==> equiv) bbang.
 move=> b1 b2 b12 s h; split; case=> H1 H2.
   split => //; by rewrite -b12.
 split => //; by rewrite b12.
@@ -919,7 +919,7 @@ Lemma mapstos_ext {t : g.-typ} (e1 e2 : exp sigma (:* t))
   (e12 : e1 =s e2) (x : seq (t.-phy)) : e1 |--> x <==> e2 |--> x.
 Proof. move=> s h; split; by apply mapstos_ext0. Qed.
 
-Instance plus_pointer_morphism_mapstos {ty : g.-typ} :
+#[global] Instance plus_pointer_morphism_mapstos {ty : g.-typ} :
   Morphisms.Proper (sequiv ==> eq ==> equiv) (@mapstos ty).
 rewrite /Morphisms.Proper.
 rewrite /Morphisms.respectful.
@@ -1041,7 +1041,7 @@ Lemma mapstos_fit_ext {ty : g.-typ} (e1 e2 : exp sigma (:* ty))
   (e12 : e1 =s e2) (x : seq (ty.-phy)) : e1 |---> x <==> e2 |---> x.
 Proof. move=> s h; split; by apply mapstos_fit_ext0. Qed.
 
-Instance plus_pointer_morphism_mapstos_fit {ty : g.-typ} :
+#[global] Instance plus_pointer_morphism_mapstos_fit {ty : g.-typ} :
   Morphisms.Proper (sequiv ==> eq ==> equiv) (@mapstos_fit ty).
 rewrite /Morphisms.Proper.
 rewrite /Morphisms.respectful.
@@ -1688,7 +1688,7 @@ Qed.
 
 Definition inde_cmd c := inde (modified_vars c) (modified_vars_subset_type_store _).
 
-Instance inde_cmd_morphism: Morphisms.Proper (eq ==> equiv ==> iff) inde_cmd.
+#[global] Instance inde_cmd_morphism: Morphisms.Proper (eq ==> equiv ==> iff) inde_cmd.
 move => c1 c2 Hc P Q HP.
 subst; rewrite /inde_cmd /inde.
 split => H s h x ty v H0; split => H1.

@@ -118,11 +118,11 @@ apply fwd_sim_while ; first by done.
         apply Zdiv_lt_upper_bound => //.
         rewrite (mulZC _ 2) -Z_div_exact_full_2 //.
         + rewrite mulZC; tauto.
-        + apply Zpower_mod, lt_O_neq.
+        + apply/Zpower_mod/nesym/Nat.neq_0_lt_0.
           apply/ltP; rewrite muln_gt0 /= andbT.
           apply/O_lt_Zabs_nat; tauto.
      - rewrite Zpower_div //; first exact: leZZ.
-       apply/lt_O_neq/ltP; rewrite muln_gt0 /= andbT.
+       apply/nesym/Nat.neq_0_lt_0/ltP; rewrite muln_gt0 /= andbT.
        apply/O_lt_Zabs_nat; tauto.
   + assoc_tac_m.put_in_front u.
     apply pfwd_sim_fwd_sim_spec; last by apply multi_halve_u_safe_termination; Uniq_uniq r0.

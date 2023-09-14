@@ -121,7 +121,7 @@ Proof.
 move=> Hm.
 rewrite /inv_mod_beta.
 case: euclid_rec => u v d Heq Hgcd.
-rewrite (Z_div_mod_eq u _ (Z.lt_gt _ _ (Zbeta_gt0 1))) in Heq.
+rewrite (Z_div_mod_eq_full u \B^1) in Heq.
 move: (Zis_gcd_Zpower_odd 32 _ Hm); rewrite -/(\B^1); move/Zis_gcd_sym => Hgcd'.
 case: (Zis_gcd_uniqueness_apart_sign _ _ _ _ Hgcd Hgcd') => Hd.
 - rewrite Hd Zone_pos.
@@ -140,7 +140,7 @@ Proof.
 move=> Hm.
 rewrite /inv_mod_beta.
 case: euclid_rec => u v d Heq Hgcd.
-rewrite (Z_div_mod_eq u _ (Z.lt_gt _ _ (Zbeta_gt0 1))) in Heq.
+rewrite (Z_div_mod_eq_full u \B^1) in Heq.
 move: (Zis_gcd_Zpower_odd 32 _ Hm); rewrite -/(\B^1); move/Zis_gcd_sym => Hgcd'.
 case: (Zis_gcd_uniqueness_apart_sign _ _ _ _ Hgcd Hgcd') => Hd.
 - rewrite Hd Zone_pos.

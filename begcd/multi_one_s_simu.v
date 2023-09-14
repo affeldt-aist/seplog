@@ -138,8 +138,8 @@ rewrite /state_mint; split.
       + rewrite [size _]/= size_nseq.
         set xx := Z_of_nat _.
         suff : xx = u2Z ([rk ]_ st)%asm_expr by move=> ->.
-        rewrite {}/xx minus_Sn_m; last by lia.
-        rewrite /= -minus_n_O Z_of_nat_Zabs_nat //; exact: min_u2Z.
+        rewrite {}/xx -Nat.sub_succ_l; last by lia.
+        rewrite /= Nat.sub_0_r Z_of_nat_Zabs_nat //; exact: min_u2Z.
       + rewrite /= size_nseq subn1 prednK //; apply/ltP; lia.
       + suff : Z2u 32 (u2Z ([rk ]_ st)%asm_expr) = Z2s 32 (Z_of_nat (S k)).
           by move=> <-.

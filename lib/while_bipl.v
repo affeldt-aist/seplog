@@ -73,7 +73,7 @@ move: (HPQ s h) (HQR s h).
 by intuition.
 Qed.
 
-Instance equiv_equivalence : Equivalence equiv.
+#[global] Instance equiv_equivalence : Equivalence equiv.
 constructor.
 exact equiv_refl.
 exact equiv_sym.

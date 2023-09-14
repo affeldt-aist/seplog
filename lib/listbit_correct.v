@@ -226,7 +226,7 @@ elim.
 Qed.
 
 Lemma pos2lst_size_pos : forall p, (O < size (pos2lst p))%nat.
-Proof. elim => // p Hp /=; by apply lt_O_Sn. Qed.
+Proof. elim => // p Hp /=; by apply lt_0_succ. Qed.
 
 Lemma pos2lst_O : forall p, ~ pos2lst p = zeros (size (pos2lst p)).
 Proof. elim=> // p Hp; contradict Hp; by case: Hp. Qed.
@@ -371,7 +371,7 @@ case.
     rewrite (_ : [::] = rev [::]) //.
     move/(congr1 rev).
     rewrite /= !revK.
-   by move: (pos2lst_nil p).
+    by move: (pos2lst_nil p).
   + move=> q _ _.
     move/(congr1 (fun x => rev x)).
     rewrite /= !revK.
@@ -465,7 +465,7 @@ elim=> //.
 Qed.
 
 Lemma ult_correct_alt : forall n m a b, size a = n -> size b = m ->
-  forall p, p = max n m ->
+  forall p, p = Nat.max n m ->
     ult (zext (p - n)%nat a) (zext (p - m)%nat b) = true ->
     .[ zext (p - n)%nat a ]u < .[ zext (p - m)%nat b ]u.
 Proof.
@@ -473,17 +473,17 @@ move=> n m a b H H0 p H1 H2.
 apply ult_correct with p.
 - rewrite (size_zext n) // addnC addnBA.
   by rewrite addnC addnK.
-  by rewrite H1; apply/leP/le_max_l.
+  by rewrite H1; apply/leP/Nat.le_max_l.
 - rewrite (size_zext m) // addnC addnBA.
   by rewrite addnC addnK.
-  by rewrite H1; apply/leP/le_max_r.
+  by rewrite H1; apply/leP/Nat.le_max_r.
 - exact H2.
 Qed.
 
 Definition pos_lt (a b : positive) : bool :=
   let a' := rev (pos2lst a) in
   let b' := rev (pos2lst b) in
-  let max_len := max (size a') (size b') in
+  let max_len := Nat.max (size a') (size b') in
   let a'' := zext (max_len - size a') a' in
   let b'' := zext (max_len - size b') b' in
   ult a'' b''.
@@ -492,8 +492,8 @@ Lemma pos_lt_correct' : forall p q, pos_lt p q = true -> Zpos p < Zpos q.
 Proof.
 move=> p q H.
 rewrite -2!u2Z_rev_poslst.
-rewrite -(zext_correct (max (size (rev (pos2lst p))) (size (rev (pos2lst q))) - size (rev (pos2lst p))) (rev (pos2lst p))).
-rewrite -(zext_correct (max (size (rev (pos2lst p))) (size (rev (pos2lst q))) - size (rev (pos2lst q)))(rev (pos2lst q))).
+rewrite -(zext_correct (Nat.max (size (rev (pos2lst p))) (size (rev (pos2lst q))) - size (rev (pos2lst p))) (rev (pos2lst p))).
+rewrite -(zext_correct (Nat.max (size (rev (pos2lst p))) (size (rev (pos2lst q))) - size (rev (pos2lst q))) (rev (pos2lst q))).
 by apply ult_correct_alt.
 Qed.
 
@@ -1108,7 +1108,7 @@ elim.
   + rewrite [Z2u _]/=.
     move=> n lst Hlenlst _ H.
     rewrite (adjust_u_S'' (n.+1) 1 [:: true]) //= subSS subn0 in H.
-    have X : (0 < size lst)%coq_nat by rewrite Hlenlst; apply lt_O_Sn.
+    have X : (0 < size lst)%coq_nat by rewrite Hlenlst; apply Nat.lt_0_succ.
     case/lastP : lst => // hd tl in X Hlenlst H * => {X}.
     apply (ult_correct n.+1) in H; last 2 first.
       by rewrite -Hlenlst.
@@ -1121,7 +1121,7 @@ elim.
   + by inversion 2.
   + move=> lst Hlenlst.
     rewrite ltnS => Hkn.
-    have X : (0 < size lst)%coq_nat by rewrite Hlenlst; apply lt_O_Sn.
+    have X : (0 < size lst)%coq_nat by rewrite Hlenlst; apply Nat.lt_0_succ.
     case/lastP : lst => // hd tl in X Hlenlst * => {X}.
     rewrite size_rcons in Hlenlst; case: Hlenlst => Hlenlst.
     rewrite -cats1 shrl_S => H.
@@ -1592,7 +1592,7 @@ induction l.
               by rewrite leq_addr.
             rewrite 2!ZpowerS.
             ring.
-        * rewrite (size_shl k l.+1) //; by apply lt_0_Sn.
+        * rewrite (size_shl k l.+1) //; by apply lt_0_succ.
       - case: H1 => [|]; last by done.
         case ; by left.
   + inversion_clear H1; try discriminate.

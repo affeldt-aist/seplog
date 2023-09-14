@@ -150,7 +150,7 @@ move=> s h [ [r_k [ r_a [r_b [Hmem [ni [r_i [Hnink [
 - have X : (1 <= ni)%nat.
     apply/ltP/not_ge; contradict r_i'.
     apply u2Z_inj; rewrite r_i Z2uK //.
-    apply le_n_0_eq in r_i'; by subst ni.
+    apply Nat.le_0_r in r_i'; by subst ni.
   rewrite /wp_addiu; repeat Reg_upd; repeat (split; trivial).
   + by Assert_upd.
   + exists (ni - 1)%nat; repeat (split; trivial).
@@ -161,7 +161,7 @@ move=> s h [ [r_k [ r_a [r_b [Hmem [ni [r_i [Hnink [
       apply leZ_add2r.
       rewrite (_ : 1 = Z_of_nat 1) //; exact/inj_le/leP.
     * destruct ni.
-      by move/leP in X; apply le_Sn_0 in X.
+      by move/leP in X; apply Nat.nle_succ_0 in X.
       by rewrite /= subn1.
     * by rewrite -subSn //= subn1.
 - move/eqP: Hneq; by rewrite r_flag store.get_r0.
@@ -341,7 +341,7 @@ move=> s h [r_k [r_a [r_b [Hmem [ni [r_i [Hnink [Hsum [r_a0 [r_a1 [ [r_ret [r_re
     subst ni.
     rewrite subn0 !drop0.
     destruct nk as [|nk].
-    * by move: (lt_irrefl O).
+    * by move: (Nat.lt_irrefl O).
     * split; first by [].
       destruct A => //; destruct B => //.
       rewrite /= subn1 /= !drop0 in Hsum.

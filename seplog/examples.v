@@ -192,7 +192,7 @@ split.
 - split; first by [].
   split; first by [].
   split; last by [].
-  move: (Z_div_mod_eq wa wb (Z.lt_gt _ _ H3)) => H.
+  move: (Z_div_mod_eq_full wa wb) => H.
   have ->: wa mod wb = wb * (- (wa / wb)) + wa.
     have -> : wa mod wb = wa - wb * (wa / wb) by lia.
     ring.

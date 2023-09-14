@@ -268,9 +268,9 @@ apply hoare_addiu with (fun s h => ([x]_s = vx /\ [z]_s = vz /\ [m]_s = vm /\
 move=> s h [[r_x [r_z [r_m [r_k [r_alpha [Sum_Z1 [Sum_Z2 [r_t Hmem]]]]]]]] HbneC0].
 rewrite /wp_addiu; repeat Reg_upd; repeat (split; trivial).
 - rewrite sext_Z2u // u2Z_add_Z2u //.
-  + rewrite r_t -subn1 inj_minus1 //; last by destruct nk => //; exact/le_n_S/le_O_n.
+  + rewrite r_t -subn1 inj_minus1 //; last by destruct nk => //; exact/le_n_S/Nat.le_0_l.
     ring.
-  + rewrite r_t -subn1 inj_minus1; last by destruct nk => //; exact/le_n_S/le_O_n.
+  + rewrite r_t -subn1 inj_minus1; last by destruct nk => //; exact/le_n_S/Nat.le_0_l.
     rewrite -Zbeta1E; rewrite Z_S in Hnz; lia.
 - rewrite /= store.get_r0 // in HbneC0; by move/eqP : HbneC0.
 - by Assert_upd.

@@ -83,7 +83,7 @@ move: (HPQ s) (HQR s).
 by intuition.
 Qed.
 
-Instance equiv_equivalence : Classes.RelationClasses.Equivalence equiv.
+#[global] Instance equiv_equivalence : Classes.RelationClasses.Equivalence equiv.
 constructor.
 exact equiv_refl.
 exact equiv_sym.
@@ -92,7 +92,7 @@ Qed.
 
 Import Morphisms.ProperNotations.
 
-Instance equiv_in_entails : Morphisms.Proper (equiv ==> equiv ==> iff) entails.
+#[global] Instance equiv_in_entails : Morphisms.Proper (equiv ==> equiv ==> iff) entails.
 rewrite /Morphisms.Proper /Morphisms.respectful.
 move=> P Q PQ P' Q' P'Q'; split; by [move=> PP' s /PQ/PP'/P'Q' | move=> QQ' s /PQ /QQ' /P'Q'].
 Qed.
@@ -123,16 +123,16 @@ Lemma ent_R_T P : P ===> TT. Proof. done. Qed.
 
 Lemma F_is_not_T : FF <==> Not TT. Proof. move=> s; split=> //; by apply. Qed.
 
-Instance entail_partial : RelationClasses.PreOrder entails.
+#[global] Instance entail_partial : RelationClasses.PreOrder entails.
 apply (RelationClasses.Build_PreOrder _ ent_id (fun a b c => ent_trans b a c)).
 Defined.
 
-Instance entails_in_entails_And : Morphisms.Proper (entails ==> entails ==> entails) And.
+#[global] Instance entails_in_entails_And : Morphisms.Proper (entails ==> entails ==> entails) And.
 rewrite /Morphisms.Proper /Morphisms.respectful.
 move=> x y xy a b ab s [H1 H2]; split; by [apply xy | apply ab].
 Qed.
 
-Instance entails_in_entails_Or : Morphisms.Proper (entails ==> entails ==> entails) Or.
+#[global] Instance entails_in_entails_Or : Morphisms.Proper (entails ==> entails ==> entails) Or.
 rewrite /Morphisms.Proper /Morphisms.respectful.
 move=> x y xy a b ab s [] H1; by [left; apply xy | right; apply ab].
 Qed.
@@ -221,7 +221,7 @@ Proof. move=> H; apply monotony; [exact H | by apply ent_id]. Qed.
 
 Import Morphisms.ProperNotations.
 
-Instance con_morphism : Morphisms.Proper (entails ==> entails ==> entails) con.
+#[global] Instance con_morphism : Morphisms.Proper (entails ==> entails ==> entails) con.
 rewrite /Morphisms.Proper /Morphisms.respectful.
 move => P P' HP Q Q' HQ s; by apply monotony.
 Qed.

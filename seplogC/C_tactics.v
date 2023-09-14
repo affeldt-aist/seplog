@@ -33,11 +33,11 @@ Definition icon (l : seq assert) := nosimpl Sum con assert_abelean l.
 Lemma iconE l : icon l = Sum con l.
 Proof. done. Qed.
 
-Instance icon_morphism_equiv : Morphisms.Proper (permutation ==> equiv) icon.
+#[global] Instance icon_morphism_equiv : Morphisms.Proper (permutation ==> equiv) icon.
 move => l1 l2 Hl; rewrite /icon; by apply/Sum_morphism.
 Qed.
 
-Instance icon_morphism_entails : Morphisms.Proper (permutation ==> entails) icon.
+#[global] Instance icon_morphism_entails : Morphisms.Proper (permutation ==> entails) icon.
 move => l1 l2 Hl; rewrite /icon; by rewrite -> (Sum_morphism _ _ Hl).
 Qed.
 
@@ -1354,12 +1354,12 @@ Class NonEmpty (A: Type) := {
    eg: A
 }.
 
-Instance NonEmpty_nat: NonEmpty nat.
+#[global] Instance NonEmpty_nat: NonEmpty nat.
 constructor.
 exact 0.
 Qed.
 
-Instance NonEmpty_int {n}: NonEmpty (int n).
+#[global] Instance NonEmpty_int {n}: NonEmpty (int n).
 constructor.
 exact (Z2u n 0).
 Qed.

@@ -1,9 +1,10 @@
 (* seplog (c) AIST 2005-2013. R. Affeldt, N. Marti, et al. GNU GPLv3. *)
 (* seplog (c) AIST 2014-2018. R. Affeldt et al. GNU GPLv3. *)
-Require Import Max Lia.
+Require Import Lia.
 From mathcomp Require Import ssreflect ssrbool ssrnat seq.
 Require Import ssrnat_ext.
-Export Max.
+
+Import PeanoNat.Nat.
 
 Lemma max_lemma1 x1 x2 x3 : x2 <= x1 -> max x2 x3 <= max x1 x3.
 Proof.

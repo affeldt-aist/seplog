@@ -493,7 +493,7 @@ move=> Hx Hy.
 exact iff.
 Defined.
 
-Instance ground_bexp_morphism {g} {sigma : g.-env} :
+#[global] Instance ground_bexp_morphism {g} {sigma : g.-env} :
   Morphisms.Proper ground_bexp_relation (@ground_bexp _ sigma).
 move=> b1 b2 Hb /= Hb1 Hb2 _ /=.
 by rewrite -(ground_bexp_sem (store0 _)) -(ground_bexp_sem (store0 _)) Hb.
