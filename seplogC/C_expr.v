@@ -1049,7 +1049,7 @@ Lemma u2Z_ptyp2ptr_1 (t : g.-typ) (e : exp sigma (:* t)) :
   u2Z (ptr<=phy [e \+ [ 1 ]sc ]_ s) = u2Z (ptr<=phy [e ]_ s) + Z<=nat (sizeof t).
 Proof.
 move=> H.
-rewrite (_ : 1%Z = Z_of_nat 1%nat) // -(mult_1_l (sizeof t)).
+rewrite (_ : 1%Z = Z_of_nat 1%nat) // -(Nat.mul_1_l (sizeof t)).
 apply u2Z_ptyp2ptr_nat => //.
 by rewrite mul1n.
 Qed.

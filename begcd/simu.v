@@ -934,7 +934,7 @@ Inductive mint : Type :=
 Definition mintP (t1 t2 : mint) : bool :=
   match t1, t2 with
     | unsign r1 r1', unsign r2 r2' => regP r1 r2 && regP r1' r2'
-    | signed l1 r1, signed l2 r2 => beq_nat l1 l2 && regP r1 r2
+    | signed l1 r1, signed l2 r2 => Nat.eqb l1 l2 && regP r1 r2
     | _, _ => false
   end.
 
@@ -943,7 +943,7 @@ Proof.
 case=> // [u1 u1'|l1 s1] // [u2 u2'|l2 s2] //= H.
 - case/andP : H; move/eqP=> ->; by move/eqP=> ->.
 - case/andP : H.
-  move/beq_nat_true => ->.
+  move/Nat.eqb_eq => ->.
   by move/eqP => ->.
 Qed.
 
@@ -951,7 +951,7 @@ Lemma mintP_refl : forall n, mintP n n.
 Proof.
 case=> [r1 r1'|l1 s1] /=.
 - apply/andP; split; by apply/eqP.
-- rewrite -beq_nat_refl /=; by apply/eqP.
+- rewrite Nat.eqb_refl /=; by apply/eqP.
 Qed.
 
 Lemma eqmintP : Equality.axiom mintP.
@@ -1020,11 +1020,10 @@ Definition mint_ptr t := match t with unsign _ rx => rx | signed _ rx => rx end.
 
 Lemma uniq_mint_ptr : forall l, uniq (map mint_ptr l) -> uniq l.
 Proof.
-elim=> // hd tl IH /=.
-case/andP => H1 H2.
+elim=> // hd tl IH /= /andP[H1 H2].
 apply/andP.
 split; last by auto.
-move/negP : H1 => H1.
+move/negP in H1.
 apply/negP.
 contradict H1.
 apply/mapP; by exists hd.
@@ -1396,7 +1395,7 @@ have ? : slen = slen_.
 subst slen_.
 have H'slen : heap.get (Z.abs_nat (u2Z ([rx ]_ st)%asm_expr / 4)) h = Some slen.
   have H'slen : heap.get (Z.abs_nat (u2Z ([rx ]_ st)%asm_expr / 4)) h1 = Some slen.
-    rewrite -(plus_0_r (Z.abs_nat (u2Z ([rx ]_ st)%asm_expr / 4))).
+    rewrite -(Nat.add_0_r (Z.abs_nat (u2Z ([rx ]_ st)%asm_expr / 4))).
     rewrite -/(eval (var_e rx) st)%asm_expr.
     apply (assert_m.mapstos_get_inv 2 (slen :: ptr :: List.nil)%list) => //; by auto.
   apply heap_get_heap_mint_inv with st (signed nk rx).
@@ -1433,7 +1432,7 @@ case: Hvar_mint => slen ptr A header_fit encoding payload_fit H.
 case: H => h1 [h2 [Hdisj [Hunion [Hh1 Hh2]]]] /=.
 have H'slen : heap.get (Z.abs_nat (u2Z ([rx ]_ st)%asm_expr / 4)) h = Some slen.
   have H'slen : heap.get (Z.abs_nat (u2Z ([rx ]_ st)%asm_expr / 4)) h1 = Some slen.
-    rewrite -(plus_0_r (Z.abs_nat (u2Z ([rx ]_ st)%asm_expr / 4))).
+    rewrite -(Nat.add_0_r (Z.abs_nat (u2Z ([rx ]_ st)%asm_expr / 4))).
     rewrite -/(eval (var_e rx) st)%asm_expr.
     apply (assert_m.mapstos_get_inv 2 (slen :: ptr :: nil)) => //; by auto.
   apply heap_get_heap_mint_inv with st (signed nk rx).
@@ -1449,12 +1448,12 @@ move: Hunion => /=.
 rewrite -Hslen H'slen u2Z_add_Z2u //; last by rewrite -Zbeta1E; lia.
 rewrite -{1}(Zmult_1_l 4) Z_div_plus_full // Zabs_nat_Zplus //; last first.
   apply Z_div_pos => //; apply min_u2Z.
-rewrite plus_comm (_ : Z.abs_nat 1 = 1%nat) //= H'ptr.
+rewrite Nat.add_comm (_ : Z.abs_nat 1 = 1%nat) //= H'ptr.
 move=> Hunion.
 rewrite u2Z_add_Z2u //; last by rewrite -Zbeta1E -Hrx; lia.
 rewrite -{3}(Zmult_1_l 4) Z_div_plus_full // Zabs_nat_Zplus //; last first.
   apply Z_div_pos => //; apply min_u2Z.
-rewrite plus_comm (_ : Z.abs_nat 1 = 1%nat) //= -Hptr H'ptr /heap_cut.
+rewrite Nat.add_comm (_ : Z.abs_nat 1 = 1%nat) //= -Hptr H'ptr /heap_cut.
 rewrite -2!heap.proj_app -Hrx; exact: heap.dom_dom_proj.
 Qed.
 
@@ -1669,8 +1668,7 @@ move: (state_mint_var_mint _ _ _ _ x (signed L rx) s_st_h).
 rewrite assoc.get_union_sing_eq.
 case/(_ (refl_equal _)) => slen_ ptr_ A _ encoding ptr_fit H.
 move/assert_m.mapstos_get2 : H.
-rewrite [u2Z _]/= ptr_vx4.
-by case => ->.
+by rewrite [u2Z _]/= ptr_vx4 => -[] ->.
 Qed.
 
 Lemma state_mint_signed_slen_L L x rx d s st h slen :
@@ -1683,8 +1681,7 @@ move: (state_mint_var_mint _ _ _ _ x (signed L rx) s_st_h).
 rewrite assoc.get_union_sing_eq.
 case/(_ (refl_equal _)) => slen_ ptr_ A _ encoding ptr_fit H.
 move/assert_m.mapstos_get1 : H.
-rewrite [u2Z _]/= ptr_vx.
-case => ->.
+rewrite [u2Z _]/= ptr_vx => -[] ->.
 by case: encoding.
 Qed.
 
@@ -1744,16 +1741,16 @@ rewrite /state_mint; split.
   exact: var_mint_invariant.
 - move=> x y Hxy rx ry H_rx_x H_ry_y.
   move: {Hs_st_he}(proj2 Hs_st_he _ _ Hxy _ _ H_rx_x H_ry_y) => Hs_st_he.
-  have X : forall x0 : reg_eqType,
+  have X (x0 : reg_eqType) :
     List.In x0 (mint_regs rx) -> ([x0 ]_ st')%asm_expr = ([x0 ]_ st)%asm_expr.
-    move=> x0 Hx0.
+    move=> Hx0.
     symmetry.
     Reg_unchanged.
     apply/(disj_not_In Hinter)/(In_mints_regs _ _ rx) => //.
     apply/inP; by apply assoc.get_Some_in_cdom in H_rx_x.
-  have Y : forall x0 : reg_eqType,
+  have Y (x0 : reg_eqType) :
     List.In x0 (mint_regs ry) -> ([x0 ]_ st')%asm_expr = ([x0 ]_ st)%asm_expr.
-    move=> x0 Hx0.
+    move=> Hx0.
     symmetry.
     Reg_unchanged.
     apply/(disj_not_In Hinter)/(In_mints_regs _ _ ry) => //.
@@ -1792,7 +1789,6 @@ rewrite /state_mint; split.
     by apply assoc.get_Some_in_cdom with y.
     (* copipe *)
 move=> x y x_y mx my x_mx y_my.
-
 rewrite (heap_mint_store_invariant st); last first.
     move=> ry Hry.
     rewrite store.get_upd //.
@@ -1962,7 +1958,7 @@ case/assoc.get_union_Some_inv : Hrx => Hrx.
               move/assoc.get_Some_in_dom : Hry0.
               by apply/negPn.
             * rewrite assoc.unionA.
-              apply assoc.get_union_R; last by exact Hry0.
+              apply assoc.get_union_R; last exact Hry0.
               apply assoc.disjUh.
               by rewrite assoc.disjE assoc.dom_sing /= (negbTE A_d).
               by rewrite assoc.disjE assoc.dom_sing /= (negbTE y_d).
@@ -1971,7 +1967,7 @@ case/assoc.get_union_Some_inv : Hrx => Hrx.
           * apply (proj2 s_st_h y0 A).
             * by apply not_eq_sym.
             * rewrite assoc.unionA.
-              apply assoc.get_union_R; last by exact Hry0.
+              apply assoc.get_union_R; last exact Hry0.
               apply assoc.disjUh.
               by rewrite assoc.disjE assoc.dom_sing /= (negbTE A_d).
               by rewrite assoc.disjE assoc.dom_sing /= (negbTE y_d).
@@ -1979,7 +1975,7 @@ case/assoc.get_union_Some_inv : Hrx => Hrx.
       apply (proj2 s_st_h A y0) => //.
       - by rewrite assoc.get_union_sing_eq.
       - rewrite assoc.unionA.
-        apply assoc.get_union_R; last by exact Hry0.
+        apply assoc.get_union_R; last exact Hry0.
         apply assoc.disjUh.
           by rewrite assoc.disjE assoc.dom_sing /= (negbTE A_d).
         by rewrite assoc.disjE assoc.dom_sing /= (negbTE y_d).

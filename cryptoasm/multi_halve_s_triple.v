@@ -623,7 +623,7 @@ case: H => h1 [h2 [h1dh2 [h1Uh2 [Hh1 Hh2]]]].
 case: Hh1 => A'' [A''_nk [Hnext [a0_ptr [Hh1 [Hlo HSum]]]]].
 case: Hh2 => rk_nk [a_va [Hh2 HSum']].
 destruct nk => //.
-rewrite [(if beq_nat nk.+1 0 then 0 else 1)]/= in HSum.
+rewrite [(if Nat.eqb nk.+1 0 then 0 else 1)]/= in HSum.
 have no_overflow : u2Z (store.lo s) = 0.
   have [X|X] : u2Z (store.lo s) = 0 \/ u2Z (store.lo s) = 1.
     move: (min_u2Z (store.lo s)) => ?; lia.

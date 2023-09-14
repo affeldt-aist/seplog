@@ -19,7 +19,7 @@ Definition sequiv {g} {sigma : g.-env} {t} (e1 e2 : exp sigma t) :=
 
 Notation "a '=s' b" := (sequiv a b) (at level 72, format "'[' a  '=s'  b ']'", no associativity) : C_expr_scope.
 
-Instance sequiv_equivalence (g : wfctxt) (sigma : g.-env) (t : g.-typ) :
+#[global] Instance sequiv_equivalence (g : wfctxt) (sigma : g.-env) (t : g.-typ) :
   Coq.Classes.RelationClasses.Equivalence (@sequiv _ sigma t).
 constructor.
 move=> e s; reflexivity.
@@ -29,23 +29,23 @@ Qed.
 
 Transparent eval.
 
-Instance bop_r_morphism g (sigma : g.-env) (t : integral) bop :
+#[global] Instance bop_r_morphism g (sigma : g.-env) (t : integral) bop :
   Coq.Classes.Morphisms.Proper (sequiv ==> sequiv ==> sequiv) (bop_r sigma t bop).
 Proof. destruct bop; move=> e1 e2 H1 a b H2 s /=; by rewrite H1 H2. Qed.
 
-Instance bop_n_morphism g (sigma : g.-env) (t : integral) bop :
+#[global] Instance bop_n_morphism g (sigma : g.-env) (t : integral) bop :
   Morphisms.Proper (sequiv ==> sequiv ==> sequiv) (bop_n sigma t bop).
 Proof. destruct bop; move=> e1 e2 H1 a b H2 s /=; by rewrite H1 H2. Qed.
 
-Instance eq_p_morphism g (sigma : g.-env) (t : g.-typ) :
+#[global] Instance eq_p_morphism g (sigma : g.-env) (t : g.-typ) :
   Morphisms.Proper (sequiv ==> sequiv ==> sequiv) (eq_p sigma t).
 Proof. move => e1 e2 H1 a b H2 s /=; by rewrite H1 H2. Qed.
 
-Instance add_p_morphism g (sigma : g.-env) (t : g.-typ) :
+#[global] Instance add_p_morphism g (sigma : g.-env) (t : g.-typ) :
   Morphisms.Proper (eq ==> sequiv ==> sequiv) (add_p sigma t).
 Proof. move=> e1 e2 -> a b H s /=; by rewrite H. Qed.
 
-Instance safe_cast_morphism g (sigma : g.-env) (t t' : integral) :
+#[global] Instance safe_cast_morphism g (sigma : g.-env) (t t' : integral) :
   Morphisms.Proper (sequiv ==> eq ==> sequiv) (safe_cast sigma t t').
 Proof. move=> x y Hxy H1 H2 -> s /=; by rewrite Hxy. Qed.
 
@@ -509,24 +509,24 @@ Definition bequiv {g} {sigma : g.-env} (b1 b2 : bexp sigma) := forall s, [ b1 ]b
 
 Notation "a '=b' b" := (bequiv a b) (at level 72, format "'[' a  '=b'  b ']'", no associativity) : C_expr_scope.
 
-Instance bequiv_equivalence g (sigma : g.-env) : Equivalence (@bequiv _ sigma).
+#[global] Instance bequiv_equivalence g (sigma : g.-env) : Equivalence (@bequiv _ sigma).
 constructor.
 move=> s b; reflexivity.
 move=> b1 b2 H s; by rewrite H.
 move=> b1 b2 b3 H1 H2 s; by rewrite H1 H2.
 Qed.
 
-Instance beval_morphism g (sigma : g.-env) :
+#[global] Instance beval_morphism g (sigma : g.-env) :
   Morphisms.Proper (bequiv ==> eq ==> eq) (@beval _ sigma).
 Proof. by move => b1 b2 H s1 s2 ->; rewrite H. Qed.
 
 Transparent eval beval.
 
-Instance exp2bexp_morphism g (sigma : g.-env) :
+#[global] Instance exp2bexp_morphism g (sigma : g.-env) :
   Morphisms.Proper (sequiv ==> bequiv) (@exp2bexp _ sigma).
 Proof. by move => e1 e2 H s /=; rewrite H. Qed.
 
-Instance bneg_morphism g (sigma : g.-env) :
+#[global] Instance bneg_morphism g (sigma : g.-env) :
   Morphisms.Proper (bequiv ==> bequiv) (@bneg _ sigma).
 Proof. move => b1 b2 H s. by rewrite /= (H s). Qed.
 

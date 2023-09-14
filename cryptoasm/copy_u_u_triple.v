@@ -190,7 +190,7 @@ rewrite !assert_m.conAE assert_m.conCE !assert_m.conAE in Hh''.
 move: Hh''; apply assert_m.monotony => h''' //.
 have -> : '|u2Z ([i ]_ s) + 1| =  S ni.
   rewrite Zabs_nat_Zplus //.
-  by rewrite plus_comm.
+  by rewrite Nat.add_comm.
   exact/min_u2Z.
 rewrite (take_nth zero32); last first.
   rewrite len_X.

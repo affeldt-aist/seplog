@@ -116,7 +116,7 @@ have {hoare_triple}hoare_triple_post_cond : (postcond ** TT)%asm_assert st' h'.
     move/(_ st h) => Hmulti_sub_s_s_s.
     lapply Hmulti_sub_s_s_s; last first.
       exists (heap_mint (signed k rz) st h \U heap_mint (signed k rx) st h \U heap_mint (signed k ry) st h),
-       (h \D\ heap.dom (heap_mint (signed k rz) st h \U heap_mint (signed k rx) st h \Uheap_mint (signed k ry) st h)).
+       (h \D\ heap.dom (heap_mint (signed k rz) st h \U heap_mint (signed k rx) st h \U heap_mint (signed k ry) st h)).
       split; first by apply heap.disj_difs', seq_ext.inc_refl.
       split.
         apply heap.union_difsK; last by [].

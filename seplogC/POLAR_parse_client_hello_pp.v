@@ -57,7 +57,7 @@ Proof.
         apply eqmod_Zmod2.
         exact: expZ_ge0.
         red.
-        rewrite {1}(Z_div_mod_eq v (2 ^^ n)); last by apply Z.lt_gt, expZ_gt0.
+        rewrite {1}(Z_div_mod_eq_full v (2 ^^ n)).
         rewrite {1}H0 mulSn ZpowerD mulZC mulZA.
         rewrite Z_div_plus_full_l; last by apply not_eq_sym, ltZ_eqF, expZ_gt0.
         exists (v / 2 ^^ n); ring.
@@ -69,7 +69,7 @@ Proof.
       symmetry.
       rewrite u2Z_Z2u_Zmod //.
       symmetry.
-      rewrite {1}(Z_div_mod_eq v (2 ^^ n)); last by apply Z.lt_gt, expZ_gt0.
+      rewrite {1}(Z_div_mod_eq_full v (2 ^^ n)).
       rewrite {1}H0 mulSn ZpowerD -H.
       rewrite mulZC mulZA addZC Z_mod_plus //.
       by apply Z.lt_gt, expZ_gt0.

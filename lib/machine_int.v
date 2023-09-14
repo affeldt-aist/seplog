@@ -575,7 +575,7 @@ move=> H.
 rewrite /bits2u /= /bits.adjust_u.
 have -> : (size l < n)%nat = false by rewrite H ltnn.
 rewrite (bitZ.skipn_Zmod (size l)) //; last first.
-  by rewrite H /= -minusE /= -minus_n_n.
+  by rewrite H /= -minusE /= Nat.sub_diag.
 have -> : (size l - (size l - n) = n)%nat.
   rewrite subnBA //; last by rewrite H.
   by rewrite addnC addnK.
@@ -2137,9 +2137,9 @@ rewrite (bitZ.Z2s_Z2u_eq _ _ (conj k_lb k_ub)).
 apply mk_int_pi => /=.
 rewrite /bits.adjust_s /=.
 case: ifP.
-  move/ltP/lt_S_n/ltP => size_k.
+  move/ltP/(Nat.succ_le_mono _ _).2/ltP => size_k.
   rewrite bits.sext_0 /bits.adjust_u.
-  move/ltP/lt_S/ltP : (size_k) => ->.
+  move/ltP/Nat.lt_lt_succ_r/ltP : (size_k) => ->.
   by rewrite /bits.zext subSS subSn // ltnW.
 move/negbT.
 rewrite -leqNgt ltnS.
@@ -2147,7 +2147,7 @@ move=> Hcase.
 rewrite /bits.adjust_u ltnS.
 case: ifP.
   move/leP in Hcase.
-  move/leP/(le_antisym _ _ Hcase) => ->.
+  move/leP/(Nat.le_antisymm _ _ Hcase) => ->.
   by rewrite subnn /= subSn // subnn.
 move/negbT.
 rewrite -ltnNge => ?.
@@ -2498,9 +2498,8 @@ have [ha [ta [ha_ta [Hha Hta]]]] : exists ha ta, a = ha ++ ta /\
   split; first exact Hl2.
   split; first exact Hl1.
   rewrite Hl2 size_cat Hn Hl1 in Ha.
-  symmetry in Ha.
-  move/plus_minus : Ha => ->.
-  by rewrite -{2}(mult_1_l k.+1) -mult_minus_distr_r /= -minus_n_O.
+  move/Nat.add_sub_eq_l : Ha => <-.
+  by rewrite -{2}(Nat.mul_1_l k.+1) -Nat.mul_sub_distr_r /= Nat.sub_0_r.
 move: {IHq}(IHq _ _ _ Hta (refl_equal _)) => IHq.
 move: Ha Hha Hta IHq.
 rewrite ha_ta => Ha Hha Hta IHq.
@@ -2681,15 +2680,13 @@ apply Hf in H; last 2 first.
   apply x_b.
   by simpl; left.
 subst hb.
-move=> H.
-apply IH in H => //.
-  by rewrite H.
-move=> x hx.
-apply x_a.
-by rewrite /=; right.
-move=> x hx.
-apply x_b.
-by rewrite /=; right.
+move/IH => -> //.
+- move=> x hx.
+  apply x_a.
+  by rewrite /=; right.
+- move=> x hx.
+  apply x_b.
+  by rewrite /=; right.
 Qed.
 
 Lemma int_break_inj : forall n k nk (l1 l2 : int nk) ,
@@ -2814,9 +2811,9 @@ rewrite u2Z_add.
   + split => //; exact: expZ_gt0.
 Qed.
 
-Lemma add_reg {n} : forall (a b k : int n), a `+ k = b `+ k -> a = b.
+Lemma add_reg {n} (a b k : int n) : a `+ k = b `+ k -> a = b.
 Proof.
-move=> a b k H.
+move=> H.
 have H' : u2Z (a `+ k) = u2Z (b `+ k) by rewrite H.
 case: (Z_lt_le_dec (u2Z a + u2Z k) (2 ^^ n)) => ak.
   rewrite u2Z_add // in H'.
@@ -2844,9 +2841,9 @@ rewrite {}H4 in H'.
 by apply u2Z_inj; lia.
 Qed.
 
-Lemma sub_reg {n} : forall (a b k : int n), a `- k = b `- k -> a = b.
+Lemma sub_reg {n} (a b k : int n) : a `- k = b `- k -> a = b.
 Proof.
-move=> a b k H.
+move=> H.
 have H' : u2Z (a `- k) = u2Z (b `- k) by rewrite H.
 case: (Z_lt_le_dec (u2Z a) (u2Z k)) => ak; last first.
   rewrite u2Z_sub in H'; last exact/Z.le_ge.
@@ -2940,23 +2937,23 @@ case: (Z_lt_le_dec (u2Z (Z2u l a) + u2Z (Z2u l b)) (2 ^^ l)) => Hadd.
         by rewrite Z_mod_plus_full Zplus_mod_idemp_l Zplus_mod_idemp_r.
 Qed.
 
-Lemma u2Z_add_Z2u : forall n (a : int n) b, 0 <= b -> u2Z a + b < 2 ^^ n ->
+Lemma u2Z_add_Z2u n (a : int n) b : 0 <= b -> u2Z a + b < 2 ^^ n ->
   u2Z (a `+ Z2u n b) = u2Z a + b.
 Proof.
-move=> n a b H H'.
+move=> H H'.
 have H'' : 0 <= b < 2 ^^ n.
   by split => //; move: (min_u2Z a) => X; lia.
 by rewrite u2Z_add Z2uK.
 Qed.
 
-Lemma u2Z_add_Z_of_nat : forall n (a : int n) b,
+Lemma u2Z_add_Z_of_nat n (a : int n) b :
   u2Z a + Z_of_nat b < 2 ^^ n -> u2Z (a `+ Z2u n (Z_of_nat b)) = u2Z a + Z_of_nat b.
-Proof. move=> n a b H. apply u2Z_add_Z2u => //. by apply Zle_0_nat. Qed.
+Proof. move=> H. apply u2Z_add_Z2u => //. by apply Zle_0_nat. Qed.
 
-Lemma u2Z_add_Z2s : forall n (a : int n.+1) b,
+Lemma u2Z_add_Z2s n (a : int n.+1) b :
   - 2 ^^ n < b < 0 -> 0 <= u2Z a + b -> u2Z (a `+ Z2s n.+1 b) = u2Z a + b.
 Proof.
-move=> n a b H H'.
+move=> H H'.
 destruct b => //.
 - by lia.
 - case: H => H; by destruct p.
@@ -2970,21 +2967,21 @@ destruct b => //.
   ring.
 Qed.
 
-Lemma u2Z_add_Z2u_overflow : forall l (a : int (S l)), u2Z (a `+ Z2u (S l) 1) = 0 ->
+Lemma u2Z_add_Z2u_overflow l (a : int l.+1) : u2Z (a `+ Z2u l.+1 1) = 0 ->
   u2Z a = 2 ^^ (S l) - 1.
 Proof.
-move=> l a H.
+move=> H.
 have [//|X] : u2Z a = 2 ^^ (S l) - 1 \/ u2Z a < 2 ^^ (S l) - 1.
   move: (max_u2Z a) => X; move: (min_u2Z a) => Y; lia.
 rewrite u2Z_add in H; last first.
   rewrite Z2uK; first by lia.
   split => //.
   rewrite (_ : 1 = 2 ^^ 0) //.
-  apply expZ_2_lt => //; by apply lt_O_Sn.
+  apply expZ_2_lt => //; by apply Nat.lt_0_succ.
 rewrite Z2uK in H; last first.
   split => //.
   rewrite (_ : 1 = 2 ^^ 0) //.
-  apply expZ_2_lt => //; by apply lt_O_Sn.
+  apply expZ_2_lt => //; by apply Nat.lt_0_succ.
 by move: (min_u2Z a) => ?; lia.
 Qed.
 
@@ -3234,23 +3231,23 @@ exfalso.
 by move/leZP in Hl; move/leZP in Hk; lia.
 Qed.
 
-Lemma add_n_lt_n : forall n (a b : int n.+1), a `< b ->
+Lemma add_n_lt_n n (a b : int n.+1) : a `< b ->
   a `+ Z2u n.+1 1 `<= b.
 Proof.
-move=> l a b H.
-have [X|Z] : u2Z a + u2Z (Z2u (S l) 1) < 2^^(S l) \/ 2^^(S l) <= u2Z a + u2Z (Z2u (S l) 1) by lia.
+move=> H.
+have [X|Z] : u2Z a + u2Z (Z2u (S n) 1) < 2^^(S n) \/ 2^^(S n) <= u2Z a + u2Z (Z2u (S n) 1) by lia.
 - apply lt_n2Zlt in H.
   apply Zle2le_n.
   rewrite u2Z_add // Z2uK; first by lia.
   split => //.
   rewrite (_ : 1 = 2 ^^ 0) //.
-  apply expZ_2_lt => //; by apply lt_0_Sn.
+  apply expZ_2_lt => //; by apply Nat.lt_0_succ.
 - apply lt_n2Zlt in H.
   apply Zle2le_n.
   move: (u2Z_add_overflow Z) => X.
-  have Y : u2Z a + u2Z (Z2u (S l) 1) - 2 ^^ (S l) <= u2Z b.
+  have Y : u2Z a + u2Z (Z2u (S n) 1) - 2 ^^ (S n) <= u2Z b.
     rewrite Z2uK.
-      by move: (expZ_gt0 l.+1) => ?; lia.
+      by move: (expZ_gt0 n.+1) => ?; lia.
     split => //.
     rewrite (_ : 1 = 2 ^^ 0) //.
     exact: expZ_2_lt.

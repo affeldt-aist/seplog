@@ -1176,7 +1176,7 @@ Lemma log_mapsto_heap_dom_styp {g} (t : Ctyp.t g) tg H (a : nat) (vs : logs (get
 Proof.
 move=> Hlv Halign h_vs Hmapstos Hind padding h_padd Hdisj Hapadding Hdom Hoverflow.
 rewrite hp.dom_union.
-+ rewrite Hdom Hind size_iota -iota_add.
++ rewrite Hdom Hind size_iota -iotaD.
   congr iota.
   rewrite (sizeof_foldl g t tg) //=.
   rewrite foldl_map.
@@ -1237,10 +1237,10 @@ have Htmp : hp.dom (h_padd \U h_hd) = hp.dom h_padd ++ hp.dom h_hd.
   by apply (leq_trans Hi).
 rewrite hp.dom_union; last first.
   move=> i j.
-  rewrite Htmp Hpadd Hhd -iota_add mem_iota addnA; case/andP => _ Hi.
+  rewrite Htmp Hpadd Hhd -iotaD mem_iota addnA; case/andP => _ Hi.
   rewrite Htl mem_iota; case/andP => Hj _.
   by apply (leq_trans Hi).
-rewrite Htmp Hpadd Hhd -iota_add Htl -addnA -iota_add /=.
+rewrite Htmp Hpadd Hhd -iotaD Htl -addnA -iotaD /=.
 congr iota.
 rewrite Hpadding addnA.
 set Q := foldl _ _ _.
@@ -1632,7 +1632,7 @@ have dom_h_hpadd : hp.dom (h \U hpadd) = hp.dom h ++ hp.dom hpadd.
   rewrite dom_hpadd mem_iota; case/andP=> Hj _.
   apply (leq_trans Hi); by rewrite dom_h size_iota in Hj.
 have -> : inc (iota a (size pv)) (hp.dom (h \U hpadd)).
-  rewrite dom_h_hpadd dom_hpadd dom_h size_iota -iota_add.
+  rewrite dom_h_hpadd dom_hpadd dom_h size_iota -iotaD.
   set x := (_ + _)%nat.
   suff : size pv = x by move=> ->; rewrite inc_refl.
   rewrite Hpv (sizeof_foldl g t tg H) /= !foldl_map /= /x.
@@ -1640,7 +1640,7 @@ have -> : inc (iota a (size pv)) (hp.dom (h \U hpadd)).
 have -> : (h \U hpadd) \D\ iota a (size pv) = hp.emp.
   suff : hp.dom (h \U hpadd) = iota a (size pv).
     move=> <-; by rewrite hp.difs_self.
-  rewrite dom_h_hpadd dom_hpadd dom_h size_iota -iota_add Hpv.
+  rewrite dom_h_hpadd dom_hpadd dom_h size_iota -iotaD Hpv.
   rewrite (sizeof_foldl g t tg H) /= !foldl_map.
   by rewrite Hpadding dom_h size_iota padd_add.
 rewrite hp.unioneh hp.unionC; last first.

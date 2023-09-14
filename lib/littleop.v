@@ -16,16 +16,16 @@ Class Abelian {A: Type} (op: A -> A -> A) := {
   op_morphism : Morphisms.Proper (equiv ==> equiv ==> equiv) op
 }.
 
-Instance Abelean_equivalence {A: Type} op `{AA : @Abelian A op} : Equivalence equiv.
+#[global] Instance Abelean_equivalence {A: Type} op `{AA : @Abelian A op} : Equivalence equiv.
 exact equiv_equivalence.
 Defined.
 
-Instance Abelean_morphism {A: Type} op `{AA : @Abelian A op} :
+#[global] Instance Abelean_morphism {A: Type} op `{AA : @Abelian A op} :
   Morphisms.Proper (equiv ==> equiv ==> equiv) op.
 exact op_morphism.
 Defined.
 
-Instance Abelean_equiv {A: Type} op `{AA : @Abelian A op} :
+#[global] Instance Abelean_equiv {A: Type} op `{AA : @Abelian A op} :
   Morphisms.Proper (equiv ==> equiv ==> iff) equiv.
 move=> x1 x2 Hx.
 move=> y1 y2 Hy.
@@ -192,7 +192,7 @@ Ltac Fold_abelean X i :=
 
 Opaque Sum.
 
-Instance Sum_morphism {A} {op} `{Ab: @Abelian A op} : Morphisms.Proper (permutation ==> equiv) (Sum op).
+#[global] Instance Sum_morphism {A} {op} `{Ab: @Abelian A op} : Morphisms.Proper (permutation ==> equiv) (Sum op).
 move => l l'.
 elim => //=.
 - apply Equivalence_Reflexive.
@@ -220,7 +220,7 @@ Ltac Solve_Abelean_equiv i :=
       Fold_abelean X i; Fold_abelean Y i; apply Sum_morphism; simpl; Solve_permutation
   end.
 
-Instance nat_abelean : Abelian addn.
+#[global] Instance nat_abelean : Abelian addn.
 eapply Build_Abelian with (equiv := @eq nat) (zero := 0).
 apply eq_equivalence.
 move=> x; apply addn0.
@@ -245,7 +245,7 @@ Section MIAbelean.
 
 Variable n : nat.
 
-Instance int_abelean: Abelian (@add n).
+#[global] Instance int_abelean: Abelian (@add n).
 eapply Build_Abelian with (equiv := eq) (zero := Z2u n Z0).
 apply  @eq_equivalence.
 move => x; apply addi0.
@@ -260,7 +260,7 @@ Arguments int_abelean {n}.
 
 Require Import ssrZ ZArith_ext.
 
-Instance Z_abelean : Abelian Z.add.
+#[global] Instance Z_abelean : Abelian Z.add.
 eapply Build_Abelian with (equiv := eq) (zero := 0).
 apply  @eq_equivalence.
 move => x; lia.

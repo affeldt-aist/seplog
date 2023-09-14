@@ -212,7 +212,7 @@ Qed.
 
 Require Export Setoid Relation_Definitions.
 
-Instance permutation_Equivalence A : Equivalence (@permutation A) | 10.
+#[global] Instance permutation_Equivalence A : Equivalence (@permutation A) | 10.
 constructor.
 exact permutation_reflexive.
 exact permutation_symmetric.
@@ -1977,7 +1977,7 @@ elim/last_ind=> [k|t h IH k H].
   apply Permutation.perm_trans with
     (map (fun x => nth def (t ++ h :: nil) x) (iota O (size t) ++ size t :: nil)); last first.
     rewrite -cats1 size_cat /= addnC /= in H.
-    apply Permutation_map; rewrite -/(iota (size t) 1) -iota_add addn1; exact/Permutation_sym.
+    apply Permutation_map; rewrite -/(iota (size t) 1) -iotaD addn1; exact/Permutation_sym.
   + rewrite map_cat /=.
     rewrite nth_cat ltnn subnn /=.
     apply Permutation_app => //.
@@ -2053,12 +2053,12 @@ case=> // sh st n _ H.
 have /inP : List.In n (sh :: st).
   apply Permutation_in with (iota O (S n)).
   - by apply Permutation_sym.
-  - rewrite -addn1 iota_add /= add0n.
+  - rewrite -addn1 iotaD /= add0n.
     apply List.in_or_app; right; simpl; by auto.
 case/memP => l1 [l2 [Hl1l2 _]].
 exists l1, l2; split; first by [].
 apply Permutation_app_inv_r with (n :: nil).
-rewrite -{2}/(iota n 1) -iota_add.
+rewrite -{2}/(iota n 1) -iotaD.
 apply Permutation.perm_trans with (sh :: st) => //.
 rewrite Hl1l2 -catA.
 apply Permutation_app.
@@ -2325,37 +2325,37 @@ Qed.
 
 End onth_ext.
 
-Lemma onth_map : forall {A B : Type} (l : seq A) x v,
+Lemma onth_map  {A B : Type} : forall (l : seq A) x v,
   onth x l = Some v -> forall f : A -> B, onth x (map f l) = Some (f v).
 Proof.
-move=> A B; elim => [[] // | h t IH [|x] /= v].
+elim => [[] // | h t IH [|x] /= v].
 by case=> <-.
 by move/IH.
 Qed.
 
-Lemma onth_map_Some_inv : forall {A B : Type} (f : A -> B) l i x,
+Lemma onth_map_Some_inv {A B : Type} : forall (f : A -> B) l i x,
   onth i (map f l) = Some x -> exists y, onth i l = Some y /\ f y = x.
 Proof.
-move=> A B f; elim=> [/= i x | hd tl IH [|i] x /= H].
+move=> f; elim=> [/= i x | hd tl IH [|i] x /= H].
 - by rewrite onth_nil.
 - case: H => ?; subst x; by exists hd.
 - case/IH : H => y H; by exists y.
 Qed.
 
-Lemma onth_map_inv : forall {A B : Type} (f : A -> B) l i b,
+Lemma onth_map_inv {A B : Type} : forall (f : A -> B) l i b,
   onth i (map f l) = Some b -> exists a, onth i l = Some a /\ b = f a.
 Proof.
-move=> A B f; elim=> /= [i b| h t IH [|i] /=].
+move=> f; elim=> /= [i b| h t IH [|i] /=].
 by rewrite onth_nil.
 move=> b [] <-; by exists h.
 move=> b; case/IH => a [H1 H2]; by exists a.
 Qed.
 
-Lemma onth_Some_exists : forall {A B: Type} (l : seq A) (l' : seq B),
+Lemma onth_Some_exists {A B: Type} : forall (l : seq A) (l' : seq B),
   size l = size l' -> forall n f, n < size l ->
     onth n l = Some f -> exists f', onth n l' = Some f'.
 Proof.
-move=> A B; elim => [[] // _ [] // | ht t IH [|h' t'] //= [t_t'] ].
+elim => [[] // _ [] // | ht t IH [|h' t'] //= [t_t'] ].
 destruct n as [|n].
 move=> f _ _; eexists; reflexivity.
 move=> f Hn n_f.

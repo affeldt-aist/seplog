@@ -2,7 +2,6 @@
 (* seplog (c) AIST 2014-2018. R. Affeldt et al. GNU GPLv3. *)
 From mathcomp Require Import ssreflect ssrfun ssrbool eqtype ssrnat seq.
 From mathcomp Require Import prime.
-Require Import Max.
 Require Import ssrZ ZArith_ext String_ext seq_ext.
 Require Import machine_int.
 Import MachineInt.
@@ -330,16 +329,16 @@ move=> a b; elim/tls_typ_nested_ind => // {a b}.
 - by move=> m l n Hnodup H1 H2 [].
 - move=> n1 m1 n2 m2 tag t1 t2 IH1 IH2 n l /= Hmax.
   destruct n as [|n]; first by done.
-  rewrite -IH1 /=; last by apply/leP; apply le_max_l.
+  rewrite -IH1 /=; last by apply/leP; apply Nat.le_max_l.
   symmetry.
   rewrite -IH1 /=; last first.
-    move: Hmax. rewrite ltnS. move/leP. move/max_lub_l. by move/leP.
+    move: Hmax. rewrite ltnS. by move/leP/Nat.max_lub_l/leP.
   move Hdec1 : (decode' _ _ _) => [dec11 dec12].
   rewrite -IH2 //; last first.
-    move: Hmax. rewrite ltnS. move/leP. move/max_lub_r. by move/leP.
+    move: Hmax. rewrite ltnS. by move/leP/Nat.max_lub_r/leP.
   symmetry.
   rewrite -IH2 //.
-  by apply/leP; apply le_max_r.
+  by apply/leP; apply Nat.le_max_r.
 Qed.
 
 Lemma fold_decode'_false : forall a b (t : tls_typ a b) lst l,
@@ -351,7 +350,7 @@ Lemma fold_decode'_false : forall a b (t : tls_typ a b) lst l,
           (acc' && acc, buf')
       else
         (acc, buf))
-  (false, l) 
+  (false, l)
   lst = (false, l).
 Proof. move=> a b t; by elim. Qed.
 
@@ -447,18 +446,18 @@ move=> n m; elim/tls_typ_nested_ind => {n m}.
   have {}H : m = size a by apply/eqP; rewrite eqn_leq m_a H.
   by rewrite -H subnn drop0 H drop_size.
 - (* pair *) move=> n1 m1 n2 m2 tag t1 t2 IH1 IH2 a a' b.
-  rewrite /decode /= -decode'_upper; last by apply/leP; apply le_max_l.
+  rewrite /decode /= -decode'_upper; last exact/leP/Nat.le_max_l.
   move Hdec1 : (decode' _ _ _) => [dec11 dec12].
-  rewrite -decode'_upper; last by apply/leP; apply le_max_r.
+  rewrite -decode'_upper; last exact/leP/Nat.le_max_r.
   move Hdec2 : (decode' _ _ _) => [dec21 dec22].
   case=> decx1 Ha'.
   subst dec22.
   destruct dec11; last by done.
   destruct dec21; last by done.
-  rewrite {decx1} -decode'_upper; last by apply/leP; apply le_max_l.
+  rewrite {decx1} -decode'_upper; last exact/leP/Nat.le_max_l.
   move/(IH1 _ _ b) : Hdec1.
   rewrite /decode => ->.
-  rewrite -decode'_upper; last by apply/leP; apply le_max_r.
+  rewrite -decode'_upper; last exact/leP/Nat.le_max_r.
   move/(IH2 _ _ b) : Hdec2.
   by rewrite /decode => ->.
 Qed.

@@ -1,6 +1,6 @@
 (* seplog (c) AIST 2005-2013. R. Affeldt, N. Marti, et al. GNU GPLv3. *)
 (* seplog (c) AIST 2014-2018. R. Affeldt et al. GNU GPLv3. *)
-Require Import Permutation.
+Require Import PeanoNat Permutation.
 From mathcomp Require Import ssreflect ssrbool eqtype ssrnat seq.
 Require Import seq_ext.
 
@@ -186,7 +186,7 @@ Ltac uniq_permut default_value :=
           [done | apply (@function_permut_Permutation _ Peano_dec.eq_nat_dec len) => // | done | done |
             (
               loop len ; move=> Hn ; loop' len ;
-              move: (Lt.lt_n_O Hn) => Hnot_lt_O; move/Hnot_lt_O => //
+              move: (Nat.nlt_0_r Hn) => Hnot_lt_O; move/Hnot_lt_O => //
             )
           ]
   end.

@@ -166,7 +166,7 @@ Proof. case : z => //= p Hp; by rewrite Zpos_eq_Z_of_nat_o_nat_of_P. Qed.
 Lemma S_Zabs_nat n : 0 <= n -> '| n |.+1 = '| n + 1 |.
 Proof.
 case : n => //; rewrite /= => p _.
-by rewrite nat_of_P_plus_morphism // plus_comm.
+by rewrite nat_of_P_plus_morphism // Nat.add_comm.
 Qed.
 
 Lemma O_lt_Zabs_nat z : 0 < z -> (O < '| z |)%nat.
@@ -820,7 +820,7 @@ Proof.
 move=> Hm; split.
 - move=> [k' ->]; by rewrite Z_mod_plus_full.
 - move=> H.
-  rewrite (Z_div_mod_eq a m (Z.lt_gt _ _ Hm)) (Z_div_mod_eq b m (Z.lt_gt _ _ Hm)) H.
+  rewrite (Z_div_mod_eq_full a m) (Z_div_mod_eq_full b m) H.
   exists ((a / m) - (b / m)); ring.
 Qed.
 
@@ -943,7 +943,7 @@ Definition Zisum z := if z is Zpos p then Z_of_nat (isum (nat_of_P p)) else 0.
 Lemma Zisum_prop : forall a, 0 <= a -> Zisum (a + 1) = Zisum a + (a + 1).
 Proof.
 case=> // p _ /=.
-rewrite nat_of_P_plus_morphism plus_comm /=.
+rewrite nat_of_P_plus_morphism Nat.add_comm /=.
 by rewrite inj_plus /= Pos2SuccNat.id_succ -Pos.add_1_r.
 Qed.
 

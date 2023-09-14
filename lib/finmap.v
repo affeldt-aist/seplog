@@ -3508,7 +3508,7 @@ rewrite /dom /=.
 by apply inc_map_fst.
 Qed.
 
-Lemma inclu_union_L : forall h1 h2 k, h1 # h2 -> k \I h1 -> k \I (h1 \Uh2).
+Lemma inclu_union_L : forall h1 h2 k, h1 # h2 -> k \I h1 -> k \I (h1 \U h2).
 Proof.
 move=> [h1 Hh1] [h2 Hh2] [k Hk] h1_d_h2.
 rewrite /inclu /proj /proj_seq /dom /=.

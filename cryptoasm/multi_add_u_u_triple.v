@@ -287,10 +287,9 @@ exists nj.+1, B'; rewrite Z_S.
 repeat Reg_upd; repeat (split; trivial).
 - by Assert_upd.
 - rewrite u2Z_add // sext_Z2u // r_j Z2uK // -Zbeta1E.
-  apply: (leZ_ltZ_trans _ Hnb).
-  apply leZ_addl; first exact/min_u2Z.
+  apply/(leZ_ltZ_trans _ Hnb)/leZ_addl; first exact/min_u2Z.
   rewrite -Z_S (_ : 4 = Z_of_nat 4) // -inj_mult multE.
-  apply/inj_le/(@le_trans _ nk) => //.
+  apply/inj_le/(@Nat.le_trans _ nk) => //.
   exact/leP; rewrite -ltnS.
   by apply/leP; rewrite leq_pmull.
 - move/leZsub1 : Hm; exact.

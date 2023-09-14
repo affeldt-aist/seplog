@@ -19,11 +19,9 @@ Definition multi_add_u_u :=
     maddu rX r1 ;
     lwxs rX a0 ry ;
     maddu rX r1 ;
-    mflhxu rX ; 
+    mflhxu rX ;
     sw rX zero16 rZ ;
     addiu rZ rZ four16 ;
     addiu a0 a0 one16 }}.
 
 End multi_add_u_u_sect.
-
-

@@ -195,7 +195,7 @@ exact/leZZ.
 
 have -> : ve `>> Z.abs_nat (Z_of_nat vl + 1) = zero32.
   rewrite shrl_overflow // Zabs_nat_Zplus //; last exact: Zle_0_nat.
-  rewrite plus_comm [plus _ _]/= Zabs2Nat.id.
+  rewrite Nat.add_comm [plus _ _]/= Zabs2Nat.id.
   apply (@ltZ_trans (2 ^^ vl)); by [ | apply expZ_2_lt].
 by rewrite Z2uK // [Zmult]lock /= -lock mul1Z.
 

@@ -379,7 +379,7 @@ assoc_comm H'.
 exact: mapsto_ext H'.
 
 rewrite HB' -cat1s catA upd_nth_cat'; last first.
-  rewrite size_cat/= HlenB'1 addnC /=; exact/ltP/lt_n_Sn.
+  rewrite size_cat/= HlenB'1 addnC /=; exact/ltP/Nat.lt_succ_diag_r.
 rewrite upd_nth_cat; last first.
   by rewrite HlenB'1.
 rewrite HlenB'1 subnn; simpl upd_nth; simpl app; rewrite -lSum_beyond; last first.

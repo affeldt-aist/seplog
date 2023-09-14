@@ -752,8 +752,6 @@ Parameter fresh_wpAssrt_inde : forall L x , fresh_wpAssrt x L ->
 
 End FRESH.
 
-Require Import Max.
-
 Module Fresh <: FRESH.
 
 Fixpoint var_max_Sigma (s : Sigma) : var.v :=
