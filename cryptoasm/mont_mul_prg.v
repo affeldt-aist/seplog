@@ -90,7 +90,7 @@ least significant word of the partial product is always zero: *)
 Lemma montgomery_lemma : forall alpha vm, u2Z vm * u2Z alpha =m -1 {{ \B^1 }} ->
   forall (A : int 64) (m : store.t) ,
     store.utoZ m < \B^2 -> store.utoZ m = u2Z A ->
-    store.lo (store.maddu_op (((A `% 32 `* alpha) `% 32) `* vm) m) = zero32.
+    store.lo (store.maddu_op ((((A `% 32) `* alpha) `% 32) `* vm) m) = zero32.
 Proof.
 move=> alpha0 m0 H A mu H0 H1.
 apply lo_remainder_zero.

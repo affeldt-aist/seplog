@@ -383,7 +383,7 @@ apply hoare_mflo with (fun s h => exists Z next, size Z = nk /\
   [t]_s = ((X `32_ next `* Y `32_ 0) `+ zext 32 (Z `32_ 0)) `% 32 /\
   u2Z ([s_]_s `|| [t]_s) = u2Z (X `32_ next) * u2Z (Y `32_ 0) + u2Z (Z `32_ 0) /\
   store.utoZ s = u2Z [t]_s * u2Z [alpha]_s /\ [int_]_s = one32 /\
-  [quot]_s = (((X `32_ next `* Y `32_ 0) `+ (zext 32 (Z `32_ 0)) `% 32) `* [alpha]_s) `% 32).
+  [quot]_s = ((((X `32_ next `* Y `32_ 0) `+ (zext 32 (Z `32_ 0))) `% 32) `* [alpha]_s) `% 32).
 
 move=> s h [Z [next [HZ [r_x [r_y [r_z [r_m [r_k [r_alpha [Hmem [r_ext [Hextk' [Hone [Hinv [Hextk [r_X_ [r_Y_ [ r_Z_ [Hm1 [r_M_ [r_t [Hconcat [Hm2 r_int_]]]]]]]]]]]]]]]]]]]]]]].
 exists Z, next; repeat Reg_upd; repeat (split; trivial).

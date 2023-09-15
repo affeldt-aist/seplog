@@ -427,7 +427,7 @@ apply hoare_seq with inv_inner.
           rewrite -2!addnA ltn_add2l.
           apply/ltP.
           rewrite -!plusE.
-          apply plus_lt_le_compat.
+          apply: Nat.add_lt_le_mono.
             apply Nat2Z.inj_lt.
             rewrite Z_of_nat_Zabs_nat // Z_of_nat_Zabs_nat; last by apply min_u2Z.
             exact: (@leZ_ltZ_trans 32%Z).
