@@ -2220,10 +2220,10 @@ rewrite is_zero_0 /=.
 move=> <-.
 apply/eqP.
 congr (Z<=s).
-rewrite (@cast_shl 32 n (i32<=i8 he Hhe `>> 1 `% n) (leq_trans Hn (leqnSSn _)) 1); last first.
+rewrite (@cast_shl 32 n ((i32<=i8 he Hhe `>> 1) `% n) (leq_trans Hn (leqnSSn _)) 1); last first.
   by rewrite addn1 (leq_ltn_trans Hn).
 have -> : cast_subnK (leq_trans Hn (leqnSSn _))
-  (zext (32 - n) (i32<=i8 he Hhe `>> 1 `% n)) = i32<=i8 he Hhe `>> 1.
+  (zext (32 - n) ((i32<=i8 he Hhe `>> 1) `% n)) = i32<=i8 he Hhe `>> 1.
   apply u2Z_inj.
   rewrite u2Z_cast.
   rewrite u2Z_zext //.

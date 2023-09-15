@@ -23,10 +23,10 @@ Reserved Notation "'`(' x ')s_' n" (at level 9, format "'`('  x  ')s_' n").
 Reserved Notation "'`(' x ')sc_' n" (at level 9, format "'`('  x  ')sc_' n").
 Reserved Notation "a '`<' b" (at level 75, format "'[' a  `<  b ']'").
 Reserved Notation "a '`<=' b" (at level 75, format "'[' a  `<=  b ']'").
-Reserved Notation "a '`+' b" (at level 35, format "'[' a  `+  b ']'").
-Reserved Notation "a '`-' b" (at level 35, format "'[' a  `-  b ']'").
-Reserved Notation "a '`*' b" (at level 50, format "'[' a  `*  b ']'").
-Reserved Notation "a '`%' n" (at level 50, format "'[' a  `%  n ']'").
+Reserved Notation "a '`+' b" (at level 50, format "'[' a  `+  b ']'").
+Reserved Notation "a '`-' b" (at level 50, format "'[' a  `-  b ']'").
+Reserved Notation "a '`*' b" (at level 40, format "'[' a  `*  b ']'").
+Reserved Notation "a '`%' n" (at level 40, format "'[' a  `%  n ']'").
 Reserved Notation "a '`<<' n" (at level 50, format "'[' a  `<<  n ']'").
 Reserved Notation "a '`>>' n" (at level 50, format "'[' a  `>>  n ']'").
 Reserved Notation "a '`&' b" (at level 50).
